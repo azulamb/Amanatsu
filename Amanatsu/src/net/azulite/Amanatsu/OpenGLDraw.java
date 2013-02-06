@@ -49,39 +49,16 @@ public class OpenGLDraw
 
   public void DrawBox( int x, int y, int w, int h, float[] color )
   {
-    // 頂点バッファ。
     float[] vert =
       {
-        (float)x       / (float)width - 1.0f, 1.0f - (float)y / (float)height,
-        (float)(x + w) / (float)width - 1.0f, 1.0f - (float)y / (float)height,
-        (float)x       / (float)width - 1.0f, 1.0f - (float)(y + h) / (float)height,
-        (float)(x + w) / (float)width - 1.0f, 1.0f - (float)(y + h) / (float)height,
+        (float)x       , (float)y,
+        (float)(x + w) , (float)y,
+        (float)x       , (float)(y + h),
+        (float)(x + w) , (float)(y + h),
       };
     FloatBuffer pvert = CreateFloatBuffer( vert );
 
-    // 色。
-    FloatBuffer pcol;
-    if ( color.length / 4 >= 4 )
-    {
-      float[] col =
-        {
-          color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
-          color[ 4 ], color[ 5 ], color[ 6 ], color[ 7 ],
-          color[ 8 ], color[ 9 ], color[ 10 ], color[ 11 ],
-          color[ 12 ], color[ 13 ], color[ 14 ], color[ 15 ],
-        };
-      pcol = CreateFloatBuffer( col );
-    }else
-    {
-      float[] col =
-        {
-          color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
-          color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
-          color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
-          color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
-        };
-      pcol = CreateFloatBuffer( col );
-    }
+    FloatBuffer pcol = CreateColor( color );
 
     // 頂点情報を登録。
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, pvert );
@@ -189,10 +166,10 @@ public class OpenGLDraw
 
     float[] vert =
     {
-      (float)dx       / (float)width - 1.0f, 1.0f - (float)dy / (float)height,
-      (float)(dx + w) / (float)width - 1.0f, 1.0f - (float)dy / (float)height,
-      (float)dx       / (float)width - 1.0f, 1.0f - (float)(dy + h) / (float)height,
-      (float)(dx + w) / (float)width - 1.0f, 1.0f - (float)(dy + h) / (float)height,
+      (float)dx       , (float)dy,
+      (float)(dx + w) , (float)dy,
+      (float)dx       , (float)(dy + h),
+      (float)(dx + w) , (float)(dy + h),
     };
     
     //int tnum = textures.get( rnum );
@@ -256,10 +233,10 @@ public class OpenGLDraw
 
     float[] vert =
     {
-      (float)dx        / (float)width - 1.0f, 1.0f - (float)dy / (float)height,
-      (float)(dx + dw) / (float)width - 1.0f, 1.0f - (float)dy / (float)height,
-      (float)dx        / (float)width - 1.0f, 1.0f - (float)(dy + dh) / (float)height,
-      (float)(dx + dw) / (float)width - 1.0f, 1.0f - (float)(dy + dh) / (float)height,
+      (float)dx        , (float)dy,
+      (float)(dx + dw) , (float)dy,
+      (float)dx        , (float)(dy + dh),
+      (float)(dx + dw) , (float)(dy + dh),
     };
 
     //int tnum = textures.get( rnum );
@@ -319,7 +296,28 @@ public class OpenGLDraw
     fb.position( 0 );
     return fb;
   }
- 
+  public static FloatBuffer CreateColor( float[] color )
+  {
+    if ( color.length / 4 >= 4 )
+    {
+      float[] col =
+      {
+        color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
+        color[ 4 ], color[ 5 ], color[ 6 ], color[ 7 ],
+        color[ 8 ], color[ 9 ], color[ 10 ], color[ 11 ],
+        color[ 12 ], color[ 13 ], color[ 14 ], color[ 15 ],
+      };
+      return CreateFloatBuffer( col );
+    }
+    float[] col =
+    {
+      color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
+      color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
+      color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
+      color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ],
+    };
+    return CreateFloatBuffer( col );
+  }
   public float[] Color( float red, float green, float blue, float alpha )
   {
     float[] color ={ red, blue, green, alpha, };

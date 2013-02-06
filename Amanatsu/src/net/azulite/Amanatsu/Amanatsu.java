@@ -7,6 +7,7 @@ import java.net.URL;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import net.azulite.Amanatsu.GameView;
 
 public class Amanatsu
 {
+  static private String VERSION = "0.0.1";
   Context context;
   AmanatsuGLView view;
   GameGLSurfaceViewRender render;
@@ -28,7 +30,10 @@ public class Amanatsu
   {
     this.context = context;
     view = new AmanatsuGLView( this );
-    render = new GameGLSurfaceViewRender( context, gview );
+    this.gview = gview;
+    render = new GameGLSurfaceViewRender( this );
+    render.SetGLLoop( new GLLoopAmanatsuOP( this ) );
+
     view.setRenderer( render );
 
     timer = new GameTimer( view, 30 );
@@ -53,6 +58,7 @@ public class Amanatsu
   }
 
   // Getter.
+  static public String GetVersion(){ return VERSION; }
   public Context GetContext(){ return context; }
 
   public GLSurfaceView GetGLSurfaceView(){ return view; }
@@ -86,13 +92,16 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
   OpenGLDraw draw;
   protected GLLoop loop;
 
-  public GameGLSurfaceViewRender( Context context, GameView view )
+  public GameGLSurfaceViewRender( Amanatsu ama )
   {
-    this.SetGameView( view );
-    draw = new OpenGLDraw( context );
-    loop = new GLLoopAmanatsuOP( this );
+    this.SetGameView( ama.gview );
+    draw = new OpenGLDraw( ama.context );
   }
 
+  public void SetGLLoop( GLLoop loop )
+  {
+    this.loop = loop;
+  }
   protected GameView SetGameView( GameView view )
   {
     GameView ret;
@@ -110,14 +119,26 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
   public void onDrawFrame( GL10 gl )
   {
     draw.SetGL( gl );
+
+    gl.glEnable( GL10.GL_BLEND );
+    gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
+    
     loop.Run( draw );
+
+    gl.glDisable( GL10.GL_BLEND );
   }
 
   @Override
   public void onSurfaceChanged( GL10 gl, int width, int height ) {
     // TODO Auto-generated method stub
-    draw.width = width * 2;
-    draw.height = height * 2;
+    draw.width = width;
+    draw.height = height;
+    gl.glViewport( 0, 0, draw.width, draw.height );
+    gl.glMatrixMode( GL10.GL_PROJECTION );
+    gl.glLoadIdentity();
+    //gl.glOrthof( -1.0f, 1.0f, 1.0f, -1.0f, 0.5f, -0.5f );
+    //gl.glOrthof( 0.0f, 1.0f, 1.0f, 0.0f, 0.5f, -0.5f );
+    gl.glOrthof( 0.0f, (float)width, (float)height, 0.0f, 50.0f, -50.0f );
   }
 
   @Override
@@ -132,12 +153,12 @@ interface GLLoop{ public void Run( OpenGLDraw draw ); }
 class GLLoopAmanatsuOP implements GLLoop
 {
   GameView view;
-  GameGLSurfaceViewRender render;
+  Amanatsu ama;
   int counter;
-  public GLLoopAmanatsuOP( GameGLSurfaceViewRender render )
+  public GLLoopAmanatsuOP( Amanatsu ama )
   {
-    this.view = render.view;
-    this.render = render;
+    this.ama = ama;
+    this.view = ama.render.view;
     counter = -1;
   }
 
@@ -158,17 +179,18 @@ class GLLoopAmanatsuOP implements GLLoop
       } catch (IOException e)
       {
       }
-    } else if ( counter == 120 )
+    } else if ( counter == 180 )
     {
       // End.
       draw.DestroyTexture( 0 );
-      render.loop = new GLLoopUserInit( render );
+      ama.render.loop = new GLLoopUserInit( ama );
     } else if ( counter > 0 )
     {
       // OP
       int max = draw.width < draw.height ? draw.width : draw.height;
-      max *= 0.8;
+      max *= 0.4;
       draw.DrawTextureScaring( 0, draw.width / 2 - max / 2, draw.height / 2 - max / 2, 0, 0, 256, 256, max, max );
+      draw.DrawTexture( 0, draw.width, draw.height, 0, 0, 256, 256 );
       ++counter;
     }
   }
@@ -177,12 +199,12 @@ class GLLoopAmanatsuOP implements GLLoop
 class GLLoopUserInit implements GLLoop
 {
   GameView view;
-  GameGLSurfaceViewRender render;
+  Amanatsu ama;
   int run = 0;
-  public GLLoopUserInit( GameGLSurfaceViewRender render )
+  public GLLoopUserInit( Amanatsu ama )
   {
-    this.view = render.view;
-    this.render = render;
+    this.ama = ama;
+    this.view = ama.render.view;
     this.run = 0;
   }
 
@@ -193,24 +215,47 @@ class GLLoopUserInit implements GLLoop
     {
       run = 1;
       view.UserInit( draw );
-      render.loop = new GLLoopMainLoop( view );
+      ama.render.loop = new GLLoopMainLoop( ama );
     }
   }
 }
 
 class GLLoopMainLoop implements GLLoop
 {
+  Amanatsu ama;
   GameView view;
-  public GLLoopMainLoop( GameView view )
+  public GLLoopMainLoop( Amanatsu ama )
   {
-    this.view = view;
+    this.ama = ama;
+    this.view = ama.render.view;
   }
 
   @Override
   public void Run( OpenGLDraw draw )
   {
-    view.MainLoop( draw );
+    if ( view.MainLoop( draw ) == false )
+    {
+      ama.render.loop = new GLLoopCleanUp( ama );
+    }
   }
+}
+
+class GLLoopCleanUp implements GLLoop
+{
+  GameView view;
+  Amanatsu ama;
+  public GLLoopCleanUp( Amanatsu ama )
+  {
+    this.view = ama.render.view;
+    this.ama = ama;
+  }
+  @Override
+  public void Run(OpenGLDraw draw)
+  {
+    ama.Term();
+    ( (Activity) ama.context ).finish();
+  }
+  
 }
 
 class GameTimer extends Handler

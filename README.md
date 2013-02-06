@@ -1,5 +1,7 @@
 Amanatsu
 ========
+## Android
+Version 2.2 or higher.
 
 ## Compile
 Use Eclipse.
@@ -38,7 +40,8 @@ class Game implements GameView
   }
 
   @Override
-  public void MainLoop( OpenGLDraw draw ) {
+  public boolean MainLoop( OpenGLDraw draw ) {
+    return true; // false is Game end.
   }
 
   @Override
@@ -50,6 +53,9 @@ class Game implements GameView
   }
 }
 <code></pre>
+
+## Android
+バージョン2.2以上。
 
 ## コンパイル方法
 EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエクスポートしてJARファイルとして出力する。

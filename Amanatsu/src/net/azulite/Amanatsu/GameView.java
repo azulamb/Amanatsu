@@ -7,7 +7,7 @@ public interface GameView
 
   public void UserInit( OpenGLDraw draw );
 
-  public void MainLoop( OpenGLDraw draw );
+  public boolean MainLoop( OpenGLDraw draw );
 
   public void CleanUp( OpenGLDraw draw );
   
