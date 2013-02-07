@@ -3,6 +3,9 @@ package net.azulite.Amanatsu;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,34 +17,47 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import net.azulite.Amanatsu.GameView;
+
 
 public class Amanatsu
 {
   static private String VERSION = "0.0.1";
   Context context;
   AmanatsuGLView view;
-  GameGLSurfaceViewRender render;
   GameView gview;
+
+  GameGLSurfaceViewRender render;
+  AmanatsuInput input = null;
   GameTimer timer;
 
   public Amanatsu( Context context, GameView gview )
   {
     this.context = context;
+
     view = new AmanatsuGLView( this );
+
     this.gview = gview;
+
     render = new GameGLSurfaceViewRender( this );
     render.SetGLLoop( new GLLoopAmanatsuOP( this ) );
 
     view.setRenderer( render );
 
-    timer = new GameTimer( view, 30 );
+    this.SetInput( new TouchEvent() );
 
-    timer.start();
+    timer = new GameTimer( view, 30 );
   }
 
-  public void Term()
+  public boolean Start()
+  {
+    timer.start();
+    return true;
+  }
+
+  public void Stop()
   {
     timer.stop();
     render.Term();
@@ -50,10 +66,22 @@ public class Amanatsu
   // Setter.
   public GameView SetGameView( GameView view )
   {
-    GameView ret;
-    ret = this.gview;
+    GameView ret = this.gview;
     this.gview = view;
     render.SetGameView( view );// TODO Lock
+    return ret;
+  }
+
+  public AmanatsuInput SetInput( AmanatsuInput input )
+  {
+    AmanatsuInput ret = this.input;
+    this.input = input;
+    /*int n;
+    Class<?>[] interfaces = input.getClass().getInterfaces();
+    for ( n = 0 ; n < interfaces.length ; ++n )
+    {
+      if ( interfaces[ n ] == AmanatsuInput.class ){}
+    }*/
     return ret;
   }
 
@@ -67,9 +95,12 @@ public class Amanatsu
 
 class AmanatsuGLView extends GLSurfaceView
 {
+  Amanatsu ama;
   public AmanatsuGLView( Amanatsu ama )
   {
     super( ama.GetContext() );
+
+    this.ama = ama;
 
     // タッチイベントを取得可能にする。
     this.setFocusable( true );
@@ -77,31 +108,41 @@ class AmanatsuGLView extends GLSurfaceView
 
   public boolean onTouchEvent( MotionEvent event )
   {
-    
-    // タッチ座標を取得。
-    //x = event.getX() * 2;
-    //y = event.getY() * 2;
+    return this.ama.input.Touch( event );
+  }
 
-    return false;
+  @Override
+  public boolean onKeyDown( int keyCode, KeyEvent event )
+  {
+    return this.ama.input.KeyDown( keyCode, event );
+  }
+
+  @Override
+  public boolean onKeyUp( int keyCode, KeyEvent event )
+  {
+    return this.ama.input.KeyUp( keyCode, event );
   }
 }
 
 class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
 {
+  Amanatsu ama;
   GameView view = null;
-  OpenGLDraw draw;
+  AmanatsuDraw draw;
   protected GLLoop loop;
 
   public GameGLSurfaceViewRender( Amanatsu ama )
   {
+    this.ama = ama;
     this.SetGameView( ama.gview );
-    draw = new OpenGLDraw( ama.context );
+    draw = new AmanatsuDraw( ama.context );
   }
 
   public void SetGLLoop( GLLoop loop )
   {
     this.loop = loop;
   }
+
   protected GameView SetGameView( GameView view )
   {
     GameView ret;
@@ -122,39 +163,40 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
 
     gl.glEnable( GL10.GL_BLEND );
     gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
-    
+
+    ama.input.Update();
     loop.Run( draw );
 
     gl.glDisable( GL10.GL_BLEND );
   }
 
   @Override
-  public void onSurfaceChanged( GL10 gl, int width, int height ) {
-    // TODO Auto-generated method stub
+  public void onSurfaceChanged( GL10 gl, int width, int height )
+  {
     draw.width = width;
     draw.height = height;
     gl.glViewport( 0, 0, draw.width, draw.height );
     gl.glMatrixMode( GL10.GL_PROJECTION );
     gl.glLoadIdentity();
-    //gl.glOrthof( -1.0f, 1.0f, 1.0f, -1.0f, 0.5f, -0.5f );
-    //gl.glOrthof( 0.0f, 1.0f, 1.0f, 0.0f, 0.5f, -0.5f );
     gl.glOrthof( 0.0f, (float)width, (float)height, 0.0f, 50.0f, -50.0f );
   }
 
   @Override
-  public void onSurfaceCreated( GL10 gl, EGLConfig config ) {
+  public void onSurfaceCreated( GL10 gl, EGLConfig config )
+  {
     // TODO Auto-generated method stub
   }
 
 }
 
-interface GLLoop{ public void Run( OpenGLDraw draw ); }
+interface GLLoop{ public void Run( AmanatsuDraw draw ); }
 
 class GLLoopAmanatsuOP implements GLLoop
 {
   GameView view;
   Amanatsu ama;
   int counter;
+
   public GLLoopAmanatsuOP( Amanatsu ama )
   {
     this.ama = ama;
@@ -163,7 +205,7 @@ class GLLoopAmanatsuOP implements GLLoop
   }
 
   @Override
-  public void Run( OpenGLDraw draw )
+  public void Run( AmanatsuDraw draw )
   {
     draw.ClearScreen();
     if ( counter < 0 )
@@ -179,7 +221,7 @@ class GLLoopAmanatsuOP implements GLLoop
       } catch (IOException e)
       {
       }
-    } else if ( counter == 180 )
+    } else if ( counter == 120 )
     {
       // End.
       draw.DestroyTexture( 0 );
@@ -209,7 +251,7 @@ class GLLoopUserInit implements GLLoop
   }
 
   @Override
-  public void Run( OpenGLDraw draw )
+  public void Run( AmanatsuDraw draw )
   {
     if ( run == 0 )
     {
@@ -231,9 +273,9 @@ class GLLoopMainLoop implements GLLoop
   }
 
   @Override
-  public void Run( OpenGLDraw draw )
+  public void Run( AmanatsuDraw draw )
   {
-    if ( view.MainLoop( draw ) == false )
+    if ( view.MainLoop( draw, ama.input ) == false )
     {
       ama.render.loop = new GLLoopCleanUp( ama );
     }
@@ -244,18 +286,252 @@ class GLLoopCleanUp implements GLLoop
 {
   GameView view;
   Amanatsu ama;
+
   public GLLoopCleanUp( Amanatsu ama )
   {
     this.view = ama.render.view;
     this.ama = ama;
   }
+
   @Override
-  public void Run(OpenGLDraw draw)
+  public void Run( AmanatsuDraw draw)
   {
-    ama.Term();
+    ama.Stop();
     ( (Activity) ama.context ).finish();
   }
   
+}
+
+class TouchEvent implements AmanatsuInput
+{
+  private float x, y;
+  private float[] mx, my;
+  private int[] fid;
+  private int len = 0, max = 0;
+  static Map<Integer, Finger> finger;
+  static Map<Integer, Key> keyboard;
+
+
+  // tmp;
+  Finger fin;
+  Key key;
+  int tfid[];
+
+  boolean lock = false;
+
+  public TouchEvent()
+  {
+    finger = new Hashtable<Integer, Finger>();
+    keyboard = new Hashtable<Integer, Key>();
+    tfid = new int[ 1 ];
+  }
+
+  @Override
+  public boolean Update()
+  {
+    Iterator< Map.Entry<Integer, Finger> > itf;
+    Iterator< Map.Entry<Integer, Key> > itk;
+    Map.Entry<Integer, Finger> entryf;
+    Map.Entry<Integer, Key> entryk;
+    Finger fin;
+
+    int del = 0;
+    len = 0;
+
+    for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
+    {
+      entryf = itf.next();
+      fin = entryf.getValue();
+      if ( fin.touched == false )
+      {
+        if ( fin.frame < 0 )
+        {
+          if ( tfid.length < del + 1 ){ tfid = new int[ del + 1 ]; }
+          tfid[ del ] = entryf.getKey();
+          ++del;
+          continue;
+        } else
+        {
+          fin.frame = -1;
+        }
+      } else
+      {
+        ++fin.frame;
+      }
+      fin.touched = false;
+      ++len;
+    }
+
+    // Delete FingerID.
+    while ( --del >= 0 ){ finger.remove( tfid[ del ] ); }
+
+    //del = 0;
+    for ( itk = keyboard.entrySet().iterator(); itk.hasNext() ; )
+    {
+      entryk = itk.next();
+      key = entryk.getValue();
+      if ( key.pushed == false )
+      {
+        if ( key.frame < 0 )
+        {
+          //if ( tfid.length < del + 1 ){ tfid = new int[ del + 1 ]; }
+          //tfid[ del ] = entryk.getKey();
+          //++del;
+          key.frame = 0;
+          continue;
+        } else
+        {
+          key.frame = -1;
+        }
+      } else
+      {
+        ++key.frame;
+      }
+      key.pushed = false;
+      ++len;
+    }
+    // Key Input.
+    return true;
+  }
+
+  @Override
+  public boolean Touch( MotionEvent event )
+  {
+    int n, id;
+
+    this.x = event.getX();
+    this.y = event.getY();
+
+    int len = event.getPointerCount();
+    if ( len > max )
+    {
+      max = len;
+      mx = new float[ max ];
+      my = new float[ max ];
+      fid = new int[ max ];
+    }
+
+    for ( n = 0 ; n < len ; ++n )
+    {
+      id = event.getPointerId( n );
+      if ( finger.get( id ) == null )
+      {
+        fin = new Finger();
+        finger.put( id, fin );
+        fin.frame = 0;
+      } else
+      {
+        fin = finger.get( id );
+      }
+
+      // Finger position.
+      fin.x = mx[ n ] = event.getX( n );
+      fin.y = my[ n ] = event.getY( n );
+      // Finger id.
+      fid[ n ] = id;
+      // Touched.
+      fin.touched = true;
+    }
+
+    return true;
+  }
+
+  @Override
+  public float GetX()
+  {
+    return x;
+  }
+
+  @Override
+  public float GetY()
+  {
+    return y;
+  }
+
+  @Override
+  public int Size()
+  {
+    return len;
+  }
+
+  @Override
+  public float GetX( int num )
+  {
+    return mx[ num ];
+  }
+
+  @Override
+  public float GetY( int num )
+  {
+    return my[ num ];
+  }
+
+  @Override
+  public int GetTouchFrame( int num )
+  {
+    if ( finger.containsKey( fid[ num ] ) == false ){ return -1; }
+    return finger.get( fid[ num ] ).frame;
+  }
+
+  @Override
+  public float GetFingerX( int fingerid )
+  {
+    if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
+    return finger.get( fingerid ).x;
+  }
+
+  @Override
+  public float GetFingerY( int fingerid )
+  {
+    if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
+    return finger.get( fingerid ).y;
+  }
+
+  @Override
+  public int GetFingerTouchFrame( int fingerid )
+  {
+    fin = finger.get( fingerid );
+    if ( fin == null ){ return 0; }
+    return fin.frame;
+  }
+
+  @Override
+  public boolean KeyDown( int keycode, KeyEvent event )
+  {
+    if ( keyboard.containsKey( keycode ) )
+    {
+      key = keyboard.get( keycode );
+    } else
+    {
+      key = new Key();
+      keyboard.put( keycode, key );
+    }
+    key.pushed = true;
+    return true;
+  }
+
+  @Override
+  public boolean KeyUp( int keycode, KeyEvent event )
+  {
+    keyboard.get( keycode ).pushed = false;
+    return true;
+  }
+
+}
+
+class Finger
+{
+  float x, y;
+  int id;
+  int frame;
+  boolean touched;
+}
+
+class Key
+{
+  int code;
+  int frame;
+  boolean pushed;
 }
 
 class GameTimer extends Handler
@@ -283,7 +559,7 @@ class GameTimer extends Handler
   {
     delayTime = 0;
   }
-  
+
   @Override
   public void handleMessage( Message msg )
   {

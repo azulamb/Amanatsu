@@ -1,15 +1,11 @@
 package net.azulite.Amanatsu;
 
-import android.view.MotionEvent;
-
 public interface GameView
 {
 
-  public void UserInit( OpenGLDraw draw );
+  public void UserInit( AmanatsuDraw draw );
 
-  public boolean MainLoop( OpenGLDraw draw );
+  public boolean MainLoop( AmanatsuDraw draw, AmanatsuInput input );
 
-  public void CleanUp( OpenGLDraw draw );
-  
-  public void Touch( MotionEvent event );
+  public void CleanUp( AmanatsuDraw draw );
 }
