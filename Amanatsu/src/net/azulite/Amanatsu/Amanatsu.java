@@ -21,6 +21,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import net.azulite.Amanatsu.GameView;
 
+// Library
+// TODO
+// * enable back to exit
 
 public class Amanatsu
 {
@@ -334,6 +337,7 @@ class TouchEvent implements AmanatsuInput
     Map.Entry<Integer, Finger> entryf;
     Map.Entry<Integer, Key> entryk;
     Finger fin;
+    Key key;
 
     int del = 0;
     len = 0;
@@ -365,6 +369,8 @@ class TouchEvent implements AmanatsuInput
     // Delete FingerID.
     while ( --del >= 0 ){ finger.remove( tfid[ del ] ); }
 
+    // Key Input.
+
     //del = 0;
     for ( itk = keyboard.entrySet().iterator(); itk.hasNext() ; )
     {
@@ -388,9 +394,8 @@ class TouchEvent implements AmanatsuInput
         ++key.frame;
       }
       key.pushed = false;
-      ++len;
     }
-    // Key Input.
+
     return true;
   }
 
@@ -469,7 +474,7 @@ class TouchEvent implements AmanatsuInput
   @Override
   public int GetTouchFrame( int num )
   {
-    if ( finger.containsKey( fid[ num ] ) == false ){ return -1; }
+    if ( num >= fid.length || finger.containsKey( fid[ num ] ) == false ){ return -1; }
     return finger.get( fid[ num ] ).frame;
   }
 
@@ -513,8 +518,26 @@ class TouchEvent implements AmanatsuInput
   @Override
   public boolean KeyUp( int keycode, KeyEvent event )
   {
-    keyboard.get( keycode ).pushed = false;
+    if ( keyboard.containsKey( keycode ) )
+    {
+      key = keyboard.get( keycode );
+    } else
+    {
+      key = new Key();
+      keyboard.put( keycode, key );
+    }
+    key.pushed = false;
     return true;
+  }
+
+  @Override
+  public int GetKey( int keycode )
+  {
+    if ( keyboard.containsKey( keycode ) )
+    {
+      return keyboard.get( keycode ).frame;
+    }
+    return 0;
   }
 
 }
