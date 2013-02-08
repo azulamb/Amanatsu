@@ -28,7 +28,7 @@ import net.azulite.Amanatsu.GameView;
 
 public class Amanatsu
 {
-  static private String VERSION = "0.0.1";
+  static private String VERSION = "0.0.2";
 
   Context context;
   AmanatsuGLView view;
@@ -229,7 +229,7 @@ class GLLoopAmanatsuOP implements GLLoop
       counter = 0;
       try
       {
-        URL filename = this.getClass().getResource( "/res/drawable/logo.png" );
+        URL filename = this.getClass().getResource( "/res/raw/logo.png" );
         InputStream input = filename.openStream();
         Bitmap bmp = BitmapFactory.decodeStream( input );
         draw.CreateTexture( 0, bmp );
@@ -357,7 +357,6 @@ class TouchEvent implements AmanatsuInput
     Finger fin;
     Key key;
 
-    //int del = 0;
     len = 0;
 
     for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )

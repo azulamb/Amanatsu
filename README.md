@@ -3,12 +3,13 @@ Amanatsu
 ## Android
 Version 2.2 or higher.
 
+## How to use
+Iy you only want to use Amanatsu, Download "Amanatsu.jar".
+And copy "Amanatsu.jar" to "libs/" dir in your project.
+
 ## Compile
 Use Eclipse.
 Do not export "AndroidManifest.xml" and "project.properties".
-
-## How to use
-Copy Amanatsu.jar to libs/ dir.
 
 ## Sample code
 
@@ -19,7 +20,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import net.azulite.Amanatsu.*;
 
-public class WitchOfGolem extends Activity
+public class XXXXX extends Activity
 {
   Amanatsu ama;
 
@@ -55,12 +56,9 @@ class Game implements GameView
 ## Android
 バージョン2.2以上。
 
-## コンパイル方法
-EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエクスポートしてJARファイルとして出力する。
-ただし、"AndroidManifest.xml"と"project.properties"はエクスポートしないようにチェックボックスを外すこと。
-
 ## 利用方法
 使いたいプロジェクト内にlibsフォルダを作り、その中にAmanatsu.jarをコピーする。
+ソースとか興味なくてただ単に使いたい場合は、ルートディレクトリにある"Amanatsu.jar"をダウンロード(ファイル名をクリック->Raw or View Rawをクリック)して、プロジェクト内に用意した libs/ ディレクトリに入れてください。
 
 で、後は上のような感じで適当にゲーム処理を記述するためのGameクラス(GameViewを継承)を作り、Amanatsuオブジェクト生成時に渡したり、View登録時にAmanatsuのViewを登録する。
 
@@ -75,11 +73,18 @@ GameViewインターフェースは次のようになっている。
 ### CleanUp
 終了時に呼ばれるメソッド。
 
+## コンパイル方法
+EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエクスポートしてJARファイルとして出力する。
+ただし、"AndroidManifest.xml"と"project.properties"はエクスポートしないようにチェックボックスを外すこと。
+
 ## その他
 
 ### リソース
-画像の場合、drawableに入れると画像がリサイズされる場合があります。
-rawディレクトリを作って、その中に入れた方が無難です。
+画像の場合、drawableに入れると画像がリサイズされる場合がある。
+rawディレクトリを作って、その中に入れた方が無難。
 
 ### Amanatsuについて
-AmanatsuはWindowsのVC++用ゲームライブラリであるMikanライブラリのAndroid版です。
+AmanatsuはWindowsのVC++用ゲームライブラリであるMikanライブラリのAndroid版だったり。
+
+### ロゴについて
+今のは適当なので、依頼予定。
