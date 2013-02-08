@@ -24,16 +24,20 @@ import net.azulite.Amanatsu.GameView;
 // Library
 // TODO
 // * enable back to exit
+// * CreateTexture
 
 public class Amanatsu
 {
   static private String VERSION = "0.0.1";
+
   Context context;
   AmanatsuGLView view;
+
   GameView gview;
 
   GameGLSurfaceViewRender render;
-  AmanatsuInput input = null;
+  AmanatsuInput input;
+  AmanatsuSound sound;
   GameTimer timer;
 
   public Amanatsu( Context context, GameView gview )
@@ -50,6 +54,8 @@ public class Amanatsu
     view.setRenderer( render );
 
     this.SetInput( new TouchEvent() );
+
+    this.SetSound( new AmanatsuSound() );
 
     timer = new GameTimer( view, 30 );
   }
@@ -88,6 +94,13 @@ public class Amanatsu
     return ret;
   }
 
+  public AmanatsuSound SetSound( AmanatsuSound sound )
+  {
+    AmanatsuSound ret = this.sound;
+    this.sound = sound;
+    return ret;
+  }
+
   // Getter.
   static public String GetVersion(){ return VERSION; }
   public Context GetContext(){ return context; }
@@ -105,7 +118,7 @@ class AmanatsuGLView extends GLSurfaceView
 
     this.ama = ama;
 
-    // タッチイベントを取得可能にする。
+    // Enable touch.
     this.setFocusable( true );
   }
 
@@ -156,7 +169,7 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
 
   public void Term()
   {
-    view.CleanUp( draw );
+    view.CleanUp( draw, ama.input, ama.sound );
   }
 
   @Override
@@ -234,7 +247,14 @@ class GLLoopAmanatsuOP implements GLLoop
       // OP
       int max = draw.width < draw.height ? draw.width : draw.height;
       max *= 0.4;
-      draw.DrawTextureScaring( 0, draw.width / 2 - max / 2, draw.height / 2 - max / 2, 0, 0, 256, 256, max, max );
+      if ( counter < 40 )
+      {
+        draw.SetColor( 0, counter / 40.0f );
+      } else if ( counter >= 80 )
+      {
+        draw.SetColor( 0, (120 - counter) / 40.0f );
+      }
+      draw.DrawTextureScaring( 0, 0, 0, 256, 256, draw.width / 2 - max / 2, draw.height / 2 - max / 2, max, max );
       draw.DrawTexture( 0, draw.width, draw.height, 0, 0, 256, 256 );
       ++counter;
     }
@@ -259,7 +279,7 @@ class GLLoopUserInit implements GLLoop
     if ( run == 0 )
     {
       run = 1;
-      view.UserInit( draw );
+      view.UserInit( draw, ama.input, ama.sound );
       ama.render.loop = new GLLoopMainLoop( ama );
     }
   }
@@ -278,7 +298,7 @@ class GLLoopMainLoop implements GLLoop
   @Override
   public void Run( AmanatsuDraw draw )
   {
-    if ( view.MainLoop( draw, ama.input ) == false )
+    if ( view.MainLoop( draw, ama.input, ama.sound ) == false )
     {
       ama.render.loop = new GLLoopCleanUp( ama );
     }
@@ -318,7 +338,6 @@ class TouchEvent implements AmanatsuInput
   // tmp;
   Finger fin;
   Key key;
-  int tfid[];
 
   boolean lock = false;
 
@@ -326,11 +345,10 @@ class TouchEvent implements AmanatsuInput
   {
     finger = new Hashtable<Integer, Finger>();
     keyboard = new Hashtable<Integer, Key>();
-    tfid = new int[ 1 ];
   }
 
   @Override
-  public boolean Update()
+  public synchronized boolean Update()
   {
     Iterator< Map.Entry<Integer, Finger> > itf;
     Iterator< Map.Entry<Integer, Key> > itk;
@@ -339,20 +357,19 @@ class TouchEvent implements AmanatsuInput
     Finger fin;
     Key key;
 
-    int del = 0;
+    //int del = 0;
     len = 0;
 
     for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
     {
+      // java.util.concurrentmodificationexception
       entryf = itf.next();
       fin = entryf.getValue();
       if ( fin.touched == false )
       {
         if ( fin.frame < 0 )
         {
-          if ( tfid.length < del + 1 ){ tfid = new int[ del + 1 ]; }
-          tfid[ del ] = entryf.getKey();
-          ++del;
+          itf.remove();
           continue;
         } else
         {
@@ -366,12 +383,8 @@ class TouchEvent implements AmanatsuInput
       ++len;
     }
 
-    // Delete FingerID.
-    while ( --del >= 0 ){ finger.remove( tfid[ del ] ); }
-
     // Key Input.
 
-    //del = 0;
     for ( itk = keyboard.entrySet().iterator(); itk.hasNext() ; )
     {
       entryk = itk.next();
@@ -380,9 +393,6 @@ class TouchEvent implements AmanatsuInput
       {
         if ( key.frame < 0 )
         {
-          //if ( tfid.length < del + 1 ){ tfid = new int[ del + 1 ]; }
-          //tfid[ del ] = entryk.getKey();
-          //++del;
           key.frame = 0;
           continue;
         } else
@@ -400,7 +410,7 @@ class TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public boolean Touch( MotionEvent event )
+  public synchronized boolean Touch( MotionEvent event )
   {
     int n, id;
 
@@ -430,10 +440,16 @@ class TouchEvent implements AmanatsuInput
       }
 
       // Finger position.
-      fin.x = mx[ n ] = event.getX( n );
-      fin.y = my[ n ] = event.getY( n );
+      // NullPo?
+      fin.x = event.getX( n );
+      fin.y = event.getY( n );
+
+      // Array
       // Finger id.
       fid[ n ] = id;
+      mx[ n ] = fin.x;
+      my[ n ] = fin.y;
+
       // Touched.
       fin.touched = true;
     }

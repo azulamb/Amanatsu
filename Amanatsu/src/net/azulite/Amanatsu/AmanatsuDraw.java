@@ -212,7 +212,9 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTexture( int rnum, float dx, float dy, float sx, float sy, float w, float h )
+  public boolean DrawTexture( int rnum,
+      float rx, float ry, float w, float h,
+      float dx, float dy )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -225,16 +227,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureC( int rnum, float dx, float dy, float sx, float sy, float w, float h )
+  public boolean DrawTextureC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -251,16 +255,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureScaring( int rnum, float dx, float dy, float sx, float sy, float w, float h, float dw, float dh )
+  public boolean DrawTextureScaring( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float dw, float dh )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -273,16 +279,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureScaringC( int rnum, float dx, float dy, float sx, float sy, float w, float h, float dw, float dh )
+  public boolean DrawTextureScaringC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float dw, float dh )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -299,16 +307,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureScaring( int rnum, float dx, float dy, float sx, float sy, float w, float h, float scale )
+  public boolean DrawTextureScaring( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float scale )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -321,16 +331,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureScaringC( int rnum, float dx, float dy, float sx, float sy, float w, float h, float scale )
+  public boolean DrawTextureScaringC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float scale )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -348,16 +360,18 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     return this.DrawTexture( ttex );
   }
 
-  public boolean DrawTextureRotationAngleC( int rnum, float dx, float dy, float sx, float sy, float w, float h, float rad )
+  public boolean DrawTextureRotationC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float rad )
   {
     if ( this.ExistTexture( rnum ) == false )
     {
@@ -368,7 +382,7 @@ public class AmanatsuDraw
 
     AMatrix.IdentityMatrix( mat );
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
-    AMatrix.rotateM( mat, 0, rad, 0.0f, 0.0f, 1.0f );
+    AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
     this.SetFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
@@ -389,10 +403,258 @@ public class AmanatsuDraw
     this.SetVertex( ttex, farr8 );
 
     this.SetFloatArray8(
-      sx     / ttex.width, sy     / ttex.height,
-      sx + w / ttex.width, sy     / ttex.height,
-      sx     / ttex.width, sy + h / ttex.height,
-      sx + w / ttex.width, sy + h / ttex.height );
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureRotationAngleC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float angle )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    AMatrix.IdentityMatrix( mat );
+    AMatrix.translateM( mat, 0, dx, dy, 0.0f );
+    AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
+
+    this.SetFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureScaleRotateC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float scale, float rad )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    AMatrix.IdentityMatrix( mat );
+    AMatrix.translateM( mat, 0, dx, dy, 0.0f );
+    AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
+    AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
+
+    this.SetFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureScaleRotateAngleC( int rnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float scale, float angle )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    AMatrix.IdentityMatrix( mat );
+    AMatrix.translateM( mat, 0, dx, dy, 0.0f );
+    AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
+    AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
+
+    this.SetFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureMatrix( int rnum,
+    float rx, float ry, float w, float h,
+    float[] matrix44 )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    this.SetFloatArray4( 0.0f, 0.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w, 0.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( 0.0f, h, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w, h, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureMatrixC( int rnum,
+    float rx, float ry, float w, float h,
+    float[] matrix44 )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    this.SetFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+
+    this.SetFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
+    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
+    this.SetUV( ttex, farr8 );
+
+    boolean ret = this.DrawTexture( ttex );
+
+    return ret;
+  }
+
+  public boolean DrawTextureVertex( int rnum,
+    float rx, float ry, float w, float h,
+    float dx0, float dy0,
+    float dx1, float dy1,
+    float dx2, float dy2,
+    float dx3, float dy3 )
+  {
+    if ( this.ExistTexture( rnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = this.GetTexture( rnum );
+
+    this.SetFloatArray8( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
+    this.SetVertex( ttex, farr8 );
+
+    this.SetFloatArray8(
+      rx     / ttex.width, ry     / ttex.height,
+      rx + w / ttex.width, ry     / ttex.height,
+      rx     / ttex.width, ry + h / ttex.height,
+      rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
     boolean ret = this.DrawTexture( ttex );
@@ -468,18 +730,6 @@ public class AmanatsuDraw
     return CreateFloatBuffer( col );
   }
 
-  public void SetColor( int rnum )
-  {
-    float[] color =
-    {
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-    };
-    this.SetColor( rnum, color );
-  }
-
   public boolean SetUV( Texture tex, float[] uv )
   {
     tex.uv  = CreateFloatBuffer( uv );
@@ -490,6 +740,30 @@ public class AmanatsuDraw
   {
     tex.ver = CreateFloatBuffer( vert );
     return true;
+  }
+
+  public void SetColor( int rnum, float col )
+  {
+    float[] color =
+    {
+      col, col, col, col,
+      col, col, col, col,
+      col, col, col, col,
+      col, col, col, col,
+    };
+    this.SetColor( rnum, color );
+  }
+
+  public void SetColor( int rnum )
+  {
+    float[] color =
+    {
+      1.0f, 1.0f, 1.0f, 1.0f,
+      1.0f, 1.0f, 1.0f, 1.0f,
+      1.0f, 1.0f, 1.0f, 1.0f,
+      1.0f, 1.0f, 1.0f, 1.0f,
+    };
+    this.SetColor( rnum, color );
   }
 
   public void SetColor( int rnum, float[] color )
