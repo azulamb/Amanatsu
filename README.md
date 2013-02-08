@@ -10,11 +10,12 @@ Do not export "AndroidManifest.xml" and "project.properties".
 ## How to use
 Copy Amanatsu.jar to libs/ dir.
 
+## Sample code
+
 <pre><code>
 package XXXXX;
 
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.app.Activity;
 import net.azulite.Amanatsu.*;
 
@@ -36,21 +37,18 @@ public class WitchOfGolem extends Activity
 class Game implements GameView
 {
   @Override
-  public void UserInit( OpenGLDraw draw ) {
+  public void UserInit(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
   }
 
   @Override
-  public boolean MainLoop( OpenGLDraw draw ) {
+  public boolean MainLoop(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
     return true; // false is Game end.
   }
 
   @Override
-  public void CleanUp( OpenGLDraw draw ) {
+  public void CleanUp(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
   }
 
-  @Override
-  public void Touch(MotionEvent event) {
-  }
 }
 <code></pre>
 
@@ -66,7 +64,7 @@ EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエ�
 
 で、後は上のような感じで適当にゲーム処理を記述するためのGameクラス(GameViewを継承)を作り、Amanatsuオブジェクト生成時に渡したり、View登録時にAmanatsuのViewを登録する。
 
-Gameクラスは次のようになっている。
+GameViewインターフェースは次のようになっている。
 
 ### UserInit
 実行開始の初めの一度だけ実行されるメソッド。
@@ -78,4 +76,10 @@ Gameクラスは次のようになっている。
 終了時に呼ばれるメソッド。
 
 ## その他
-AmanatsuはWindowsのVC++用ゲームライブラリである、MikanライブラリのAndroid版です。
+
+### リソース
+画像の場合、drawableに入れると画像がリサイズされる場合があります。
+rawディレクトリを作って、その中に入れた方が無難です。
+
+### Amanatsuについて
+AmanatsuはWindowsのVC++用ゲームライブラリであるMikanライブラリのAndroid版です。
