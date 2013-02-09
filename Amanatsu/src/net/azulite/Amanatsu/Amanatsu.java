@@ -19,16 +19,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
 import net.azulite.Amanatsu.GameView;
 
 // Library
 // TODO
 // * enable back to exit
 // * CreateTexture
+// * disable amanatsu thema
+// * screen size
 
 public class Amanatsu
 {
-  static private String VERSION = "0.0.2";
+  static private String VERSION = "0.0.3";
 
   Context context;
   AmanatsuGLView view;
@@ -55,7 +58,7 @@ public class Amanatsu
 
     this.SetInput( new TouchEvent() );
 
-    this.SetSound( new AmanatsuSound() );
+    this.SetSound( new AmanatsuSound( this ) );
 
     timer = new GameTimer( view, 30 );
   }
@@ -194,7 +197,7 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
     gl.glViewport( 0, 0, draw.width, draw.height );
     gl.glMatrixMode( GL10.GL_PROJECTION );
     gl.glLoadIdentity();
-    gl.glOrthof( 0.0f, (float)width, (float)height, 0.0f, 50.0f, -50.0f );
+    gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );
   }
 
   @Override
