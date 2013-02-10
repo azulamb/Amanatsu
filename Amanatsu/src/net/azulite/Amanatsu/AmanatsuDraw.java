@@ -17,6 +17,11 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
+/**
+ * @author Hiroki
+ */
+
+
 // Library.
 // TODO:
 
@@ -46,11 +51,20 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * Clear Screen(black).
+   */
   public boolean ClearScreen()
   {
     return this.ClearScreen( 0.0f, 0.0f, 0.0f );
   }
 
+  /**
+   * Clear Screen.
+   * @param red Red color(0.0f-1.0f).
+   * @param red Green color(0.0f-1.0f).
+   * @param red Blue color(0.0f-1.0f).
+   */
   public boolean ClearScreen( float red, float green, float blue)
   {
     gl.glClearColor( red, green, blue, 1.0f );
@@ -59,6 +73,8 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * */
   public boolean DrawBox( float x, float y, float w, float h, float[] color )
   {
     this.SetFloatArray8( x, y, x + w, y, x, y + h, x + w, y + h );

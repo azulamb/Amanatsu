@@ -22,13 +22,25 @@ import android.view.MotionEvent;
 
 import net.azulite.Amanatsu.GameView;
 
+/**
+ * @author Hiroki
+ * @version 0.0.3
+ */
+
 // Library
 // TODO
 // * enable back to exit
 // * CreateTexture
 // * disable amanatsu thema
 // * screen size
+// * fps
 
+/**
+ * Amanatsu
+ * <pre>
+ * Amanatsu main class.
+ * </pre>
+ */
 public class Amanatsu
 {
   static private String VERSION = "0.0.3";
@@ -43,7 +55,17 @@ public class Amanatsu
   AmanatsuSound sound;
   GameTimer timer;
 
+  /**
+   * Amanatsu
+   * @param Content Activity instance.
+   * @param GameView Class instance(implements GameView).
+   */
   public Amanatsu( Context context, GameView gview )
+  {
+    this( context, gview, true );
+  }
+
+  public Amanatsu( Context context, GameView gview, boolean multitouch )
   {
     this.context = context;
 
@@ -56,19 +78,31 @@ public class Amanatsu
 
     view.setRenderer( render );
 
-    this.SetInput( new TouchEvent() );
+    if ( multitouch )
+    {
+      this.SetInput( new MultiTouchEvent() );
+    } else
+    {
+      this.SetInput( new TouchEvent() );      
+    }
 
     this.SetSound( new AmanatsuSound( this ) );
 
     timer = new GameTimer( view, 30 );
   }
 
+  /**
+   * Start game.
+   */
   public boolean Start()
   {
     timer.start();
     return true;
   }
 
+  /**
+   * End game.
+   */
   public void Stop()
   {
     timer.stop();
@@ -331,6 +365,189 @@ class GLLoopCleanUp implements GLLoop
 class TouchEvent implements AmanatsuInput
 {
   private float x, y;
+  private boolean touched;
+  private int frame;
+  static Map<Integer, Key> keyboard;
+
+  // tmp;
+  Key key;
+
+  boolean lock = false;
+
+  public TouchEvent()
+  {
+    keyboard = new Hashtable<Integer, Key>();
+    touched = false;
+  }
+
+  @Override
+  public synchronized boolean Update()
+  {
+    Iterator< Map.Entry<Integer, Key> > itk;
+    Map.Entry<Integer, Key> entryk;
+    Key key;
+
+    if ( touched )
+    {
+      ++frame;
+    } else if ( frame > 0 )
+    {
+      frame = -1;
+    } else
+    {
+      frame = 0;
+    }
+
+    // Key Input.
+
+    for ( itk = keyboard.entrySet().iterator(); itk.hasNext() ; )
+    {
+      entryk = itk.next();
+      key = entryk.getValue();
+      if ( key.pushed == false )
+      {
+        if ( key.frame < 0 )
+        {
+          key.frame = 0;
+          continue;
+        } else
+        {
+          key.frame = -1;
+        }
+      } else
+      {
+        ++key.frame;
+      }
+      key.pushed = false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public synchronized boolean Touch( MotionEvent event )
+  {
+    this.x = event.getX();
+    this.y = event.getY();
+
+    if ( event.getAction() == MotionEvent.ACTION_UP )
+    {
+      touched = false;
+    }else
+    {
+      touched = true;
+    }
+
+    return true;
+  }
+
+  @Override
+  public float GetX()
+  {
+    return x;
+  }
+
+  @Override
+  public float GetY()
+  {
+    return y;
+  }
+
+  @Override
+  public int GetTouchFrame()
+  {
+    return frame;
+  }
+
+  @Override
+  public int Size()
+  {
+    return (frame > 0) ? 1 : 0;
+  }
+
+  @Override
+  public float GetX( int num )
+  {
+    return x;
+  }
+
+  @Override
+  public float GetY( int num )
+  {
+    return y;
+  }
+
+  @Override
+  public int GetTouchFrame( int num )
+  {
+    return frame;
+  }
+
+  @Override
+  public float GetFingerX( int fingerid )
+  {
+    return x;
+  }
+
+  @Override
+  public float GetFingerY( int fingerid )
+  {
+    return y;
+  }
+
+  @Override
+  public int GetFingerTouchFrame( int fingerid )
+  {
+    return frame;
+  }
+
+  @Override
+  public boolean KeyDown( int keycode, KeyEvent event )
+  {
+    if ( keyboard.containsKey( keycode ) )
+    {
+      key = keyboard.get( keycode );
+    } else
+    {
+      key = new Key();
+      keyboard.put( keycode, key );
+    }
+    key.pushed = true;
+    return true;
+  }
+
+  @Override
+  public boolean KeyUp( int keycode, KeyEvent event )
+  {
+    if ( keyboard.containsKey( keycode ) )
+    {
+      key = keyboard.get( keycode );
+    } else
+    {
+      key = new Key();
+      keyboard.put( keycode, key );
+    }
+    key.pushed = false;
+    return true;
+  }
+
+  @Override
+  public int GetKey( int keycode )
+  {
+    if ( keyboard.containsKey( keycode ) )
+    {
+      return keyboard.get( keycode ).frame;
+    }
+    return 0;
+  }
+
+}
+
+class MultiTouchEvent implements AmanatsuInput
+{
+  private float x, y;
+  private boolean touched;
+  private int frame;
   private float[] mx, my;
   private int[] fid;
   private int len = 0, max = 0;
@@ -339,28 +556,40 @@ class TouchEvent implements AmanatsuInput
 
 
   // tmp;
+  Iterator< Map.Entry<Integer, Finger> > itf;
+  Map.Entry<Integer, Finger> entryf;
   Finger fin;
   Key key;
 
   boolean lock = false;
 
-  public TouchEvent()
+  public MultiTouchEvent()
   {
     finger = new Hashtable<Integer, Finger>();
     keyboard = new Hashtable<Integer, Key>();
+    touched = false;
   }
 
   @Override
   public synchronized boolean Update()
   {
-    Iterator< Map.Entry<Integer, Finger> > itf;
     Iterator< Map.Entry<Integer, Key> > itk;
-    Map.Entry<Integer, Finger> entryf;
     Map.Entry<Integer, Key> entryk;
     Finger fin;
     Key key;
 
     len = 0;
+
+    if ( touched )
+    {
+      ++frame;
+    } else if ( frame > 0 )
+    {
+      frame = -1;
+    } else
+    {
+      frame = 0;
+    }
 
     for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
     {
@@ -381,7 +610,7 @@ class TouchEvent implements AmanatsuInput
       {
         ++fin.frame;
       }
-      fin.touched = false;
+      //fin.touched = false;
       ++len;
     }
 
@@ -418,6 +647,13 @@ class TouchEvent implements AmanatsuInput
 
     this.x = event.getX();
     this.y = event.getY();
+    if ( event.getAction() == MotionEvent.ACTION_UP )
+    {
+      touched = false;
+    }else
+    {
+      touched = true;
+    }
 
     int len = event.getPointerCount();
     if ( len > max )
@@ -426,6 +662,12 @@ class TouchEvent implements AmanatsuInput
       mx = new float[ max ];
       my = new float[ max ];
       fid = new int[ max ];
+    }
+
+    for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
+    {
+      entryf = itf.next();
+      entryf.getValue().touched = false;
     }
 
     for ( n = 0 ; n < len ; ++n )
@@ -469,6 +711,12 @@ class TouchEvent implements AmanatsuInput
   public float GetY()
   {
     return y;
+  }
+
+  @Override
+  public int GetTouchFrame()
+  {
+    return frame;
   }
 
   @Override

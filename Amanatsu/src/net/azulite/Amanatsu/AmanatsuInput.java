@@ -11,6 +11,7 @@ public interface AmanatsuInput
 
   public float GetX();
   public float GetY();
+  public int GetTouchFrame();
 
   public int Size();
 
