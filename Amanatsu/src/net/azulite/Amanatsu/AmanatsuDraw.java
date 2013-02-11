@@ -13,7 +13,12 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.Color;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
@@ -31,10 +36,17 @@ public class AmanatsuDraw
   int width, height;
   Resources resource;
   static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >();
+  static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >();
+
+  // String.
+  Bitmap stringbmp;
+  Texture stringtex;
+  int stringnum;
 
   // tmp.
   private float[] farr4, farr8, mat;
   private Texture ttex;
+  private Paint tpaint;
 
   public AmanatsuDraw( Context context )
   {
@@ -43,6 +55,21 @@ public class AmanatsuDraw
     farr8 = new float[ 8 ];
     mat = new float[ 16 ];
 
+    stringbmp = Bitmap.createBitmap( 512, 512, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
+    this.CreateFont( 0, 30, 1.0f, 1.0f, 1.0f, 1.0f );
+  }
+
+  public void Init()
+  {
+    this.CreateTextureFromBitmap( 0, stringbmp, false );
+    stringtex = ttex;
+    stringnum = ttex.texid[ 0 ];
+    stringtex.col  = CreateFloatBuffer( new float[]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f } );
+  }
+
+  public void Release()
+  {
+    stringbmp.recycle();
   }
 
   public boolean SetGL( GL10 gl )
@@ -74,6 +101,11 @@ public class AmanatsuDraw
   }
 
   /**
+   * @param x Draw x oordinate.
+   * @param y Draw y cordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
    * */
   public boolean DrawBox( float x, float y, float w, float h, float[] color )
   {
@@ -90,46 +122,93 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * @param x Draw x oordinate(center).
+   * @param y Draw y cordinate(center).
+   * @param w Width.
+   * @param h Height.
+   * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
+   * */
+  public boolean DrawBoxC( float x, float y, float w, float h, float[] color )
+  {
+    this.SetFloatArray8( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, CreateFloatBuffer( farr8 ) );
+    gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
+
+    gl.glColorPointer( 4, GL10.GL_FLOAT, 0, CreateColor( color ) );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glDrawArrays( GL10.GL_TRIANGLE_STRIP, 0, 4 );
+
+    return true;
+  }
+
   public int CreateTexture( int rnum )
   {
-    return this.CreateTextureFromBitmap( rnum, BitmapFactory.decodeResource( resource, rnum ) );
+    return this.CreateTextureFromBitmap( rnum, BitmapFactory.decodeResource( resource, rnum ), true );
+  }
+
+  public int CreateTexture( int tnum, int rnum )
+  {
+    return this.CreateTextureFromBitmap( tnum, BitmapFactory.decodeResource( resource, rnum ), true );
   }
 
   public int CreateTexture( int rnum, Bitmap bmp )
   {
-    return this.CreateTextureFromBitmap( rnum, bmp );
+    return this.CreateTextureFromBitmap( rnum, bmp, true );
   }
 
-  private int CreateTextureFromBitmap( int rnum, Bitmap bmp )
+  private int CreateTextureFromBitmap( int rnum, Bitmap bmp, boolean regist )
   {
     if ( bmp == null )
     {
       return -1;
     }
 
-    if ( textures.containsKey( rnum ) )
+    if ( regist )
     {
-      ReleaseTexture( rnum );
-      ttex = textures.get( rnum );
+      if ( textures.containsKey( rnum ) )
+      {
+        ReleaseTexture( rnum );
+        ttex = textures.get( rnum );
+      } else
+      {
+        ttex = new Texture();
+        ttex.texid = new int [ 1 ];
+        textures.put( rnum, ttex );
+      }
     } else
     {
+      // Unregist.
       ttex = new Texture();
       ttex.texid = new int [ 1 ];
-      textures.put( rnum, ttex );
     }
 
     gl.glGenTextures( 1, ttex.texid, 0 );
     gl.glBindTexture( GL10.GL_TEXTURE_2D, ttex.texid[ 0 ] );
+
+    if ( AmanatsuDraw.IsPowerOf2( bmp.getWidth() ) == false ||
+         AmanatsuDraw.IsPowerOf2( bmp.getHeight() ) == false ||
+         bmp.getWidth() != bmp.getHeight() )
+    {
+      int length = AmanatsuDraw.ConvertPowerOf2( bmp.getWidth() >= bmp.getHeight() ? bmp.getWidth() : bmp.getHeight() );
+      bmp = AmanatsuDraw.ResizeBitmap( bmp, length );
+    }
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmp, 0 );
+
     gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
-    gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );
+    //gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );
     gl.glBindTexture( GL10.GL_TEXTURE_2D, 0 );
 
     ttex.width = bmp.getWidth();
     ttex.height = bmp.getHeight();
-    this.SetColor( rnum );
 
-    bmp.recycle();
+    if ( regist )
+    {
+      this.SetColor( rnum );
+      bmp.recycle();
+    }
 
     return ttex.texid[ 0 ];
   }
@@ -186,6 +265,11 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param dx Draw x coordinate.
+   * @param dy Draw y coordinate.
+   * */
   public boolean DrawTexture( int rnum, float dx, float dy )
   {
 
@@ -205,6 +289,11 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * */
   public boolean DrawTextureC( int rnum, float dx, float dy )
   {
 
@@ -228,6 +317,15 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate.
+   * @param dy Draw y coordinate.
+   * */
   public boolean DrawTexture( int rnum,
       float rx, float ry, float w, float h,
       float dx, float dy )
@@ -252,6 +350,15 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * */
   public boolean DrawTextureC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy )
@@ -280,6 +387,17 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate.
+   * @param dy Draw y coordinate.
+   * @param dw Draw width.
+   * @param dh Draw height.
+   * */
   public boolean DrawTextureScaring( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
@@ -304,6 +422,17 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param dw Draw width.
+   * @param dh Draw height.
+   * */
   public boolean DrawTextureScaringC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
@@ -332,6 +461,16 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate.
+   * @param dy Draw y coordinate.
+   * @param scale Draw scale.
+   * */
   public boolean DrawTextureScaring( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
@@ -356,6 +495,16 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param scale Draw scale.
+   * */
   public boolean DrawTextureScaringC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
@@ -385,6 +534,16 @@ public class AmanatsuDraw
     return this.DrawTexture( ttex );
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param rad Rotation radian.
+   * */
   public boolean DrawTextureRotationC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float rad )
@@ -430,6 +589,16 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param angle Rotation angle.
+   */
   public boolean DrawTextureRotationAngleC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float angle )
@@ -466,7 +635,7 @@ public class AmanatsuDraw
     this.SetFloatArray8(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
+      rx    / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
     this.SetUV( ttex, farr8 );
 
@@ -475,6 +644,17 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param scale Draw scale.
+   * @param rad Rotation radian.
+   * */
   public boolean DrawTextureScaleRotateC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float rad )
@@ -521,6 +701,17 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param scale Draw scale.
+   * @param angle Rotation angle.
+   * */
   public boolean DrawTextureScaleRotateAngleC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float angle )
@@ -567,6 +758,14 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param matrix44 4 * 4 draw matrix.
+   * */
   public boolean DrawTextureMatrix( int rnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
@@ -608,6 +807,16 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx Draw x coordinate(center).
+   * @param dy Draw y coordinate(center).
+   * @param matrix44 4 * 4 draw matrix.
+   * */
   public boolean DrawTextureMatrixC( int rnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
@@ -649,6 +858,21 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * @param rnum Resource or Texture number.
+   * @param rx Read x coordinate.
+   * @param ry Read y coordinate.
+   * @param w Width.
+   * @param h Height.
+   * @param dx0 Draw x coordinate(left up).
+   * @param dy0 Draw y coordinate(left up).
+   * @param dx1 Draw x coordinate(right up).
+   * @param dy1 Draw y coordinate(right up).
+   * @param dx2 Draw x coordinate(left down).
+   * @param dy2 Draw y coordinate(left down).
+   * @param dx3 Draw x coordinate.
+   * @param dy3 Draw y coordinate.
+   * */
   public boolean DrawTextureVertex( int rnum,
     float rx, float ry, float w, float h,
     float dx0, float dy0,
@@ -678,15 +902,56 @@ public class AmanatsuDraw
     return ret;
   }
 
-  // Support OpenGL.
-  public static FloatBuffer CreateFloatBuffer( float[] arr )
+  public boolean CreateFont( int fnum, int size, float red, float green, float blue, float alpha)
   {
-    ByteBuffer bb = ByteBuffer.allocateDirect( arr.length * 4 );
-    bb.order( ByteOrder.nativeOrder() );
-    FloatBuffer fb = bb.asFloatBuffer();
-    fb.put( arr );
-    fb.position( 0 );
-    return fb;
+    if ( paints.containsKey( fnum ) == false )
+    {
+      tpaint = new Paint();
+      paints.put( fnum, tpaint );
+    } else
+    {
+      tpaint = paints.get( fnum );
+    }
+
+    tpaint.setTextSize( size );
+    tpaint.setARGB( (int)(0xff * alpha), (int)(0xff * red), (int)(0xff * green), (int)(0xff * blue) );
+
+    return true;
+  }
+
+  public boolean Printf( int fnum, float dx, float dy, String str )
+  {
+    Canvas canvas = new Canvas( stringbmp );
+
+    canvas.drawColor( Color.TRANSPARENT, PorterDuff.Mode.CLEAR );
+
+    if ( paints.containsKey( fnum ) )
+    {
+      tpaint = paints.get( fnum );
+    } else
+    {
+      tpaint = paints.get( 0 );
+    }
+
+    canvas.drawText( str, 0, 30, tpaint );
+
+    //gl.glEnable( GL10.GL_TEXTURE_2D );//
+    gl.glBindTexture(GL10.GL_TEXTURE_2D, stringnum );
+    //GLUtils.texSubImage2D( GL10.GL_TEXTURE_2D, 0, 0, 0, stringbmp );//
+    //gl.glDisable( GL10.GL_TEXTURE_2D );//
+    GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
+    //gl.glGenTextures( 1, ttex.texid, 0 );
+
+    //gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
+    //gl.glBindTexture( GL10.GL_TEXTURE_2D, 0 );
+
+    this.SetFloatArray8( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
+    stringtex.ver = CreateFloatBuffer( farr8 );
+
+    this.SetFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    stringtex.uv   = CreateFloatBuffer( farr8 );
+
+    return this.DrawTexture( stringtex );
   }
 
   private void SetFloatArray4( float f0, float f1, float f2, float f3 )
@@ -804,7 +1069,39 @@ public class AmanatsuDraw
   public int GetWidth(){ return width; }
   public int GetHeight(){ return height; }
   public Texture GetTexture( int rnum ){ return textures.get( rnum ); }
-  
+
+  // Support OpenGL.
+  public static Bitmap ResizeBitmap( Bitmap bmp, int length )
+  {
+    Bitmap nbmp = Bitmap.createBitmap( length, length, Bitmap.Config.ARGB_8888);
+
+    Canvas cv = new Canvas( nbmp );
+
+    cv.drawBitmap( bmp, 0, 0, null );
+
+    return nbmp;
+  }
+
+  public static FloatBuffer CreateFloatBuffer( float[] arr )
+  {
+    ByteBuffer bb = ByteBuffer.allocateDirect( arr.length * 4 );
+    bb.order( ByteOrder.nativeOrder() );
+    FloatBuffer fb = bb.asFloatBuffer();
+    fb.put( arr );
+    fb.position( 0 );
+    return fb;
+  }
+
+  public static boolean IsPowerOf2( int val ){ return val > 0 && ( val & (val - 1) ) == 0; }
+
+  public static int ConvertPowerOf2( int val )
+  {
+    if ( val < 0 ){ return 0; }
+    int ret = 1;
+    for( ; val > ret ; ret <<= 1 );
+    return ret;
+  }
+
 }
 
 class AMatrix extends Matrix

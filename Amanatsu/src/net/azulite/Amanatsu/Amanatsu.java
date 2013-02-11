@@ -15,8 +15,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -43,7 +41,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  static private String VERSION = "0.0.3";
+  static private String VERSION = "0.0.4";
 
   Context context;
   AmanatsuGLView view;
@@ -53,7 +51,7 @@ public class Amanatsu
   GameGLSurfaceViewRender render;
   AmanatsuInput input;
   AmanatsuSound sound;
-  GameTimer timer;
+  AmanatsuGameTimer timer;
 
   /**
    * Amanatsu
@@ -62,10 +60,15 @@ public class Amanatsu
    */
   public Amanatsu( Context context, GameView gview )
   {
-    this( context, gview, true );
+    this( context, gview, true, true );
   }
 
   public Amanatsu( Context context, GameView gview, boolean multitouch )
+  {
+    this( context, gview, multitouch, true );
+  }
+
+  public Amanatsu( Context context, GameView gview, boolean multitouch, boolean logo )
   {
     this.context = context;
 
@@ -74,9 +77,10 @@ public class Amanatsu
     this.gview = gview;
 
     render = new GameGLSurfaceViewRender( this );
-    render.SetGLLoop( new GLLoopAmanatsuOP( this ) );
+    render.SetGLLoop( new GLLoopAmanatsuOP( this, logo ) );
 
     view.setRenderer( render );
+    view.setRenderMode( GLSurfaceView.RENDERMODE_WHEN_DIRTY );
 
     if ( multitouch )
     {
@@ -88,7 +92,7 @@ public class Amanatsu
 
     this.SetSound( new AmanatsuSound( this ) );
 
-    timer = new GameTimer( view, 30 );
+    timer = new AmanatsuGameTimer( view, 30 );
   }
 
   /**
@@ -249,12 +253,14 @@ class GLLoopAmanatsuOP implements GLLoop
   GameView view;
   Amanatsu ama;
   int counter;
+  boolean logo;
 
-  public GLLoopAmanatsuOP( Amanatsu ama )
+  public GLLoopAmanatsuOP( Amanatsu ama, boolean logo )
   {
     this.ama = ama;
     this.view = ama.render.view;
     counter = -1;
+    this.logo = logo;
   }
 
   @Override
@@ -264,6 +270,7 @@ class GLLoopAmanatsuOP implements GLLoop
     if ( counter < 0 )
     {
       counter = 0;
+      draw.Init();
       try
       {
         URL filename = this.getClass().getResource( "/res/raw/logo.png" );
@@ -274,7 +281,7 @@ class GLLoopAmanatsuOP implements GLLoop
       } catch (IOException e)
       {
       }
-    } else if ( counter == 120 )
+    } else if ( counter == 120 || logo == false )
     {
       // End.
       draw.DestroyTexture( 0 );
@@ -356,7 +363,10 @@ class GLLoopCleanUp implements GLLoop
   @Override
   public void Run( AmanatsuDraw draw)
   {
+    view.CleanUp( draw, ama.input, ama.sound );
     ama.Stop();
+    draw.Release();
+    ama.sound.Release();
     ( (Activity) ama.context ).finish();
   }
   
@@ -371,8 +381,6 @@ class TouchEvent implements AmanatsuInput
 
   // tmp;
   Key key;
-
-  boolean lock = false;
 
   public TouchEvent()
   {
@@ -670,32 +678,35 @@ class MultiTouchEvent implements AmanatsuInput
       entryf.getValue().touched = false;
     }
 
-    for ( n = 0 ; n < len ; ++n )
+    if ( event.getAction() != MotionEvent.ACTION_UP )
     {
-      id = event.getPointerId( n );
-      if ( finger.get( id ) == null )
+      for ( n = 0 ; n < len ; ++n )
       {
-        fin = new Finger();
-        finger.put( id, fin );
-        fin.frame = 0;
-      } else
-      {
-        fin = finger.get( id );
+        id = event.getPointerId( n );
+        if ( finger.get( id ) == null )
+        {
+          fin = new Finger();
+          finger.put( id, fin );
+          fin.frame = 0;
+        } else
+        {
+          fin = finger.get( id );
+        }
+
+        // Finger position.
+        // NullPo?
+        fin.x = event.getX( n );
+        fin.y = event.getY( n );
+
+        // Array
+        // Finger id.
+        fid[ n ] = id;
+        mx[ n ] = fin.x;
+        my[ n ] = fin.y;
+
+        // Touched.
+        fin.touched = true;
       }
-
-      // Finger position.
-      // NullPo?
-      fin.x = event.getX( n );
-      fin.y = event.getY( n );
-
-      // Array
-      // Finger id.
-      fid[ n ] = id;
-      mx[ n ] = fin.x;
-      my[ n ] = fin.y;
-
-      // Touched.
-      fin.touched = true;
     }
 
     return true;
@@ -823,40 +834,4 @@ class Key
   boolean pushed;
 }
 
-class GameTimer extends Handler
-{
-  GLSurfaceView view;
-  private float delayTime;
-  private float frameRate;
 
-  public GameTimer( GLSurfaceView glview, float frameRate )
-  {
-    this.view = glview;
-    this.frameRate = frameRate;
-  }
-
-  public void start()
-  {
-    this.delayTime = 1000 / frameRate;
-
-    view.invalidate();
-    
-    this.sendMessageDelayed( obtainMessage( 0 ), (int)delayTime );
-  }
-
-  public void stop()
-  {
-    delayTime = 0;
-  }
-
-  @Override
-  public void handleMessage( Message msg )
-  {
-    view.invalidate();
-    if ( delayTime == 0.0 )
-    {
-      return; // stop
-    }
-    sendMessageDelayed( obtainMessage( 0 ), (int)delayTime );
-  }
-}

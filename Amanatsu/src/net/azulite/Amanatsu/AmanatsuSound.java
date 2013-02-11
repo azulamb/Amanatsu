@@ -20,6 +20,8 @@ public class AmanatsuSound
   static Map<Integer, MediaPlayer> bgm;
   static Map<Integer, Integer> se;
   SoundPool sp;
+  int srcvolume;
+  float volume;
 
   // tmp.
 
@@ -30,6 +32,19 @@ public class AmanatsuSound
     bgm = new Hashtable<Integer, MediaPlayer>();
     se = new Hashtable<Integer, Integer>();
     sp = new SoundPool( 3, AudioManager.STREAM_MUSIC, 0 );
+
+    srcvolume = om.getStreamVolume( AudioManager.STREAM_MUSIC );
+    volume = (float)om.getStreamVolume( AudioManager.STREAM_MUSIC ) / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
+  }
+
+  public void Release()
+  {
+    this.Restore();
+  }
+
+  public void Restore()
+  {
+    om.setStreamVolume( AudioManager.STREAM_MUSIC, srcvolume, 0 );
   }
 
   // System
@@ -202,7 +217,9 @@ public class AmanatsuSound
 
   public boolean PlaySE( int rnum ){ return this.PlaySE( rnum, false, 1.0f, 1.0f, 1.0f ); }
 
-  public boolean PlaySE( int rnum, boolean loop ){ return this.PlaySE( rnum, loop, 1.0f, 1.0f, 1.0f ); }
+  public boolean PlaySE( int rnum, boolean loop ){ return this.PlaySE( rnum, loop, 1.0f, volume, volume ); }
+
+  public boolean PlaySE( int rnum, boolean loop, float volume ){ return this.PlaySE( rnum, loop, 1.0f, volume, volume ); }
 
   public boolean PlaySE( int rnum, boolean loop, float late, float pan_l, float pan_r )
   {
