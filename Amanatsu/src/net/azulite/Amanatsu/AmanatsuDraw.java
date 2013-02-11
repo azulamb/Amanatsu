@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -32,6 +31,7 @@ import android.opengl.Matrix;
 
 public class AmanatsuDraw
 {
+  Amanatsu ama;
   GL10 gl = null;
   int width, height;
   Resources resource;
@@ -48,15 +48,16 @@ public class AmanatsuDraw
   private Texture ttex;
   private Paint tpaint;
 
-  public AmanatsuDraw( Context context )
+  public AmanatsuDraw( Amanatsu ama )
   {
-    resource = context.getResources();
+    this.ama = ama;
+    resource = ama.context.getResources();
     farr4 = new float[ 4 ];
     farr8 = new float[ 8 ];
     mat = new float[ 16 ];
 
     stringbmp = Bitmap.createBitmap( 512, 512, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
-    this.CreateFont( 0, 30, 1.0f, 1.0f, 1.0f, 1.0f );
+    this.CreateFont( 0, 30 );
   }
 
   public void Init()
@@ -78,6 +79,39 @@ public class AmanatsuDraw
     return true;
   }
 
+  public float GetFPS()
+  {
+    return ama.render.GetFPS();
+  }
+
+  public float SetFPS( float fps )
+  {
+    return ama.render.SetFPS( fps );
+  }
+
+  public boolean SetRender( int type )
+  {
+    switch ( type )
+    {
+    case Amanatsu.DRAW_ADD:
+      gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
+      break;
+/*    case Amanatsu.DRAW_SUB:
+      gl.glBlendEquationEXT( GL11ExtensionPack.GL_FUNC_REVERSE_SUBTRACT_EXT );
+      gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
+      break;*/
+    case Amanatsu.DRAW_MUL:
+      gl.glBlendFunc( GL10.GL_ZERO, GL10.GL_SRC_COLOR );
+      //dst = dst * src * alpha;
+      //gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_COLOR);
+      //gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_ALPHA);
+      break;
+    default:
+      gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
+    }
+    return true;
+  }
+
   /**
    * Clear Screen(black).
    */
@@ -92,7 +126,23 @@ public class AmanatsuDraw
    * @param red Green color(0.0f-1.0f).
    * @param red Blue color(0.0f-1.0f).
    */
-  public boolean ClearScreen( float red, float green, float blue)
+  public boolean ClearScreen( GameColor color )
+  {
+    return this.ClearScreen( color.color[ 0 ], color.color[ 1 ], color.color[ 2 ] );
+  }
+
+  /**
+   * Clear Screen.
+   * @param red Red color(0.0f-1.0f).
+   * @param red Green color(0.0f-1.0f).
+   * @param red Blue color(0.0f-1.0f).
+   */
+  public boolean ClearScreen( float[] color )
+  {
+    return this.ClearScreen( color[ 0 ], color[ 1 ], color[ 2 ] );
+  }
+
+  public boolean ClearScreen( float red, float green, float blue )
   {
     gl.glClearColor( red, green, blue, 1.0f );
     gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
@@ -107,6 +157,10 @@ public class AmanatsuDraw
    * @param h Height.
    * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
    * */
+  public boolean DrawBox( float x, float y, float w, float h, GameColor color )
+  {
+    return DrawBox( x, y, w, h, color.color );
+  }
   public boolean DrawBox( float x, float y, float w, float h, float[] color )
   {
     this.SetFloatArray8( x, y, x + w, y, x, y + h, x + w, y + h );
@@ -129,6 +183,11 @@ public class AmanatsuDraw
    * @param h Height.
    * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
    * */
+  public boolean DrawBoxC( float x, float y, float w, float h, GameColor color )
+  {
+    return this.DrawBoxC( x, y, w, h, color.color );
+  }
+
   public boolean DrawBoxC( float x, float y, float w, float h, float[] color )
   {
     this.SetFloatArray8( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
@@ -902,7 +961,13 @@ public class AmanatsuDraw
     return ret;
   }
 
-  public boolean CreateFont( int fnum, int size, float red, float green, float blue, float alpha)
+  public boolean CreateFont( int fnum, int size ){ return this.CreateFont( fnum, size, false, GameColor.WHITE ); }
+
+  public boolean CreateFont( int fnum, int size, boolean antialias ){ return this.CreateFont( fnum, size, antialias, GameColor.WHITE ); }
+
+  public boolean CreateFont( int fnum, int size, boolean antialias, GameColor color ){ return CreateFont( fnum, size, antialias, color.color ); }
+
+  public boolean CreateFont( int fnum, int size, boolean antialias, float[] color )
   {
     if ( paints.containsKey( fnum ) == false )
     {
@@ -914,7 +979,8 @@ public class AmanatsuDraw
     }
 
     tpaint.setTextSize( size );
-    tpaint.setARGB( (int)(0xff * alpha), (int)(0xff * red), (int)(0xff * green), (int)(0xff * blue) );
+    tpaint.setARGB( (int)(0xff * color[ 3 ]), (int)(0xff * color[ 0 ]), (int)(0xff * color[ 1 ]), (int)(0xff * color[ 2 ]) );
+    tpaint.setAntiAlias( antialias );
 
     return true;
   }
@@ -968,7 +1034,7 @@ public class AmanatsuDraw
     farr8[ 6 ] = f6; farr8[ 7 ] = f7;
   }
 
-  public static FloatBuffer CreateColor( float[] color )
+  private static FloatBuffer CreateColor( float[] color )
   {
     if ( color.length >= 16 )
     {
@@ -1046,7 +1112,10 @@ public class AmanatsuDraw
     };
     this.SetColor( rnum, color );
   }
-
+  public void SetColor( int rnum, GameColor color )
+  {
+    this.SetColor( rnum, color.color );
+  }
   public void SetColor( int rnum, float[] color )
   {
     Texture tex;
@@ -1059,15 +1128,10 @@ public class AmanatsuDraw
     tex = textures.get( rnum );
     tex.col  = CreateFloatBuffer( color );
   }
-
-  public float[] Color( float red, float green, float blue, float alpha )
-  {
-    float[] color ={ red, blue, green, alpha, };
-    return color;
-  }
  
   public int GetWidth(){ return width; }
   public int GetHeight(){ return height; }
+
   public Texture GetTexture( int rnum ){ return textures.get( rnum ); }
 
   // Support OpenGL.

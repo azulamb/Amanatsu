@@ -15,6 +15,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -41,7 +43,11 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  static private String VERSION = "0.0.4";
+  static private String VERSION = "0.0.5";
+  public static final int DRAW_TRC = 0;
+  public static final int DRAW_ADD = 1;
+//  public static final int DRAW_SUB = 2;
+  public static final int DRAW_MUL = 3;
 
   Context context;
   AmanatsuGLView view;
@@ -51,7 +57,6 @@ public class Amanatsu
   GameGLSurfaceViewRender render;
   AmanatsuInput input;
   AmanatsuSound sound;
-  AmanatsuGameTimer timer;
 
   /**
    * Amanatsu
@@ -91,8 +96,6 @@ public class Amanatsu
     }
 
     this.SetSound( new AmanatsuSound( this ) );
-
-    timer = new AmanatsuGameTimer( view, 30 );
   }
 
   /**
@@ -100,7 +103,7 @@ public class Amanatsu
    */
   public boolean Start()
   {
-    timer.start();
+    render.Start();
     return true;
   }
 
@@ -109,7 +112,7 @@ public class Amanatsu
    */
   public void Stop()
   {
-    timer.stop();
+    //timer.stop();
     render.Term();
   }
 
@@ -143,7 +146,7 @@ public class Amanatsu
   }
 
   // Getter.
-  static public String GetVersion(){ return VERSION; }
+  public String GetVersion(){ return VERSION; }
   public Context GetContext(){ return context; }
 
   public GLSurfaceView GetGLSurfaceView(){ return view; }
@@ -181,18 +184,27 @@ class AmanatsuGLView extends GLSurfaceView
   }
 }
 
-class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
+class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 {
   Amanatsu ama;
+  AmanatsuGLView glview;
   GameView view = null;
   AmanatsuDraw draw;
   protected GLLoop loop;
+  boolean loopflag = false;
+
+  // FPS
+  private long before, now, progress, idol;
+  private int frame;
+  float fps = 30.0f, nowfps;
+  private float countfps;
 
   public GameGLSurfaceViewRender( Amanatsu ama )
   {
     this.ama = ama;
+    glview = ama.view;
     this.SetGameView( ama.gview );
-    draw = new AmanatsuDraw( ama.context );
+    draw = new AmanatsuDraw( ama );
   }
 
   public void SetGLLoop( GLLoop loop )
@@ -213,18 +225,64 @@ class GameGLSurfaceViewRender implements GLSurfaceView.Renderer
     view.CleanUp( draw, ama.input, ama.sound );
   }
 
+  public void Start()
+  {
+    loopflag = true;
+    before = System.currentTimeMillis();
+    sendMessageDelayed( obtainMessage( 0 ), 0 );
+  }
+
+  public void Stop()
+  {
+    loopflag = false;
+  }
+
+  public float GetFPS()
+  {
+    return nowfps;
+  }
+
+  public float SetFPS( float fps)
+  {
+    float ret = this.fps;
+    this.fps = fps;
+    return ret;
+  }
+
+  @Override
+  public void handleMessage( Message msg )
+  {
+    glview.requestRender();
+  }
+
   @Override
   public void onDrawFrame( GL10 gl )
   {
+
     draw.SetGL( gl );
 
     gl.glEnable( GL10.GL_BLEND );
-    gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
+    draw.SetRender( Amanatsu.DRAW_TRC );
 
     ama.input.Update();
     loop.Run( draw );
 
     gl.glDisable( GL10.GL_BLEND );
+
+    now = System.currentTimeMillis();
+    progress = now - before;
+    countfps += 1.0;
+    ++frame;
+    if ( progress >= 1000 )
+    {
+      progress = 0;
+      before = now;
+      frame = 0;
+      nowfps = countfps;
+      countfps = 0.0f;
+    }
+    idol = (int)((float)frame * 1000.0f / fps ) - progress;
+    if ( loopflag ){ sendMessageDelayed( obtainMessage( 0 ), idol ); }
   }
 
   @Override
@@ -297,9 +355,11 @@ class GLLoopAmanatsuOP implements GLLoop
       } else if ( counter >= 80 )
       {
         draw.SetColor( 0, (120 - counter) / 40.0f );
+      } else
+      {
+        draw.Printf( 0, draw.width / 2.0f - 50, draw.height / 2.0f + max / 2.0f, ama.GetVersion() );
       }
       draw.DrawTextureScaring( 0, 0, 0, 256, 256, draw.width / 2 - max / 2, draw.height / 2 - max / 2, max, max );
-      draw.DrawTexture( 0, draw.width, draw.height, 0, 0, 256, 256 );
       ++counter;
     }
   }

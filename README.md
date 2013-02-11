@@ -1,7 +1,7 @@
 Amanatsu
 ========
 ## Android
-Version 2.2 or higher.
+Version 2.2 or higher(Enable multi touch).
 
 ## How to use
 Iy you only want to use Amanatsu, Download "Amanatsu.jar".
@@ -28,9 +28,14 @@ public class XXXXX extends Activity
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    // Create Amanatsu object.
     ama = new Amanatsu( this, new Game() );
 
+    // Set View.
     this.setContentView( ama.GetGLSurfaceView() );
+
+    // Start game.
+    ama.Start();
   }
 
 }
@@ -39,15 +44,18 @@ class Game implements GameView
 {
   @Override
   public void UserInit(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+    // Prepare game.
   }
 
   @Override
   public boolean MainLoop(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+    // Game main routine.
     return true; // false is Game end.
   }
 
   @Override
   public void CleanUp(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+    // Cleanup game.
   }
 
 }
