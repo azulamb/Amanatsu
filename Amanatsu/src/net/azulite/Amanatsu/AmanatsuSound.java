@@ -15,59 +15,72 @@ import android.net.Uri;
 
 public class AmanatsuSound
 {
-  Amanatsu ama;
-  AudioManager om;
-  static Map<Integer, MediaPlayer> bgm;
-  static Map<Integer, Integer> se;
-  SoundPool sp;
-  int srcvolume;
-  float volume;
+  private Amanatsu ama;
+  private AudioManager om;
+  private static Map<Integer, MediaPlayer> bgm = new Hashtable<Integer, MediaPlayer>( 20 );
+  private static Map<Integer, Integer> se = new Hashtable<Integer, Integer>( 20 );
+  private SoundPool sp;
+  private int srcvolume;
+  private int bvolume;
+  private float svolume;
 
   // tmp.
 
   public AmanatsuSound( Amanatsu ama )
   {
     this.ama = ama;
-    om = (AudioManager) ama.context.getSystemService( Context.AUDIO_SERVICE );
-    bgm = new Hashtable<Integer, MediaPlayer>();
-    se = new Hashtable<Integer, Integer>();
+    om = (AudioManager) ama.getContext().getSystemService( Context.AUDIO_SERVICE );
     sp = new SoundPool( 3, AudioManager.STREAM_MUSIC, 0 );
 
-    srcvolume = om.getStreamVolume( AudioManager.STREAM_MUSIC );
-    volume = (float)om.getStreamVolume( AudioManager.STREAM_MUSIC ) / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
+    srcvolume = bvolume = om.getStreamVolume( AudioManager.STREAM_MUSIC );
+    if ( isMannerMode() )
+    {
+      setVolume( 0 );
+    }
+    svolume = (float)bvolume / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
   }
 
-  public void Release()
+  public void release()
   {
-    this.Restore();
+    restore();
   }
 
-  public void Restore()
+  public void restore()
   {
     om.setStreamVolume( AudioManager.STREAM_MUSIC, srcvolume, 0 );
   }
 
   // System
 
-  public boolean IsMannerMode()
+  public boolean setVolume( int volume )
   {
-    if ( om.getRingerMode() == AudioManager.RINGER_MODE_NORMAL ){ return false; }
+    if ( volume > om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ) ){ volume = om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
+    bvolume = volume;
+    svolume = (float)bvolume / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
+    om.setVibrateSetting( AudioManager.STREAM_MUSIC, bvolume );
     return true;
+  }
+
+  public int GetVolume(){ return bvolume; }
+
+  public boolean isMannerMode()
+  {
+    return ( om.getRingerMode() != AudioManager.RINGER_MODE_NORMAL );
   }
   // BGM
 
-  public boolean LoadBGM( int rnum, boolean loop )
+  public boolean loadBgm( int rnum, boolean loop )
   {
-    return this.LoadBGM( rnum, Uri.parse("android.resource://" + ama.context.getPackageName() +"/" + rnum ), loop );
+    return loadBgm( rnum, Uri.parse("android.resource://" + ama.getContext().getPackageName() +"/" + rnum ), loop );
   }
 
-  public boolean LoadBGM( int rnum, Uri uri, boolean loop )
+  public boolean loadBgm( int rnum, Uri uri, boolean loop )
   {
     MediaPlayer mp = new MediaPlayer();
     bgm.put( rnum, mp );
     try
     {
-      mp.setDataSource( ama.context, Uri.parse("android.resource://" + ama.context.getPackageName() +"/" + rnum ) );
+      mp.setDataSource( ama.getContext(), Uri.parse("android.resource://" + ama.getContext().getPackageName() +"/" + rnum ) );
       mp.setAudioStreamType( AudioManager.STREAM_MUSIC );//STREAM_NOTIFICATION
       mp.setLooping( loop );
       mp.prepare();
@@ -84,7 +97,7 @@ public class AmanatsuSound
     return false;
   }
 
-  public boolean UnloadBGM( int rnum )
+  public boolean unloadBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) )
     {
@@ -94,7 +107,7 @@ public class AmanatsuSound
     return false;
   }
 
-  public boolean UnloadBGM()
+  public boolean unloadBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
     //Map.Entry<Integer, MediaPlayer> entry;
@@ -108,21 +121,22 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean PlayBGM( int rnum )
+  public boolean playBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) == false ){ return false; }
 
     MediaPlayer mp = bgm.get( rnum );
 
     mp.seekTo( 0 );
+    mp.setVolume( svolume, svolume );
     mp.start();
 
     return true;
   }
 
-  public boolean StopBGM( int rnum )
+  public boolean stopBgm( int rnum )
   {
-    boolean ret = this.PauseBGM( rnum );
+    boolean ret = pauseBgm( rnum );
     if ( ret )
     {
       bgm.get( rnum ).seekTo( 0 );
@@ -130,7 +144,7 @@ public class AmanatsuSound
     return ret;
   }
 
-  public boolean StopBGM()
+  public boolean stopBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
     Map.Entry<Integer, MediaPlayer> entry;
@@ -144,7 +158,7 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean ResumeBGM( int rnum )
+  public boolean resumeBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) == false ){ return false; }
 
@@ -155,7 +169,7 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean PauseBGM( int rnum )
+  public boolean pauseBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) == false ){ return false; }
 
@@ -165,7 +179,7 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean PauseBGM()
+  public boolean pauseBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
     Map.Entry<Integer, MediaPlayer> entry;
@@ -180,18 +194,18 @@ public class AmanatsuSound
 
   // SE
 
-  public boolean LoadSE( int rnum )
+  public boolean loadSe( int rnum )
   {
     int id;
 
-    id = sp.load( this.ama.context, rnum, 1 );
+    id = sp.load( ama.getContext(), rnum, 1 );
 
     se.put( rnum, id );
 
     return true;
   }
 
-  public boolean UnloadSE( int rnum )
+  public boolean unloadSe( int rnum )
   {
     if ( se.containsKey( rnum ) == false ){ return false; }
 
@@ -201,7 +215,7 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean UnloadSE()
+  public boolean unloadSe()
   {
     Iterator< Map.Entry<Integer, Integer> > it;
     Map.Entry<Integer, Integer> entry;
@@ -215,13 +229,13 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean PlaySE( int rnum ){ return this.PlaySE( rnum, false, 1.0f, 1.0f, 1.0f ); }
+  public boolean playSe( int rnum ){ return playSe( rnum, false, 1.0f, 1.0f, 1.0f ); }
 
-  public boolean PlaySE( int rnum, boolean loop ){ return this.PlaySE( rnum, loop, 1.0f, volume, volume ); }
+  public boolean playSe( int rnum, boolean loop ){ return playSe( rnum, loop, 1.0f, svolume, svolume ); }
 
-  public boolean PlaySE( int rnum, boolean loop, float volume ){ return this.PlaySE( rnum, loop, 1.0f, volume, volume ); }
+  public boolean playSe( int rnum, boolean loop, float volume ){ return playSe( rnum, loop, 1.0f, volume, volume ); }
 
-  public boolean PlaySE( int rnum, boolean loop, float late, float pan_l, float pan_r )
+  public boolean playSe( int rnum, boolean loop, float late, float pan_l, float pan_r )
   {
     if ( se.containsKey( rnum ) == false ){ return false; }
 
@@ -230,32 +244,32 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean StopSE( int rnum )
+  public boolean stopSe( int rnum )
   {
     if ( se.containsKey( rnum ) == false ){ return false;}
     sp.stop( se.get( rnum ) );
     return true;
   }
 
-  public boolean StopSE()
+  public boolean stopSe()
   {
     return true;
   }
 
-  public boolean ResumeSE( int rnum )
+  public boolean resumeSe( int rnum )
   {
     if ( se.containsKey( rnum ) == false ){ return false;}
     sp.resume( se.get( rnum ) );
     return true;
   }
 
-  public boolean PauseSE( int rnum )
+  public boolean pauseSe( int rnum )
   {
     if ( se.containsKey( rnum ) == false ){ return false;}
     sp.pause( se.get( rnum ) );
     return true;
   }
-  public boolean PauseSE()
+  public boolean pauseSe()
   {
     Iterator< Map.Entry<Integer, Integer> > it;
     Map.Entry<Integer, Integer> entry;

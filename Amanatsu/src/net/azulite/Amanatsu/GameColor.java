@@ -25,7 +25,7 @@ public class GameColor
     color[ 3 ] = (float)( alpha & 0xff ) / 255.0f;
   }
 
-  static float[] CreateColor( byte red, byte green, byte blue, byte alpha )
+  static final float[] CreateColor( byte red, byte green, byte blue, byte alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = (float)( red & 0xff ) / 255.0f;
@@ -35,7 +35,7 @@ public class GameColor
     return color;
   }
 
-  static float[] CreateColor( float red, float green, float blue, float alpha )
+  static final float[] CreateColor( float red, float green, float blue, float alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = red;

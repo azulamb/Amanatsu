@@ -5,26 +5,27 @@ import android.view.MotionEvent;
 
 public interface AmanatsuInput
 {
-  public boolean Update();
+  public boolean update();
 
-  public boolean Touch( MotionEvent event );
+  public boolean touch( MotionEvent event );
 
-  public float GetX();
-  public float GetY();
-  public int GetTouchFrame();
+  public float getX();
+  public float getY();
+  public int getTouchFrame();
 
-  public int Size();
+  public int size();
 
-  public float GetX( int num );
-  public float GetY( int num );
-  public int GetTouchFrame( int num );
+  public float getX( int num );
+  public float getY( int num );
+  public int getTouchFrame( int num );
 
-  public float GetFingerX( int fingerid );
-  public float GetFingerY( int fingerid );
-  public int GetFingerTouchFrame( int fingerid );
+  public float getFingerX( int fingerid );
+  public float getFingerY( int fingerid );
+  public int getFingerTouchFrame( int fingerid );
 
-  public boolean KeyDown( int keycode, KeyEvent event );
-  public boolean KeyUp( int keycode, KeyEvent event );
+  public boolean keyDown( int keycode, KeyEvent event );
+  public boolean keyUp( int keycode, KeyEvent event );
 
-  public int GetKey( int keycode );
+  public int getKey( int keycode );
+  public int getLastKey();
 }

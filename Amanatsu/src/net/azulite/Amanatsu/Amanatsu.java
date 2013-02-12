@@ -43,20 +43,131 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  static private String VERSION = "0.0.5";
+  private static String VERSION = "0.0.6";
+
   public static final int DRAW_TRC = 0;
   public static final int DRAW_ADD = 1;
 //  public static final int DRAW_SUB = 2;
   public static final int DRAW_MUL = 3;
 
-  Context context;
-  AmanatsuGLView view;
+  public static final int K_BACK = 4;
 
-  GameView gview;
+  public static final int K_0 = 7;
+  public static final int K_1 = 8;
+  public static final int K_2 = 9;
+  public static final int K_3 = 10;
+  public static final int K_4 = 11;
+  public static final int K_5 = 12;
+  public static final int K_6 = 13;
+  public static final int K_7 = 15;
+  public static final int K_8 = 16;
 
-  GameGLSurfaceViewRender render;
-  AmanatsuInput input;
-  AmanatsuSound sound;
+  public static final int K_UP = 19;
+  public static final int K_DOWN = 20;
+  public static final int K_RIGHT = 21;
+  public static final int K_LEFT = 22;
+
+  public static final int K_A = 29;
+  public static final int K_B = 30;
+  public static final int K_C = 31;
+  public static final int K_D = 32;
+  public static final int K_E = 33;
+  public static final int K_F = 34;
+  public static final int K_G = 35;
+  public static final int K_H = 36;
+  public static final int K_I = 37;
+  public static final int K_J = 38;
+  public static final int K_K = 39;
+  public static final int K_L = 40;
+  public static final int K_M = 41;
+  public static final int K_N = 42;
+  public static final int K_O = 43;
+  public static final int K_P = 44;
+  public static final int K_Q = 45;
+  public static final int K_R = 46;
+  public static final int K_S = 47;
+  public static final int K_T = 48;
+  public static final int K_U = 49;
+  public static final int K_V = 50;
+  public static final int K_W = 51;
+  public static final int K_X = 52;
+  public static final int K_Y = 53;
+  public static final int K_Z = 54;
+
+  public static final int K_COMMA = 55;
+  public static final int K_PERIOD = 56;
+  public static final int K_LALT = 57;
+  public static final int K_RALT = 58;
+
+  public static final int K_LSHIFT = 59;
+  public static final int K_RSHIFT = 60;
+  public static final int K_TAB = 61;
+  public static final int K_SPACE = 62;
+  public static final int K_ENTER = 66;
+  public static final int K_BACKSPACE = 67;
+  public static final int K_ZENKAKU = 68;
+  public static final int K_MINUS = 69;
+  public static final int K_HAT = 70;
+  public static final int K_LBRACKET = 71;//[
+  public static final int K_RBRACKET = 72;//]
+  public static final int K_BACKSLASH = 73;
+  public static final int K_SEMICORON = 74;
+  public static final int K_CORON = 75;
+  public static final int K_SLASH = 76;
+  public static final int K_AT = 77;
+  public static final int K_MENU = 82;
+  public static final int K_SEARCH = 84;
+
+  public static final int K_ESC = 111;
+  public static final int K_LCTRL = 113;
+  public static final int K_RCTRL = 114;
+  public static final int K_LWINDOWS = 117;
+  public static final int K_RWINDOWS = 118;
+
+  public static final int K_F1 = 131;
+  public static final int K_F2 = 132;
+  public static final int K_F3 = 133;
+  public static final int K_F4 = 134;
+  public static final int K_F5 = 135;
+  public static final int K_F6 = 136;
+  public static final int K_F7 = 137;
+  public static final int K_F8 = 138;
+  public static final int K_F9 = 139;
+  public static final int K_F10 = 140;
+  public static final int K_F11 = 141;
+  public static final int K_F12 = 142;
+
+  public static final int K_NUMLOCK = 143;
+  public static final int K_NUMPAD0 = 144;
+  public static final int K_NUMPAD1 = 145;
+  public static final int K_NUMPAD2 = 146;
+  public static final int K_NUMPAD3 = 147;
+  public static final int K_NUMPAD4 = 148;
+  public static final int K_NUMPAD5 = 149;
+  public static final int K_NUMPAD6 = 150;
+  public static final int K_NUMPAD7 = 151;
+  public static final int K_NUMPAD8 = 152;
+  public static final int K_NUMPAD9 = 153;
+  public static final int K_DIV = 154;
+  public static final int K_MUL = 155;
+  public static final int K_SUB = 156;
+  public static final int K_ADD = 157;
+  public static final int K_DECIMAL = 168;
+
+  public static final int K_CAPSLOCK = 212;
+  public static final int K_MUHENKAN = 213;
+  public static final int K_HENKAN = 214;
+  public static final int K_KANA = 215;
+  public static final int K_YEN = 216;
+
+  private Context context;
+  protected AmanatsuGLView view;
+
+  protected GameView gview;
+
+  protected GameGLSurfaceViewRender render;
+  protected AmanatsuInput input;
+  protected AmanatsuSound sound;
 
   /**
    * Amanatsu
@@ -77,55 +188,55 @@ public class Amanatsu
   {
     this.context = context;
 
+    if ( multitouch )
+    {
+      setInput( new MultiTouchEvent() );
+    } else
+    {
+      setInput( new TouchEvent() );      
+    }
+
+    setSound( new AmanatsuSound( this ) );
+
     view = new AmanatsuGLView( this );
 
     this.gview = gview;
 
     render = new GameGLSurfaceViewRender( this );
-    render.SetGLLoop( new GLLoopAmanatsuOP( this, logo ) );
+    render.setGLLoop( new GLLoopAmanatsuOP( this, logo ) );
 
     view.setRenderer( render );
     view.setRenderMode( GLSurfaceView.RENDERMODE_WHEN_DIRTY );
-
-    if ( multitouch )
-    {
-      this.SetInput( new MultiTouchEvent() );
-    } else
-    {
-      this.SetInput( new TouchEvent() );      
-    }
-
-    this.SetSound( new AmanatsuSound( this ) );
   }
 
   /**
    * Start game.
    */
-  public boolean Start()
+  public boolean start()
   {
-    render.Start();
+    render.start();
     return true;
   }
 
   /**
    * End game.
    */
-  public void Stop()
+  public void stop()
   {
     //timer.stop();
-    render.Term();
+    render.term();
   }
 
   // Setter.
-  public GameView SetGameView( GameView view )
+  public GameView setGameView( GameView view )
   {
     GameView ret = this.gview;
     this.gview = view;
-    render.SetGameView( view );// TODO Lock
+    render.setGameView( view );// TODO Lock
     return ret;
   }
 
-  public AmanatsuInput SetInput( AmanatsuInput input )
+  public AmanatsuInput setInput( AmanatsuInput input )
   {
     AmanatsuInput ret = this.input;
     this.input = input;
@@ -138,7 +249,7 @@ public class Amanatsu
     return ret;
   }
 
-  public AmanatsuSound SetSound( AmanatsuSound sound )
+  public AmanatsuSound setSound( AmanatsuSound sound )
   {
     AmanatsuSound ret = this.sound;
     this.sound = sound;
@@ -146,52 +257,51 @@ public class Amanatsu
   }
 
   // Getter.
-  public String GetVersion(){ return VERSION; }
-  public Context GetContext(){ return context; }
+  public static final String getVersion(){ return VERSION; }
+  public final Context getContext(){ return context; }
 
-  public GLSurfaceView GetGLSurfaceView(){ return view; }
+  public final GLSurfaceView getGLSurfaceView(){ return view; }
 
 }
 
 class AmanatsuGLView extends GLSurfaceView
 {
-  Amanatsu ama;
+  private AmanatsuInput input;
   public AmanatsuGLView( Amanatsu ama )
   {
-    super( ama.GetContext() );
+    super( ama.getContext() );
 
-    this.ama = ama;
-
+    input = ama.input;
     // Enable touch.
-    this.setFocusable( true );
+    setFocusable( true );
   }
 
   public boolean onTouchEvent( MotionEvent event )
   {
-    return this.ama.input.Touch( event );
+    return input.touch( event );
   }
 
   @Override
   public boolean onKeyDown( int keyCode, KeyEvent event )
   {
-    return this.ama.input.KeyDown( keyCode, event );
+    return input.keyDown( keyCode, event );
   }
 
   @Override
   public boolean onKeyUp( int keyCode, KeyEvent event )
   {
-    return this.ama.input.KeyUp( keyCode, event );
+    return input.keyUp( keyCode, event );
   }
 }
 
 class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 {
-  Amanatsu ama;
-  AmanatsuGLView glview;
-  GameView view = null;
-  AmanatsuDraw draw;
+  private Amanatsu ama;
+  private AmanatsuGLView glview;
+  protected GameView view = null;
+  private AmanatsuDraw draw;
   protected GLLoop loop;
-  boolean loopflag = false;
+  private boolean loopflag = false;
 
   // FPS
   private long before, now, progress, idol;
@@ -203,46 +313,45 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   {
     this.ama = ama;
     glview = ama.view;
-    this.SetGameView( ama.gview );
+    setGameView( ama.gview );
     draw = new AmanatsuDraw( ama );
   }
 
-  public void SetGLLoop( GLLoop loop )
+  public void setGLLoop( GLLoop loop )
   {
     this.loop = loop;
   }
 
-  protected GameView SetGameView( GameView view )
+  protected GameView setGameView( GameView view )
   {
-    GameView ret;
-    ret = this.view;
+    GameView ret = this.view;
     this.view = view;
     return ret;
   }
 
-  public void Term()
+  public void term()
   {
     view.CleanUp( draw, ama.input, ama.sound );
   }
 
-  public void Start()
+  public void start()
   {
     loopflag = true;
     before = System.currentTimeMillis();
     sendMessageDelayed( obtainMessage( 0 ), 0 );
   }
 
-  public void Stop()
+  public void stop()
   {
     loopflag = false;
   }
 
-  public float GetFPS()
+  public final float getFps()
   {
     return nowfps;
   }
 
-  public float SetFPS( float fps)
+  public final float setFps( float fps)
   {
     float ret = this.fps;
     this.fps = fps;
@@ -258,14 +367,13 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   @Override
   public void onDrawFrame( GL10 gl )
   {
-
-    draw.SetGL( gl );
+    draw.setGL( gl );
 
     gl.glEnable( GL10.GL_BLEND );
-    draw.SetRender( Amanatsu.DRAW_TRC );
+    draw.setRender( Amanatsu.DRAW_TRC );
 
-    ama.input.Update();
-    loop.Run( draw );
+    ama.input.update();
+    loop.run( draw );
 
     gl.glDisable( GL10.GL_BLEND );
 
@@ -288,9 +396,9 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   @Override
   public void onSurfaceChanged( GL10 gl, int width, int height )
   {
-    draw.width = width;
-    draw.height = height;
-    gl.glViewport( 0, 0, draw.width, draw.height );
+    draw.setWidth( width );
+    draw.setHeight( height );
+    gl.glViewport( 0, 0, width, height );
     gl.glMatrixMode( GL10.GL_PROJECTION );
     gl.glLoadIdentity();
     gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );
@@ -304,37 +412,35 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 
 }
 
-interface GLLoop{ public void Run( AmanatsuDraw draw ); }
+interface GLLoop{ public void run( AmanatsuDraw draw ); }
 
 class GLLoopAmanatsuOP implements GLLoop
 {
-  GameView view;
-  Amanatsu ama;
-  int counter;
-  boolean logo;
+  private Amanatsu ama;
+  private int counter;
+  private boolean logo;
 
   public GLLoopAmanatsuOP( Amanatsu ama, boolean logo )
   {
     this.ama = ama;
-    this.view = ama.render.view;
     counter = -1;
     this.logo = logo;
   }
 
   @Override
-  public void Run( AmanatsuDraw draw )
+  public void run( AmanatsuDraw draw )
   {
-    draw.ClearScreen();
+    draw.clearScreen();
     if ( counter < 0 )
     {
       counter = 0;
-      draw.Init();
+      draw.init();
       try
       {
-        URL filename = this.getClass().getResource( "/res/raw/logo.png" );
+        URL filename = getClass().getResource( "/res/raw/logo.png" );
         InputStream input = filename.openStream();
         Bitmap bmp = BitmapFactory.decodeStream( input );
-        draw.CreateTexture( 0, bmp );
+        draw.createTexture( 0, bmp );
         counter = 1;
       } catch (IOException e)
       {
@@ -342,24 +448,24 @@ class GLLoopAmanatsuOP implements GLLoop
     } else if ( counter == 120 || logo == false )
     {
       // End.
-      draw.DestroyTexture( 0 );
+      draw.destroyTexture( 0 );
       ama.render.loop = new GLLoopUserInit( ama );
     } else if ( counter > 0 )
     {
       // OP
-      int max = draw.width < draw.height ? draw.width : draw.height;
+      int max = draw.getWidth() < draw.getHeight() ? draw.getWidth() : draw.getHeight();
       max *= 0.4;
       if ( counter < 40 )
       {
-        draw.SetColor( 0, counter / 40.0f );
+        draw.setColor( 0, counter / 40.0f );
       } else if ( counter >= 80 )
       {
-        draw.SetColor( 0, (120 - counter) / 40.0f );
+        draw.setColor( 0, (120 - counter) / 40.0f );
       } else
       {
-        draw.Printf( 0, draw.width / 2.0f - 50, draw.height / 2.0f + max / 2.0f, ama.GetVersion() );
+        draw.printf( 0, draw.getWidth() / 2.0f - 50, draw.getHeight() / 2.0f + max / 2.0f, Amanatsu.getVersion() );
       }
-      draw.DrawTextureScaring( 0, 0, 0, 256, 256, draw.width / 2 - max / 2, draw.height / 2 - max / 2, max, max );
+      draw.drawTextureScaring( 0, 0, 0, 256, 256, draw.getWidth() / 2 - max / 2, draw.getHeight() / 2 - max / 2, max, max );
       ++counter;
     }
   }
@@ -367,9 +473,10 @@ class GLLoopAmanatsuOP implements GLLoop
 
 class GLLoopUserInit implements GLLoop
 {
-  GameView view;
-  Amanatsu ama;
-  int run = 0;
+  private GameView view;
+  private Amanatsu ama;
+  private int run = 0;
+
   public GLLoopUserInit( Amanatsu ama )
   {
     this.ama = ama;
@@ -378,7 +485,7 @@ class GLLoopUserInit implements GLLoop
   }
 
   @Override
-  public void Run( AmanatsuDraw draw )
+  public void run( AmanatsuDraw draw )
   {
     if ( run == 0 )
     {
@@ -391,18 +498,23 @@ class GLLoopUserInit implements GLLoop
 
 class GLLoopMainLoop implements GLLoop
 {
-  Amanatsu ama;
-  GameView view;
+  private Amanatsu ama;
+  private GameView view;
+  private AmanatsuInput input;
+  private AmanatsuSound sound;
+
   public GLLoopMainLoop( Amanatsu ama )
   {
     this.ama = ama;
     this.view = ama.render.view;
+    this.input = ama.input;
+    this.sound = ama.sound;
   }
 
   @Override
-  public void Run( AmanatsuDraw draw )
+  public void run( AmanatsuDraw draw )
   {
-    if ( view.MainLoop( draw, ama.input, ama.sound ) == false )
+    if ( view.MainLoop( draw, input, sound ) == false )
     {
       ama.render.loop = new GLLoopCleanUp( ama );
     }
@@ -411,23 +523,29 @@ class GLLoopMainLoop implements GLLoop
 
 class GLLoopCleanUp implements GLLoop
 {
-  GameView view;
-  Amanatsu ama;
+  private GameView view;
+  private Amanatsu ama;
+  private int run;
 
   public GLLoopCleanUp( Amanatsu ama )
   {
     this.view = ama.render.view;
     this.ama = ama;
+    this.run = 0;
   }
 
   @Override
-  public void Run( AmanatsuDraw draw)
+  public void run( AmanatsuDraw draw)
   {
-    view.CleanUp( draw, ama.input, ama.sound );
-    ama.Stop();
-    draw.Release();
-    ama.sound.Release();
-    ( (Activity) ama.context ).finish();
+    if ( run == 0 )
+    {
+      run = 1;
+      view.CleanUp( draw, ama.input, ama.sound );
+      ama.stop();
+      draw.release();
+      ama.sound.release();
+      ( (Activity) ama.getContext() ).finish();
+    }
   }
   
 }
@@ -437,19 +555,18 @@ class TouchEvent implements AmanatsuInput
   private float x, y;
   private boolean touched;
   private int frame;
-  static Map<Integer, Key> keyboard;
-
+  private static Map<Integer, Key> keyboard = new Hashtable<Integer, Key>();
+  private int lastkey;
   // tmp;
-  Key key;
+  private Key key;
 
   public TouchEvent()
   {
-    keyboard = new Hashtable<Integer, Key>();
     touched = false;
   }
 
   @Override
-  public synchronized boolean Update()
+  public synchronized boolean update()
   {
     Iterator< Map.Entry<Integer, Key> > itk;
     Map.Entry<Integer, Key> entryk;
@@ -493,7 +610,7 @@ class TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public synchronized boolean Touch( MotionEvent event )
+  public synchronized boolean touch( MotionEvent event )
   {
     this.x = event.getX();
     this.y = event.getY();
@@ -510,67 +627,67 @@ class TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public float GetX()
+  public float getX()
   {
     return x;
   }
 
   @Override
-  public float GetY()
+  public float getY()
   {
     return y;
   }
 
   @Override
-  public int GetTouchFrame()
+  public int getTouchFrame()
   {
     return frame;
   }
 
   @Override
-  public int Size()
+  public int size()
   {
     return (frame > 0) ? 1 : 0;
   }
 
   @Override
-  public float GetX( int num )
+  public float getX( int num )
   {
     return x;
   }
 
   @Override
-  public float GetY( int num )
+  public float getY( int num )
   {
     return y;
   }
 
   @Override
-  public int GetTouchFrame( int num )
+  public int getTouchFrame( int num )
   {
     return frame;
   }
 
   @Override
-  public float GetFingerX( int fingerid )
+  public float getFingerX( int fingerid )
   {
     return x;
   }
 
   @Override
-  public float GetFingerY( int fingerid )
+  public float getFingerY( int fingerid )
   {
     return y;
   }
 
   @Override
-  public int GetFingerTouchFrame( int fingerid )
+  public int getFingerTouchFrame( int fingerid )
   {
     return frame;
   }
 
   @Override
-  public boolean KeyDown( int keycode, KeyEvent event )
+  public boolean keyDown( int keycode, KeyEvent event )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -581,11 +698,12 @@ class TouchEvent implements AmanatsuInput
       keyboard.put( keycode, key );
     }
     key.pushed = true;
+    lastkey = keycode;
     return true;
   }
 
   @Override
-  public boolean KeyUp( int keycode, KeyEvent event )
+  public boolean keyUp( int keycode, KeyEvent event )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -600,7 +718,7 @@ class TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public int GetKey( int keycode )
+  public int getKey( int keycode )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -609,6 +727,11 @@ class TouchEvent implements AmanatsuInput
     return 0;
   }
 
+  @Override
+  public int getLastKey()
+  {
+    return lastkey;
+  }
 }
 
 class MultiTouchEvent implements AmanatsuInput
@@ -619,27 +742,25 @@ class MultiTouchEvent implements AmanatsuInput
   private float[] mx, my;
   private int[] fid;
   private int len = 0, max = 0;
-  static Map<Integer, Finger> finger;
-  static Map<Integer, Key> keyboard;
-
+  private static Map<Integer, Finger> finger = new Hashtable<Integer, Finger>( 15 );
+  private static Map<Integer, Key> keyboard = new Hashtable<Integer, Key>();
+  private int lastkey;
 
   // tmp;
-  Iterator< Map.Entry<Integer, Finger> > itf;
-  Map.Entry<Integer, Finger> entryf;
-  Finger fin;
-  Key key;
+  private Iterator< Map.Entry<Integer, Finger> > itf;
+  private Map.Entry<Integer, Finger> entryf;
+  private Finger fin;
+  private Key key;
 
   boolean lock = false;
 
   public MultiTouchEvent()
   {
-    finger = new Hashtable<Integer, Finger>();
-    keyboard = new Hashtable<Integer, Key>();
     touched = false;
   }
 
   @Override
-  public synchronized boolean Update()
+  public synchronized boolean update()
   {
     Iterator< Map.Entry<Integer, Key> > itk;
     Map.Entry<Integer, Key> entryk;
@@ -709,7 +830,7 @@ class MultiTouchEvent implements AmanatsuInput
   }
 
   @Override
-  public synchronized boolean Touch( MotionEvent event )
+  public synchronized boolean touch( MotionEvent event )
   {
     int n, id;
 
@@ -773,64 +894,64 @@ class MultiTouchEvent implements AmanatsuInput
   }
 
   @Override
-  public float GetX()
+  public float getX()
   {
     return x;
   }
 
   @Override
-  public float GetY()
+  public float getY()
   {
     return y;
   }
 
   @Override
-  public int GetTouchFrame()
+  public int getTouchFrame()
   {
     return frame;
   }
 
   @Override
-  public int Size()
+  public int size()
   {
     return len;
   }
 
   @Override
-  public float GetX( int num )
+  public float getX( int num )
   {
     return mx[ num ];
   }
 
   @Override
-  public float GetY( int num )
+  public float getY( int num )
   {
     return my[ num ];
   }
 
   @Override
-  public int GetTouchFrame( int num )
+  public int getTouchFrame( int num )
   {
     if ( num >= fid.length || finger.containsKey( fid[ num ] ) == false ){ return -1; }
     return finger.get( fid[ num ] ).frame;
   }
 
   @Override
-  public float GetFingerX( int fingerid )
+  public float getFingerX( int fingerid )
   {
     if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
     return finger.get( fingerid ).x;
   }
 
   @Override
-  public float GetFingerY( int fingerid )
+  public float getFingerY( int fingerid )
   {
     if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
     return finger.get( fingerid ).y;
   }
 
   @Override
-  public int GetFingerTouchFrame( int fingerid )
+  public int getFingerTouchFrame( int fingerid )
   {
     fin = finger.get( fingerid );
     if ( fin == null ){ return 0; }
@@ -838,7 +959,7 @@ class MultiTouchEvent implements AmanatsuInput
   }
 
   @Override
-  public boolean KeyDown( int keycode, KeyEvent event )
+  public boolean keyDown( int keycode, KeyEvent event )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -849,11 +970,12 @@ class MultiTouchEvent implements AmanatsuInput
       keyboard.put( keycode, key );
     }
     key.pushed = true;
+    lastkey = keycode;
     return true;
   }
 
   @Override
-  public boolean KeyUp( int keycode, KeyEvent event )
+  public boolean keyUp( int keycode, KeyEvent event )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -868,7 +990,7 @@ class MultiTouchEvent implements AmanatsuInput
   }
 
   @Override
-  public int GetKey( int keycode )
+  public int getKey( int keycode )
   {
     if ( keyboard.containsKey( keycode ) )
     {
@@ -877,6 +999,11 @@ class MultiTouchEvent implements AmanatsuInput
     return 0;
   }
 
+  @Override
+  public int getLastKey()
+  {
+    return lastkey;
+  }
 }
 
 class Finger
