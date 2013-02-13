@@ -25,17 +25,17 @@ public class XXXXX extends Activity
   Amanatsu ama;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onCreate( Bundle savedInstanceState ) {
+    super.onCreate( savedInstanceState );
 
     // Create Amanatsu object.
     ama = new Amanatsu( this, new Game() );
 
     // Set View.
-    this.setContentView( ama.GetGLSurfaceView() );
+    this.setContentView( ama.getGLSurfaceView() );
 
     // Start game.
-    ama.Start();
+    ama.start();
   }
 
 }

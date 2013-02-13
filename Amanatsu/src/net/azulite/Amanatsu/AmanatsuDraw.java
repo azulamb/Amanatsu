@@ -998,7 +998,7 @@ public class AmanatsuDraw
       tpaint = paints.get( 0 );
     }
 
-    canvas.drawText( str, 0, 30, tpaint );
+    canvas.drawText( str, 0, tpaint.getTextSize(), tpaint );
 
     //gl.glEnable( GL10.GL_TEXTURE_2D );//
     gl.glBindTexture(GL10.GL_TEXTURE_2D, stringnum );
