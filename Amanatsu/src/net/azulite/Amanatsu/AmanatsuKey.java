@@ -10,6 +10,12 @@ public class AmanatsuKey
 {
   // Keyboard.
   public static final int K_BACK = 4;
+  public static final int K_MENU = 82;
+
+  public static final int K_UP = 19;
+  public static final int K_DOWN = 20;
+  public static final int K_RIGHT = 21;
+  public static final int K_LEFT = 22;
 
   public static final int K_0 = 7;
   public static final int K_1 = 8;
@@ -20,11 +26,6 @@ public class AmanatsuKey
   public static final int K_6 = 13;
   public static final int K_7 = 15;
   public static final int K_8 = 16;
-
-  public static final int K_UP = 19;
-  public static final int K_DOWN = 20;
-  public static final int K_RIGHT = 21;
-  public static final int K_LEFT = 22;
 
   public static final int K_A = 29;
   public static final int K_B = 30;
@@ -74,7 +75,7 @@ public class AmanatsuKey
   public static final int K_CORON = 75;
   public static final int K_SLASH = 76;
   public static final int K_AT = 77;
-  public static final int K_MENU = 82;
+
   public static final int K_SEARCH = 84;
 
   public static final int K_ESC = 111;

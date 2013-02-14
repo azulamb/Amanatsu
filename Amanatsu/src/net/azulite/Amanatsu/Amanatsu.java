@@ -43,7 +43,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = "0.0.6";
+  private static String VERSION = "0.0.7";
 
   public static final int DRAW_TRC = 0;
   public static final int DRAW_ADD = 1;
@@ -287,20 +287,31 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   @Override
   public void onSurfaceChanged( GL10 gl, int width, int height )
   {
-    draw.setWidth( width );
-    draw.setHeight( height );
-    gl.glViewport( 0, 0, width, height );
+    draw.setGL( gl );
+
     gl.glMatrixMode( GL10.GL_PROJECTION );
     gl.glLoadIdentity();
-    gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );
+    gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );//TODO
+
+    if ( draw.getWidth() <= 0 )
+    {
+      draw.setWindowSize( width, height );
+      draw.SetScreenSize( 0.0f, 0.0f, width, height );
+      ama.input.setWindowSize( width, height );
+      ama.input.setInputArea( 0.0f, 0.0f, width, height );
+    } else
+    {
+      draw.setWindowSize( width, height );
+      ama.input.setWindowSize( width, height );
+    }
+
   }
 
   @Override
   public void onSurfaceCreated( GL10 gl, EGLConfig config )
   {
-    // TODO Auto-generated method stub
-    gl.glGetString( GL10.GL_VERSION );
-
+    gl.glGetString( GL10.GL_VERSION ); // TODO:select version
+    draw.setGL( gl );
   }
 
 }
@@ -445,13 +456,32 @@ class GLLoopCleanUp implements GLLoop
 
 class TouchEvent extends AmanatsuKey implements AmanatsuInput
 {
+  private float basex, basey, width, height, W, H;
   private float x, y;
   private boolean touched;
   private int frame;
 
+
   public TouchEvent()
   {
     touched = false;
+  }
+
+  @Override
+  public boolean setWindowSize( float width, float height )
+  {
+    W = width;
+    H = height;
+    return true;
+  }
+  @Override
+  public boolean setInputArea(float x, float y, float width, float height)
+  {
+    basex = x;
+    basey = y;
+    this.width = width;
+    this.height = height;
+    return true;
   }
 
   @Override
@@ -478,8 +508,8 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public synchronized boolean touch( MotionEvent event )
   {
-    this.x = event.getX();
-    this.y = event.getY();
+    this.x = basex + event.getX() / W * width;
+    this.y = basey + event.getY() / H * height;
 
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
@@ -552,11 +582,11 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
     return frame;
   }
 
-
 }
 
 class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
 {
+  private float basex, basey, width, height, W, H;
   private float x, y;
   private boolean touched;
   private int frame;
@@ -575,6 +605,23 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   public MultiTouchEvent()
   {
     touched = false;
+  }
+
+  @Override
+  public boolean setWindowSize( float width, float height )
+  {
+    W = width;
+    H = height;
+    return true;
+  }
+  @Override
+  public boolean setInputArea(float x, float y, float width, float height)
+  {
+    basex = x;
+    basey = y;
+    this.width = width;
+    this.height = height;
+    return true;
   }
 
   @Override
@@ -629,8 +676,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   {
     int n, id;
 
-    this.x = event.getX();
-    this.y = event.getY();
+    this.x = basex + event.getX() / W * width;
+    this.y = basey + event.getY() / H * height;
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
       touched = false;
@@ -671,8 +718,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
 
         // Finger position.
         // NullPo?
-        fin.x = event.getX( n );
-        fin.y = event.getY( n );
+        fin.x = basex + event.getX( n ) / W * width;
+        fin.y = basey + event.getY( n ) / H * height;
 
         // Array
         // Finger id.

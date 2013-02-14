@@ -29,12 +29,14 @@ import android.opengl.Matrix;
 // Library.
 // TODO:
 // * screen size
+// * auto change 1.1, 2.0
 
 public class AmanatsuDraw
 {
   private Amanatsu ama;
   private GL10 gl = null;
   private int width, height;
+  private float basex, basey, screenwidth, screenheight;
   private Resources resource;
   private static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >( 50 );
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
@@ -67,6 +69,33 @@ public class AmanatsuDraw
     stringtex = ttex;
     stringnum = ttex.texid[ 0 ];
     stringtex.col  = createFloatBuffer( new float[]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f } );
+  }
+
+  public boolean SetScreenSize( float x, float y, float width, float height )
+  {
+    basex = x;
+    basey = y;
+    screenwidth = width;
+    screenheight = height;
+    width = (this.width * this.width) / width;
+    height = (this.height * this.height) / height;
+
+    gl.glViewport( (int)-basex, (this.height - (int)height) + (int)basey, (int)width, (int)height );
+    //gl.glViewport( (int)basex, (this.height - (int)height) - (int)basey, (int)screenwidth, (int)screenheight );
+    //gl.glMatrixMode( GL10.GL_PROJECTION );
+    //gl.glLoadIdentity();    //gl.glViewport( (int)basex, (int)basey, (int)screenwidth, (int)screenheight );
+    //gl.glOrthof( basex, screenwidth, screenheight, basey, 50.0f, -50.0f );//TODO
+    //gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );//TODO
+
+    return true;
+  }
+
+  public boolean MoveScreen( float x, float y )
+  {
+    basex = x;
+    basey = y;
+    gl.glViewport( (int)basex, (int)basey, (int)screenwidth, (int)screenheight );
+    return true;
   }
 
   public void release()
@@ -1132,7 +1161,13 @@ public class AmanatsuDraw
 
   public final int getWidth(){ return width; }
   public final int getHeight(){ return height; }
-  public final int setWidth( int width )
+  public boolean setWindowSize( int width, int height )
+  {
+    this.width = width;
+    this.height = height;
+    return true;
+  }
+  /*public final int setWidth( int width )
   {
     int ret = this.width;
     this.width = width;
@@ -1143,7 +1178,7 @@ public class AmanatsuDraw
     int ret = this.height;
     this.height = height;
     return ret;
-  }
+  }*/
 
   public final Texture getTexture( int rnum ){ return textures.get( rnum ); }
 

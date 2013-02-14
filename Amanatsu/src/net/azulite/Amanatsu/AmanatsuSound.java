@@ -12,7 +12,8 @@ import android.media.SoundPool;
 import android.net.Uri;
 
 // memo:AudioTrack
-
+// TODO:
+// * ogg loop flag
 public class AmanatsuSound
 {
   private Amanatsu ama;

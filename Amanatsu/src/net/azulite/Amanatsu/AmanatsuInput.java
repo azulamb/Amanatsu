@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 
 public interface AmanatsuInput
 {
+  public boolean setWindowSize( float width, float height );
+  public boolean setInputArea( float x, float y, float width, float height );
   public boolean update();
 
   public boolean touch( MotionEvent event );
