@@ -296,7 +296,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
     if ( draw.getWidth() <= 0 )
     {
       draw.setWindowSize( width, height );
-      draw.SetScreenSize( 0.0f, 0.0f, width, height );
+      draw.setScreenSize( 0.0f, 0.0f, width, height );
       ama.input.setWindowSize( width, height );
       ama.input.setInputArea( 0.0f, 0.0f, width, height );
     } else

@@ -76,8 +76,12 @@ public String getGLVersion(){ return gl.glGetString( GL10.GL_VERSION ); }
     stringtex.col  = createFloatBuffer( new float[]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f } );
   }
 
-  public boolean SetScreenSize( float x, float y, float width, float height )
+  public boolean setScreenSize( float x, float y, float width, float height )
   {
+    if ( ama.input != null )
+    {
+      ama.input.setInputArea( -x, -y, width, height );
+    }
     basex = x;
     basey = y;
     screenwidth = width;
@@ -95,7 +99,7 @@ public String getGLVersion(){ return gl.glGetString( GL10.GL_VERSION ); }
     return true;
   }
 
-  public boolean MoveScreen( float x, float y )
+  public boolean moveScreen( float x, float y )
   {
     basex = x;
     basey = y;
