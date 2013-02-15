@@ -43,7 +43,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = "0.0.7";
+  private static String VERSION = "0.1.0";
 
   public static final int DRAW_TRC = 0;
   public static final int DRAW_ADD = 1;

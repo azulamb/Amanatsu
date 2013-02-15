@@ -1,5 +1,7 @@
 package net.azulite.Amanatsu;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -38,6 +41,7 @@ public class AmanatsuDraw
   private int width, height;
   private float basex, basey, screenwidth, screenheight;
   private Resources resource;
+  private AssetManager assets;
   private static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >( 50 );
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
 
@@ -55,14 +59,15 @@ public class AmanatsuDraw
   {
     this.ama = ama;
     resource = ama.getContext().getResources();
+    assets = ama.getContext().getResources().getAssets();
     farr4 = new float[ 4 ];
     farr8 = new float[ 8 ];
     mat = new float[ 16 ];
 
-    stringbmp = Bitmap.createBitmap( 512, 512, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
+    stringbmp = Bitmap.createBitmap( 1024, 1024, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
     createFont( 0, 30 );
   }
-
+public String getGLVersion(){ return gl.glGetString( GL10.GL_VERSION ); }
   public void init()
   {
     createTextureFromBitmap( 0, stringbmp, false );
@@ -241,6 +246,18 @@ public class AmanatsuDraw
   public int createTexture( int tnum, int rnum )
   {
     return createTextureFromBitmap( tnum, BitmapFactory.decodeResource( resource, rnum ), true );
+  }
+
+  public int createTexture( int tnum, String path )
+  {
+    try
+    {
+      InputStream is = assets.open( path );
+      return createTextureFromBitmap( tnum, BitmapFactory.decodeStream( is ), true );
+    } catch (IOException e)
+    {
+    }
+    return -1;
   }
 
   public int createTexture( int rnum, Bitmap bmp )

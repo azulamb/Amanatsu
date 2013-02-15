@@ -75,6 +75,11 @@ public class AmanatsuSound
     return loadBgm( rnum, Uri.parse("android.resource://" + ama.getContext().getPackageName() +"/" + rnum ), loop );
   }
 
+  public boolean loadBgm( int snum, String file, boolean loop )
+  {
+    return loadBgm( snum, Uri.parse( "file:///android_asset/" + file ), loop );
+  }
+
   public boolean loadBgm( int rnum, Uri uri, boolean loop )
   {
     MediaPlayer mp = new MediaPlayer();
