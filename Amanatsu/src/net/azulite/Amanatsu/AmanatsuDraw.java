@@ -33,7 +33,7 @@ import android.opengl.GLUtils;
 // * screen size
 // * auto change 1.1, 2.0
 // * box texture
-
+// * set funciton glEnable() GL_POINT_SMOOTH,GL_LINE_SMOOTH,GL_POLYGON_SMOOTH
 public class AmanatsuDraw
 {
   private Amanatsu ama;
@@ -54,7 +54,7 @@ public class AmanatsuDraw
   private int stringnum;
 
   // tmp.
-  private float[] farr4, farr8, mat;
+  private float[] farr4, farr6, farr8, mat;
   private Texture ttex;
   private Paint tpaint;
 
@@ -64,6 +64,7 @@ public class AmanatsuDraw
     resource = ama.getContext().getResources();
     assets = ama.getContext().getResources().getAssets();
     farr4 = new float[ 4 ];
+    farr6 = new float[ 6 ];
     farr8 = new float[ 8 ];
     mat = new float[ 16 ];
   }
@@ -119,6 +120,7 @@ public class AmanatsuDraw
     gl.glEnable( GL10.GL_TEXTURE_2D );
     gl.glEnableClientState( GL10.GL_TEXTURE_COORD_ARRAY );
     gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+    gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );//TODO
 
     gl.glFrontFace( GL10.GL_CW );
     gl.glEnable( GL10.GL_CULL_FACE );
@@ -139,11 +141,6 @@ public class AmanatsuDraw
     height = (this.height * this.height) / height;
 
     gl.glViewport( (int)-basex, (this.height - (int)height) + (int)basey, (int)width, (int)height );
-    //gl.glViewport( (int)basex, (this.height - (int)height) - (int)basey, (int)screenwidth, (int)screenheight );
-    //gl.glMatrixMode( GL10.GL_PROJECTION );
-    //gl.glLoadIdentity();    //gl.glViewport( (int)basex, (int)basey, (int)screenwidth, (int)screenheight );
-    //gl.glOrthof( basex, screenwidth, screenheight, basey, 50.0f, -50.0f );//TODO
-    //gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );//TODO
 
     return true;
   }
@@ -152,8 +149,6 @@ public class AmanatsuDraw
   {
     basex = x;
     basey = y;
-    //gl.glViewport( (int)basex, (int)basey, (int)screenwidth, (int)screenheight );
-    //return true;
     return setScreenSize( basex, basey, screenwidth, screenheight );
   }
 
@@ -185,12 +180,13 @@ public class AmanatsuDraw
     case Amanatsu.DRAW_ADD:
       gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
       break;
-/*    case Amanatsu.DRAW_SUB:
+/*    case Amanatsu.DRAW_SUB:TODO
       gl.glBlendEquationEXT( GL11ExtensionPack.GL_FUNC_REVERSE_SUBTRACT_EXT );
       gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
       break;*/
     case Amanatsu.DRAW_MUL:
       gl.glBlendFunc( GL10.GL_ZERO, GL10.GL_SRC_COLOR );
+      // memo:
       //dst = dst * src * alpha;
       //gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_COLOR);
       //gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_ALPHA);
@@ -254,7 +250,7 @@ public class AmanatsuDraw
     {
       InputStream is = assets.open( path );
       return createTextureFromBitmap( tnum, BitmapFactory.decodeStream( is ), true );
-    } catch (IOException e)
+    } catch ( IOException e )
     {
     }
     return -1;
@@ -348,70 +344,17 @@ public class AmanatsuDraw
     }
   }
 
-
-  public boolean createFont( int fnum, int size ){ return createFont( fnum, size, false, GameColor.WHITE ); }
-
-  public boolean createFont( int fnum, int size, boolean antialias ){ return createFont( fnum, size, antialias, GameColor.WHITE ); }
-
-  public boolean createFont( int fnum, int size, boolean antialias, GameColor color ){ return createFont( fnum, size, antialias, color.color ); }
-
-  public boolean createFont( int fnum, int size, boolean antialias, float[] color )
-  {
-    if ( paints.containsKey( fnum ) == false )
-    {
-      tpaint = new Paint();
-      paints.put( fnum, tpaint );
-    } else
-    {
-      tpaint = paints.get( fnum );
-    }
-
-    tpaint.setTextSize( size );
-    tpaint.setARGB( (int)(0xff * color[ 3 ]), (int)(0xff * color[ 0 ]), (int)(0xff * color[ 1 ]), (int)(0xff * color[ 2 ]) );
-    tpaint.setAntiAlias( antialias );
-
-    return true;
-  }
-
-  public boolean printf( int fnum, float dx, float dy, String str )
-  {
-    Canvas canvas = new Canvas( stringbmp );
-
-    canvas.drawColor( Color.TRANSPARENT, PorterDuff.Mode.CLEAR );
-
-    if ( paints.containsKey( fnum ) )
-    {
-      tpaint = paints.get( fnum );
-    } else
-    {
-      tpaint = paints.get( 0 );
-    }
-
-    canvas.drawText( str, 0, tpaint.getTextSize(), tpaint );
-
-    //gl.glEnable( GL10.GL_TEXTURE_2D );//
-    gl.glBindTexture(GL10.GL_TEXTURE_2D, stringnum );
-    //GLUtils.texSubImage2D( GL10.GL_TEXTURE_2D, 0, 0, 0, stringbmp );//
-    //gl.glDisable( GL10.GL_TEXTURE_2D );//
-    GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
-    //gl.glGenTextures( 1, ttex.texid, 0 );
-
-    //gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
-    //gl.glBindTexture( GL10.GL_TEXTURE_2D, 0 );
-
-    setFloatArray8( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
-    stringtex.ver = createFloatBuffer( farr8 );
-
-    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    stringtex.uv   = createFloatBuffer( farr8 );
-
-    return drawTexture( stringtex );
-  }
-
   private final void setFloatArray4( float f0, float f1, float f2, float f3 )
   {
     farr4[ 0 ] = f0; farr4[ 1 ] = f1;
     farr4[ 2 ] = f2; farr4[ 3 ] = f3;
+  }
+
+  private final void setFloatArray6( float f0, float f1, float f2, float f3, float f4, float f5 )
+  {
+    farr6[ 0 ] = f0; farr6[ 1 ] = f1;
+    farr6[ 2 ] = f2; farr6[ 3 ] = f3;
+    farr6[ 4 ] = f4; farr6[ 5 ] = f5;
   }
 
   private final void setFloatArray8( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7 )
@@ -563,6 +506,89 @@ public class AmanatsuDraw
     return ret;
   }
 
+  public boolean createFont( int fnum, int size ){ return createFont( fnum, size, false, GameColor.WHITE ); }
+
+  public boolean createFont( int fnum, int size, boolean antialias ){ return createFont( fnum, size, antialias, GameColor.WHITE ); }
+
+  public boolean createFont( int fnum, int size, boolean antialias, GameColor color ){ return createFont( fnum, size, antialias, color.color ); }
+
+  public boolean createFont( int fnum, int size, boolean antialias, float[] color )
+  {
+    if ( paints.containsKey( fnum ) == false )
+    {
+      tpaint = new Paint();
+      paints.put( fnum, tpaint );
+    } else
+    {
+      tpaint = paints.get( fnum );
+    }
+
+    tpaint.setTextSize( size );
+    tpaint.setARGB( (int)(0xff * color[ 3 ]), (int)(0xff * color[ 0 ]), (int)(0xff * color[ 1 ]), (int)(0xff * color[ 2 ]) );
+    tpaint.setAntiAlias( antialias );
+
+    return true;
+  }
+
+  public boolean printf( int fnum, float dx, float dy, String str )
+  {
+    Canvas canvas = new Canvas( stringbmp );
+
+    canvas.drawColor( Color.TRANSPARENT, PorterDuff.Mode.CLEAR );
+
+    if ( paints.containsKey( fnum ) )
+    {
+      tpaint = paints.get( fnum );
+    } else
+    {
+      tpaint = paints.get( 0 );
+    }
+
+    canvas.drawText( str, 0, tpaint.getTextSize(), tpaint );
+
+    gl.glBindTexture(GL10.GL_TEXTURE_2D, stringnum );
+
+    GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
+
+    setFloatArray8( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
+    stringtex.ver = createFloatBuffer( farr8 );
+
+    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    stringtex.uv   = createFloatBuffer( farr8 );
+
+    return drawTexture( stringtex );
+  }
+
+  // Base draw.
+  public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color )
+  {
+    return drawLine( sx, sy, ex, ey, 1.0f, color.color );
+  }
+
+  public boolean drawLine( float sx, float sy, float ex, float ey, float[] color )
+  {
+    return drawLine( sx, sy, ex, ey, 1.0f, color );
+  }
+
+  public boolean drawLine( float sx, float sy, float ex, float ey, float width, GameColor color )
+  {
+    return drawLine( sx, sy, ex, ey, width, color.color );
+  }
+
+  public boolean drawLine( float sx, float sy, float ex, float ey, float width, float[] color )
+  {
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+
+    gl.glLineWidth( width );
+    setFloatArray6( sx, sy, 1.0f, ex, ey, 1.0f );
+    gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, createFloatBuffer( farr6 ) );
+    gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 2 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+
+    return true;
+  }
+
   /**
    * @param x Draw x oordinate.
    * @param y Draw y cordinate.
@@ -601,7 +627,10 @@ public class AmanatsuDraw
     boxtex.col = createColor( color );
     return drawTexture( boxtex );
   }
+  
+  // TODO drawCircle
 
+  // Draw texture.
   private boolean drawTexture( Texture tex )//TODO
   {
     gl.glBindTexture( GL10.GL_TEXTURE_2D, tex.texid[ 0 ] );

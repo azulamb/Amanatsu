@@ -487,8 +487,8 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public synchronized boolean touch( MotionEvent event )
   {
-    this.x = event.getX();//basex + event.getX() / W * width;
-    this.y = event.getY();//basey + event.getY() / H * height;
+    this.x = event.getX();
+    this.y = event.getY();
 
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
@@ -621,7 +621,7 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
       frame = 0;
     }
 
-    for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
+    for ( itf = finger.entrySet().iterator() ; itf.hasNext() ; )
     {
       // java.util.concurrentmodificationexception
       entryf = itf.next();
@@ -655,8 +655,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   {
     int n, id;
 
-    this.x = event.getX();//basex + event.getX() / W * width;
-    this.y = event.getY();//basey + event.getY() / H * height;
+    this.x = event.getX();
+    this.y = event.getY();
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
       touched = false;
@@ -674,13 +674,13 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
       fid = new int[ max ];
     }
 
-    for ( itf = finger.entrySet().iterator(); itf.hasNext() ; )
+    for ( itf = finger.entrySet().iterator() ; itf.hasNext() ; )
     {
       entryf = itf.next();
       entryf.getValue().touched = false;
     }
 
-    if ( event.getAction() != MotionEvent.ACTION_UP )
+    if ( event.getAction() != MotionEvent.ACTION_UP ) // TODO
     {
       for ( n = 0 ; n < len ; ++n )
       {
@@ -696,9 +696,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
         }
 
         // Finger position.
-        // NullPo?
-        fin.x = event.getX( n );//basex + event.getX( n ) / W * width;
-        fin.y = event.getY( n );//basey + event.getY( n ) / H * height;
+        fin.x = event.getX( n );
+        fin.y = event.getY( n );
 
         // Array
         // Finger id.
@@ -717,7 +716,7 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getX()
   {
-    return  basex + x / W * width;
+    return  basex + x / W * width; // TODO index over length
   }
 
   @Override
