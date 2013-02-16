@@ -487,8 +487,8 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public synchronized boolean touch( MotionEvent event )
   {
-    this.x = basex + event.getX() / W * width;
-    this.y = basey + event.getY() / H * height;
+    this.x = event.getX();//basex + event.getX() / W * width;
+    this.y = event.getY();//basey + event.getY() / H * height;
 
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
@@ -504,13 +504,13 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getX()
   {
-    return x;
+    return basex + x / W * width;
   }
 
   @Override
   public float getY()
   {
-    return y;
+    return basey + y / H * height;
   }
 
   @Override
@@ -528,13 +528,13 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getX( int num )
   {
-    return x;
+    return basex + x / W * width;
   }
 
   @Override
   public float getY( int num )
   {
-    return y;
+    return basey + y / H * height;
   }
 
   @Override
@@ -546,13 +546,13 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getFingerX( int fingerid )
   {
-    return x;
+    return basex + x / W * width;
   }
 
   @Override
   public float getFingerY( int fingerid )
   {
-    return y;
+    return basey + y / H * height;
   }
 
   @Override
@@ -655,8 +655,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   {
     int n, id;
 
-    this.x = basex + event.getX() / W * width;
-    this.y = basey + event.getY() / H * height;
+    this.x = event.getX();//basex + event.getX() / W * width;
+    this.y = event.getY();//basey + event.getY() / H * height;
     if ( event.getAction() == MotionEvent.ACTION_UP )
     {
       touched = false;
@@ -697,8 +697,8 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
 
         // Finger position.
         // NullPo?
-        fin.x = basex + event.getX( n ) / W * width;
-        fin.y = basey + event.getY( n ) / H * height;
+        fin.x = event.getX( n );//basex + event.getX( n ) / W * width;
+        fin.y = event.getY( n );//basey + event.getY( n ) / H * height;
 
         // Array
         // Finger id.
@@ -717,13 +717,13 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getX()
   {
-    return x;
+    return  basex + x / W * width;
   }
 
   @Override
   public float getY()
   {
-    return y;
+    return basey + y / H * height;
   }
 
   @Override
@@ -741,13 +741,13 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   @Override
   public float getX( int num )
   {
-    return mx[ num ];
+    return basex + mx[ num ] / W * width;
   }
 
   @Override
   public float getY( int num )
   {
-    return my[ num ];
+    return basey + my[ num ] / H * height;
   }
 
   @Override
@@ -761,14 +761,14 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   public float getFingerX( int fingerid )
   {
     if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
-    return finger.get( fingerid ).x;
+    return basex + finger.get( fingerid ).x / W * width;
   }
 
   @Override
   public float getFingerY( int fingerid )
   {
     if ( finger.containsKey( fingerid ) == false ){ return 0.0f; }
-    return finger.get( fingerid ).y;
+    return basey + finger.get( fingerid ).y / H * height;
   }
 
   @Override

@@ -129,10 +129,10 @@ public class AmanatsuDraw
   {
     if ( ama.input != null )
     {
-      ama.input.setInputArea( -x, -y, width, height );
+      ama.input.setInputArea( x, y, width, height );
     }
-    basex = x;
-    basey = y;
+    basex = x * this.width / width;
+    basey = y * this.height / height;
     screenwidth = width;
     screenheight = height;
     width = (this.width * this.width) / width;

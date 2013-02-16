@@ -68,8 +68,8 @@ public class AmanatsuKey
   public static final int K_ZENKAKU = 68;
   public static final int K_MINUS = 69;
   public static final int K_HAT = 70;
-  public static final int K_LBRACKET = 71;//[
-  public static final int K_RBRACKET = 72;//]
+  public static final int K_LBRACKET = 71;//[ TODO
+  public static final int K_RBRACKET = 72;//] TODO
   public static final int K_BACKSLASH = 73;
   public static final int K_SEMICORON = 74;
   public static final int K_CORON = 75;
