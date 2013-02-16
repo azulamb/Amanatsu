@@ -43,7 +43,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = "0.1.0";
+  private static String VERSION = "0.1.2";
 
   public static final int DRAW_TRC = 0;
   public static final int DRAW_ADD = 1;
@@ -195,7 +195,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   private boolean loopflag = false;
 
   // FPS
-  private long before, now, progress, idol;
+  private long before, now, progress;
   private int frame;
   float fps = 30.0f, nowfps;
   private float countfps;
@@ -205,7 +205,6 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
     this.ama = ama;
     glview = ama.view;
     setGameView( ama.gview );
-    draw = new AmanatsuDraw( ama );
   }
 
   public void setGLLoop( GLLoop loop )
@@ -260,13 +259,10 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   {
     draw.setGL( gl );
 
-    gl.glEnable( GL10.GL_BLEND );
-    draw.setRender( Amanatsu.DRAW_TRC );
-
     ama.input.update();
-    loop.run( draw );
 
-    gl.glDisable( GL10.GL_BLEND );
+    loop.run( draw );
+    gl.glFlush();
 
     now = System.currentTimeMillis();
     progress = now - before;
@@ -280,38 +276,21 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
       nowfps = countfps;
       countfps = 0.0f;
     }
-    idol = (int)((float)frame * 1000.0f / fps ) - progress;
-    if ( loopflag ){ sendMessageDelayed( obtainMessage( 0 ), idol ); }
+    if ( loopflag ){ sendMessageDelayed( obtainMessage( 0 ), (int)((float)frame * 1000.0f / fps ) - progress ); }
   }
 
   @Override
   public void onSurfaceChanged( GL10 gl, int width, int height )
   {
-    draw.setGL( gl );
-
-    gl.glMatrixMode( GL10.GL_PROJECTION );
-    gl.glLoadIdentity();
-    gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );//TODO
-
-    if ( draw.getWidth() <= 0 )
-    {
-      draw.setWindowSize( width, height );
-      draw.setScreenSize( 0.0f, 0.0f, width, height );
-      ama.input.setWindowSize( width, height );
-      ama.input.setInputArea( 0.0f, 0.0f, width, height );
-    } else
-    {
-      draw.setWindowSize( width, height );
-      ama.input.setWindowSize( width, height );
-    }
-
+    draw.change( gl, width, height );
   }
 
   @Override
   public void onSurfaceCreated( GL10 gl, EGLConfig config )
   {
-    gl.glGetString( GL10.GL_VERSION ); // TODO:select version
-    draw.setGL( gl );
+    // TODO:select version
+    draw = new AmanatsuDraw( ama );
+    draw.init( gl );
   }
 
 }
@@ -335,21 +314,7 @@ class GLLoopAmanatsuOP implements GLLoop
   public void run( AmanatsuDraw draw )
   {
     draw.clearScreen();
-    if ( counter < 0 )
-    {
-      counter = 0;
-      draw.init();
-      try
-      {
-        URL filename = getClass().getResource( "/res/raw/logo.png" );
-        InputStream input = filename.openStream();
-        Bitmap bmp = BitmapFactory.decodeStream( input );
-        draw.createTexture( 0, bmp );
-        counter = 1;
-      } catch (IOException e)
-      {
-      }
-    } else if ( counter == 120 || logo == false )
+    if ( counter == 120 || logo == false )
     {
       // End.
       draw.destroyTexture( 0 );
@@ -371,7 +336,21 @@ class GLLoopAmanatsuOP implements GLLoop
       }
       draw.drawTextureScaring( 0, 0, 0, 256, 256, draw.getWidth() / 2 - max / 2, draw.getHeight() / 2 - max / 2, max, max );
       ++counter;
+    } else if ( counter < 0 )
+    {
+      counter = 0;
+      try
+      {
+        URL filename = getClass().getResource( "/res/raw/logo.png" );
+        InputStream input = filename.openStream();
+        Bitmap bmp = BitmapFactory.decodeStream( input );
+        draw.createTexture( 0, bmp );
+        counter = 1;
+      } catch (IOException e)
+      {
+      }
     }
+
   }
 }
 
