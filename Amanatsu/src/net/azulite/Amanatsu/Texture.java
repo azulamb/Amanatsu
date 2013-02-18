@@ -1,6 +1,9 @@
 package net.azulite.Amanatsu;
 
 import java.nio.FloatBuffer;
+/**
+ * Amanatsuでのテクスチャ情報を管理するクラス。
+ */
 
 public class Texture
 {

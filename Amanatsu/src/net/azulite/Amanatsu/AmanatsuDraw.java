@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.opengl.GLUtils;
 
 /**
+ * Amanatsuã®æç”»ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
  * @author Hiroki
  */
 
@@ -129,13 +130,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒXƒNƒŠ[ƒ“ƒTƒCƒY‚Ìİ’èB
-   * ƒXƒNƒŠ[ƒ“ƒTƒCƒY‚Æ‚Í‰æ–Ê‘S‘Ì‚ğƒEƒBƒ“ƒhƒE‚Æ‚µ‚½A‚»‚Ìˆê•”•ª‚ğØ‚èæ‚Á‚½‚à‚Ì‚ğw‚µ‚Ü‚·B
-   * ŠJnÀ•W‚Æ—Ìˆæ‚Åw’è‚·‚é‚±‚Æ‚ª‰Â”\‚Å‚·B
-   * @param x ŠJnXÀ•WB
-   * @param y ŠJnYÀ•WB
-   * @param width ‰¡•B
-   * @param height ‚‚³B
+   * ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºã®è¨­å®šã€‚
+   * ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºã¨ã¯ç”»é¢å…¨ä½“ã‚’ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¨ã—ãŸæ™‚ã€ãã®ä¸€éƒ¨åˆ†ã‚’åˆ‡ã‚Šå–ã£ãŸã‚‚ã®ã‚’æŒ‡ã—ã¾ã™ã€‚
+   * é–‹å§‹åº§æ¨™ã¨é ˜åŸŸã§æŒ‡å®šã™ã‚‹ã“ã¨ãŒå¯èƒ½ã§ã™ã€‚
+   * @param x é–‹å§‹Xåº§æ¨™ã€‚
+   * @param y é–‹å§‹Yåº§æ¨™ã€‚
+   * @param width æ¨ªå¹…ã€‚
+   * @param height é«˜ã•ã€‚
    */
   public boolean setScreenSize( float x, float y, float width, float height )
   {
@@ -156,9 +157,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒXƒNƒŠ[ƒ“‚ÌˆÚ“®B
-   * @param x ˆÚ“®æXÀ•WB
-   * @param y ˆÚ“®æYÀ•WB
+   * ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®ç§»å‹•ã€‚
+   * @param x ç§»å‹•å…ˆXåº§æ¨™ã€‚
+   * @param y ç§»å‹•å…ˆYåº§æ¨™ã€‚
    */
   public boolean moveScreen( float x, float y )
   {
@@ -187,8 +188,8 @@ public class AmanatsuDraw
   }
 
   /**
-   * FPS‚Ìİ’èA
-   * @param fps FPS‚Ìİ’è(Amanatsu‚ÌƒfƒtƒHƒ‹ƒg‚Í30.0f)B
+   * FPSã®è¨­å®šã€
+   * @param fps FPSã®è¨­å®š(Amanatsuã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯30.0f)ã€‚
    */
   public float setFps( float fps )
   {
@@ -196,12 +197,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * •`‰æƒ‚[ƒh‚Ìİ’èB
-   * •`‰æƒ‚[ƒh‚ğØ‚è‘Ö‚¦‚Ü‚·B
-   * Amanatsu.DRAW_ADD=‰ÁZ‡¬B
-   * Amanatsu.DRAW_MUL=æZ‡¬B
-   * Amanatsu.DRAW_TRC=“§‰ßF—LŒø’Êí‡¬B
-   * @param type Amanatsu.DRAW_* ‚Åİ’è‚³‚ê‚Ä‚¢‚é•`‰æƒ‚[ƒhB
+   * æç”»ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šã€‚
+   * æç”»ãƒ¢ãƒ¼ãƒ‰ã‚’åˆ‡ã‚Šæ›¿ãˆã¾ã™ã€‚
+   * Amanatsu.DRAW_ADD=åŠ ç®—åˆæˆã€‚
+   * Amanatsu.DRAW_MUL=ä¹—ç®—åˆæˆã€‚
+   * Amanatsu.DRAW_TRC=é€éè‰²æœ‰åŠ¹é€šå¸¸åˆæˆã€‚
+   * @param type Amanatsu.DRAW_* ã§è¨­å®šã•ã‚Œã¦ã„ã‚‹æç”»ãƒ¢ãƒ¼ãƒ‰ã€‚
    */
   public boolean setRender( int type )
   {
@@ -228,10 +229,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * ‰æ–Ê‚ğ•‚Å“h‚è‚Â‚Ô‚µ‚Ü‚·B
-   * MainLoopŠJn‚Éˆê“xÀs‚µ‚Ä‚­‚¾‚³‚¢B
-   * ‚Ü‚½A‰æ–ÊƒNƒŠƒA‘O‚É•`‰æ‚µ‚Ä‚¢‚½–½—ß‚Í‘S‚ÄÁ‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚Å‹C‚ğ‚Â‚¯‚Ä‰º‚³‚¢B
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * ç”»é¢ã‚’é»’ã§å¡—ã‚Šã¤ã¶ã—ã¾ã™ã€‚
+   * MainLoopé–‹å§‹æ™‚ã«ä¸€åº¦å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
+   * ã¾ãŸã€ç”»é¢ã‚¯ãƒªã‚¢å‰ã«æç”»ã—ã¦ã„ãŸå‘½ä»¤ã¯å…¨ã¦æ¶ˆã•ã‚Œã¦ã—ã¾ã†ã®ã§æ°—ã‚’ã¤ã‘ã¦ä¸‹ã•ã„ã€‚
    */
   public boolean clearScreen()
   {
@@ -239,9 +240,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * ”CˆÓ‚ÌF‚Å‰æ–Ê‚ğ“h‚è‚Â‚Ô‚µ‚Ü‚·(ƒAƒ‹ƒtƒ@’l‚Í–³‹)B
-   * @param color GameColor‚ÌƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * ä»»æ„ã®è‰²ã§ç”»é¢ã‚’å¡—ã‚Šã¤ã¶ã—ã¾ã™(ã‚¢ãƒ«ãƒ•ã‚¡å€¤ã¯ç„¡è¦–)ã€‚
+   * @param color GameColorã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean clearScreen( GameColor color )
   {
@@ -249,9 +250,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * ”CˆÓ‚ÌF‚Å‰æ–Ê‚ğ“h‚è‚Â‚Ô‚µ‚Ü‚·(ƒAƒ‹ƒtƒ@’l‚Í–³‹)B
-   * @param color F”z—ñ( Ô, —Î, Â ).ŠeF‚Ì‹­‚³‚Í0-255B
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * ä»»æ„ã®è‰²ã§ç”»é¢ã‚’å¡—ã‚Šã¤ã¶ã—ã¾ã™(ã‚¢ãƒ«ãƒ•ã‚¡å€¤ã¯ç„¡è¦–)ã€‚
+   * @param color è‰²é…åˆ—( èµ¤, ç·‘, é’ ).å„è‰²ã®å¼·ã•ã¯0-255ã€‚
    */
   public boolean clearScreen( byte[] color )
   {
@@ -259,9 +260,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * ”CˆÓ‚ÌF‚Å‰æ–Ê‚ğ“h‚è‚Â‚Ô‚µ‚Ü‚·(ƒAƒ‹ƒtƒ@’l‚Í–³‹)B
-   * @param color F”z—ñ( Ô, —Î, Â ).ŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * ä»»æ„ã®è‰²ã§ç”»é¢ã‚’å¡—ã‚Šã¤ã¶ã—ã¾ã™(ã‚¢ãƒ«ãƒ•ã‚¡å€¤ã¯ç„¡è¦–)ã€‚
+   * @param color è‰²é…åˆ—( èµ¤, ç·‘, é’ ).å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean clearScreen( float[] color )
   {
@@ -269,10 +270,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * @param red Ô(0-255).
-   * @param green —Î(0-255).
-   * @param blue Â(0-255).
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * @param red èµ¤(0-255).
+   * @param green ç·‘(0-255).
+   * @param blue é’(0-255).
    */
   public boolean clearScreen( byte red, byte green, byte blue )
   {
@@ -280,10 +281,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚ÌƒNƒŠƒAB
-   * @param red Ô(0.0f-1.0f).
-   * @param green —Î(0.0f-1.0f).
-   * @param blue Â(0.0f-1.0f).
+   * ç”»é¢ã®ã‚¯ãƒªã‚¢ã€‚
+   * @param red èµ¤(0.0f-1.0f).
+   * @param green ç·‘(0.0f-1.0f).
+   * @param blue é’(0.0f-1.0f).
    */
   public boolean clearScreen( float red, float green, float blue )
   {
@@ -294,9 +295,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì¶¬(ƒŠƒ\[ƒX‚©‚ç)B
-   * ƒeƒNƒXƒ`ƒƒ‚ğƒŠƒ\[ƒX‚©‚ç¶¬‚·‚éBƒeƒNƒXƒ`ƒƒ”Ô†‚ÍƒŠƒ\[ƒX”Ô†‚Æ‚È‚éB
-   * @param rnum ƒŠƒ\[ƒX”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç”Ÿæˆ(ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰)ã€‚
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰ç”Ÿæˆã™ã‚‹ã€‚ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã¯ãƒªã‚½ãƒ¼ã‚¹ç•ªå·ã¨ãªã‚‹ã€‚
+   * @param rnum ãƒªã‚½ãƒ¼ã‚¹ç•ªå·ã€‚
    */
   public int createTexture( int rnum )
   {
@@ -304,10 +305,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì¶¬(ƒŠƒ\[ƒX‚©‚ç)B
-   * ƒeƒNƒXƒ`ƒƒ”Ô†‚Í©•ª‚Åİ’è‚·‚éB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rnum ƒŠƒ\[ƒX”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç”Ÿæˆ(ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰)ã€‚
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã¯è‡ªåˆ†ã§è¨­å®šã™ã‚‹ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rnum ãƒªã‚½ãƒ¼ã‚¹ç•ªå·ã€‚
    */
   public int createTexture( int tnum, int rnum )
   {
@@ -315,11 +316,11 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ìİ’è(assets)B
-   * assets“à‚ÉŠi”[‚µ‚½ƒtƒ@ƒCƒ‹‚©‚çƒeƒNƒXƒ`ƒƒ‚ğ¶¬‚·‚éB
-   * ƒtƒ@ƒCƒ‹ƒpƒX‚Íassets‚ğroot‚É‚µ‚½ê‡B
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param path ƒtƒ@ƒCƒ‹ƒpƒXB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¨­å®š(assets)ã€‚
+   * assetså†…ã«æ ¼ç´ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+   * ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã¯assetsã‚’rootã«ã—ãŸå ´åˆã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param path ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã€‚
    */
   public int createTexture( int tnum, String path )
   {
@@ -334,10 +335,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì¶¬(Bitmap)B
-   * Bitmap‚©‚çƒeƒNƒXƒ`ƒƒ‚ğ¶¬‚·‚éB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param bmp Bitmap‚ÌƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç”Ÿæˆ(Bitmap)ã€‚
+   * Bitmapã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param bmp Bitmapã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public int createTexture( int tnum, Bitmap bmp )
   {
@@ -399,14 +400,14 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì‘¶İƒ`ƒFƒbƒNB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
    */
   public boolean existTexture( int tnum ){ return (textures.containsKey( tnum ) && textures.get( tnum ).texid != null );}
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì”jŠüB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç ´æ£„ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
    */
   public void destroyTexture( int tnum )
   {
@@ -418,8 +419,8 @@ public class AmanatsuDraw
 
   // TODO
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì‰ğ•úB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è§£æ”¾ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
    */
   public boolean releaseTexture( int tnum )
   {
@@ -433,7 +434,7 @@ public class AmanatsuDraw
 
   // TODO
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ğ‘S‚Ä‰ğ•úB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å…¨ã¦è§£æ”¾ã€‚
    */
   public void releaseTexture()
   {
@@ -509,8 +510,8 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌFİ’è(”’)B
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è‰²è¨­å®š(ç™½)ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
    */
   public final void setColor( int tnum )
   {
@@ -525,9 +526,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒF‚Ìİ’èB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param col F‚Ì‹­‚³BƒAƒ‹ƒtƒ@’lˆÈŠO‚Ì’l‚ª‘S‚Ä“¯‚¶B0.0f-1.0fB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£è‰²ã®è¨­å®šã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param col è‰²ã®å¼·ã•ã€‚ã‚¢ãƒ«ãƒ•ã‚¡å€¤ä»¥å¤–ã®å€¤ãŒå…¨ã¦åŒã˜ã€‚0.0f-1.0fã€‚
    */
   public final void setColor( int tnum, float col )
   {
@@ -542,9 +543,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒF‚Ìİ’èB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param color GameColor‚ÌƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£è‰²ã®è¨­å®šã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param color GameColorã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public final void setColor( int tnum, GameColor color )
   {
@@ -552,9 +553,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒF‚Ìİ’èB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param color F‚Ì”z—ñ( red, green, blue, alpha )BŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£è‰²ã®è¨­å®šã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param color è‰²ã®é…åˆ—( red, green, blue, alpha )ã€‚å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public final void setColor( int tnum, float[] color )
   {
@@ -572,9 +573,9 @@ public class AmanatsuDraw
   // TODO setAlpha
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌUVİ’èB
-   * @param tex ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param uv UV“WŠJ‚ÌŠeÀ•W( x0, y0, x1, y1, x2, y2, x3, y3 )B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®UVè¨­å®šã€‚
+   * @param tex ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param uv UVå±•é–‹ã®å„åº§æ¨™( x0, y0, x1, y1, x2, y2, x3, y3 )ã€‚
    */
   public final boolean setUV( Texture tex, float[] uv )
   {
@@ -583,9 +584,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æÀ•Wİ’èB
-   * @param tex ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param vert •`‰æ‚·‚éŠeÀ•W( x0, y0, x1, y1, x2 y2, x3, y3 )B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»åº§æ¨™è¨­å®šã€‚
+   * @param tex ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param vert æç”»ã™ã‚‹å„åº§æ¨™( x0, y0, x1, y1, x2 y2, x3, y3 )ã€‚
    */
   public final boolean setVertex( Texture tex, float[] vert )
   {
@@ -594,19 +595,19 @@ public class AmanatsuDraw
   }
 
   /**
-   * ‰æ–Ê‚Ì‰¡•æ“¾B
+   * ç”»é¢ã®æ¨ªå¹…å–å¾—ã€‚
    */
   public final int getWidth(){ return width; }
 
   /**
-   * ‰æ–Ê‚Ì‚‚³æ“¾B
+   * ç”»é¢ã®é«˜ã•å–å¾—ã€‚
    */
   public final int getHeight(){ return height; }
 
   /**
-   * ‰æ–Ê‚Ì‘å‚«‚³İ’èB
-   * Šî–{“I‚É‰æ–Ê•ûŒü‚ª•Ï‚í‚é‚ÆŒÄ‚Ño‚³‚ê‚éB
-   * ‚Ü‚½‚±‚Ì’l‚Í•`‰æ—Ìˆæ‚Æ‚µ‚Äˆµ‚í‚ê‚é‚Ì‚ÅAsetScreenSize‚Æ‡‚í‚¹‚Äg‚¤‚±‚Æ‚ÅAƒXƒNƒ[ƒ‹‚È‚Ç‚ª‰Â”\‚É‚È‚éB
+   * ç”»é¢ã®å¤§ãã•è¨­å®šã€‚
+   * åŸºæœ¬çš„ã«ç”»é¢æ–¹å‘ãŒå¤‰ã‚ã‚‹ã¨å‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
+   * ã¾ãŸã“ã®å€¤ã¯æç”»é ˜åŸŸã¨ã—ã¦æ‰±ã‚ã‚Œã‚‹ã®ã§ã€setScreenSizeã¨åˆã‚ã›ã¦ä½¿ã†ã“ã¨ã§ã€ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãªã©ãŒå¯èƒ½ã«ãªã‚‹ã€‚
    */
   public boolean setWindowSize( int width, int height )
   {
@@ -616,9 +617,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒƒf[ƒ^‚Ìæ“¾B
-   * ƒeƒNƒXƒ`ƒƒ‚ÌFA•`‰æÀ•WAdrawTexture‚Åg‚¤UV“WŠJ‚Ìƒf[ƒ^‚ª“ü‚Á‚Ä‚¢‚éB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‡ãƒ¼ã‚¿ã®å–å¾—ã€‚
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è‰²ã€æç”»åº§æ¨™ã€drawTextureã§ä½¿ã†UVå±•é–‹ã®ãƒ‡ãƒ¼ã‚¿ãŒå…¥ã£ã¦ã„ã‚‹ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
    */
   public final Texture getTexture( int tnum ){ return textures.get( tnum ); }
 
@@ -656,42 +657,42 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * ƒfƒtƒHƒ‹ƒg‚Å0”Ô‚É‚Í‘å‚«‚³30.0fAF‚Í”’‚ÌƒtƒHƒ“ƒg‚ªì¬‚³‚ê‚Ä‚¢‚éB
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§0ç•ªã«ã¯å¤§ãã•30.0fã€è‰²ã¯ç™½ã®ãƒ•ã‚©ãƒ³ãƒˆãŒä½œæˆã•ã‚Œã¦ã„ã‚‹ã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
    */
   public boolean createFont( int fnum, int size ){ return createFont( fnum, size, false, GameColor.WHITE ); }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias ){ return createFont( fnum, size, antialias, GameColor.WHITE ); }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
-   * @param color GameColor‚ÌƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
+   * @param color GameColorã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias, GameColor color ){ return createFont( fnum, size, antialias, color.color ); }
 
   // TODO load font file? set font name?
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
-   * @param color F”z—ñ( red, green, blue, alpha )BŠeF‚Ì‹­‚³‚Í0-255B
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
+   * @param color è‰²é…åˆ—( red, green, blue, alpha )ã€‚å„è‰²ã®å¼·ã•ã¯0-255ã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias, byte[] color )
   {
@@ -699,12 +700,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
-   * @param color F”z—ñ( red, green, blue, alpha )BŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
+   * @param color è‰²é…åˆ—( red, green, blue, alpha )ã€‚å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias, float[] color )
   {
@@ -712,15 +713,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
-   * @param red Ô‚Ì‹­‚³(0.0f-1.0f)B
-   * @param green —Î‚Ì‹­‚³(0.0f-1.0f)B
-   * @param blue Â‚Ì‹­‚³(0.0f-1.0f)B
-   * @param alpha •s“§–¾‚Ì‹­‚³(0.0f-1.0f)B
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
+   * @param red èµ¤ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param green ç·‘ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param blue é’ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param alpha ä¸é€æ˜ã®å¼·ã•(0.0f-1.0f)ã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias, float red, float green, float blue, float alpha )
   {
@@ -728,15 +729,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒtƒHƒ“ƒg‚Ìì¬B
-   * printf‚Å•¶š—ñ‚ğ•`‰æ‚·‚é‚Ég‚¤ƒtƒHƒ“ƒg‚Ìì¬B
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param size ƒtƒHƒ“ƒgƒTƒCƒYB@
-   * @param antialias ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX‚Ìİ’èB
-   * @param red Ô‚Ì‹­‚³(0-255)B
-   * @param green —Î‚Ì‹­‚³(0-255)B
-   * @param blue Â‚Ì‹­‚³(0-255)B
-   * @param alpha •s“§–¾‚Ì‹­‚³(0255)B
+   * ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * printfã§æ–‡å­—åˆ—ã‚’æç”»ã™ã‚‹æ™‚ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆã®ä½œæˆã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param size ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã€‚ã€€
+   * @param antialias ã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®è¨­å®šã€‚
+   * @param red èµ¤ã®å¼·ã•(0-255)ã€‚
+   * @param green ç·‘ã®å¼·ã•(0-255)ã€‚
+   * @param blue é’ã®å¼·ã•(0-255)ã€‚
+   * @param alpha ä¸é€æ˜ã®å¼·ã•(0255)ã€‚
    */
   public boolean createFont( int fnum, int size, boolean antialias, byte red, byte green, byte blue, byte alpha )
   {
@@ -757,12 +758,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * •¶š—ñ‚Ì•`‰æB
-   * •s³‚ÈƒtƒHƒ“ƒg”Ô†‚ğg‚¤‚Æ0”Ô‚ÌƒtƒHƒ“ƒg‚ªg—p‚³‚ê‚éB
-   * @param fnum ƒtƒHƒ“ƒg”Ô†B
-   * @param dx •`‰æXÀ•WB
-   * @param dy •`‰æYÀ•WB
-   * @param str •`‰æ‚·‚é•¶š—ñB
+   * æ–‡å­—åˆ—ã®æç”»ã€‚
+   * ä¸æ­£ãªãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã‚’ä½¿ã†ã¨0ç•ªã®ãƒ•ã‚©ãƒ³ãƒˆãŒä½¿ç”¨ã•ã‚Œã‚‹ã€‚
+   * @param fnum ãƒ•ã‚©ãƒ³ãƒˆç•ªå·ã€‚
+   * @param dx æç”»Xåº§æ¨™ã€‚
+   * @param dy æç”»Yåº§æ¨™ã€‚
+   * @param str æç”»ã™ã‚‹æ–‡å­—åˆ—ã€‚
    */
   public boolean printf( int fnum, float dx, float dy, String str )
   {
@@ -796,12 +797,12 @@ public class AmanatsuDraw
   // Base draw.
 
   /**
-   * æ‚Ì•`‰æB
-   * @param sx •`‰æŠJnXÀ•WB
-   * @param sy •`‰æŠJnYÀ•WB
-   * @param ex •`‰æI—¹XÀ•WB
-   * @param ey •`‰æI—¹YÀ•WB
-   * @param color GameColorƒCƒ“ƒXƒ^ƒ“ƒXB
+   * å…ˆã®æç”»ã€‚
+   * @param sx æç”»é–‹å§‹Xåº§æ¨™ã€‚
+   * @param sy æç”»é–‹å§‹Yåº§æ¨™ã€‚
+   * @param ex æç”»çµ‚äº†Xåº§æ¨™ã€‚
+   * @param ey æç”»çµ‚äº†Yåº§æ¨™ã€‚
+   * @param color GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color )
   {
@@ -809,12 +810,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * æ‚Ì•`‰æB
-   * @param sx •`‰æŠJnXÀ•WB
-   * @param sy •`‰æŠJnYÀ•WB
-   * @param ex •`‰æI—¹XÀ•WB
-   * @param ey •`‰æI—¹YÀ•WB
-   * @param color F”z—ñ( red, green, blue, alpha )BŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * å…ˆã®æç”»ã€‚
+   * @param sx æç”»é–‹å§‹Xåº§æ¨™ã€‚
+   * @param sy æç”»é–‹å§‹Yåº§æ¨™ã€‚
+   * @param ex æç”»çµ‚äº†Xåº§æ¨™ã€‚
+   * @param ey æç”»çµ‚äº†Yåº§æ¨™ã€‚
+   * @param color è‰²é…åˆ—( red, green, blue, alpha )ã€‚å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float[] color )
   {
@@ -822,13 +823,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * æ‚Ì•`‰æB
-   * @param sx •`‰æŠJnXÀ•WB
-   * @param sy •`‰æŠJnYÀ•WB
-   * @param ex •`‰æI—¹XÀ•WB
-   * @param ey •`‰æI—¹YÀ•WB
-   * @param width ü‚Ì‘¾‚³B
-   * @param color GameColorƒCƒ“ƒXƒ^ƒ“ƒXB
+   * å…ˆã®æç”»ã€‚
+   * @param sx æç”»é–‹å§‹Xåº§æ¨™ã€‚
+   * @param sy æç”»é–‹å§‹Yåº§æ¨™ã€‚
+   * @param ex æç”»çµ‚äº†Xåº§æ¨™ã€‚
+   * @param ey æç”»çµ‚äº†Yåº§æ¨™ã€‚
+   * @param width ç·šã®å¤ªã•ã€‚
+   * @param color GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, GameColor color )
   {
@@ -836,13 +837,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * æ‚Ì•`‰æB
-   * @param sx •`‰æŠJnXÀ•WB
-   * @param sy •`‰æŠJnYÀ•WB
-   * @param ex •`‰æI—¹XÀ•WB
-   * @param ey •`‰æI—¹YÀ•WB
-   * @param width ü‚Ì‘¾‚³B
-   * @param color F”z—ñ( red, green, blue, alpha ).ŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * å…ˆã®æç”»ã€‚
+   * @param sx æç”»é–‹å§‹Xåº§æ¨™ã€‚
+   * @param sy æç”»é–‹å§‹Yåº§æ¨™ã€‚
+   * @param ex æç”»çµ‚äº†Xåº§æ¨™ã€‚
+   * @param ey æç”»çµ‚äº†Yåº§æ¨™ã€‚
+   * @param width ç·šã®å¤ªã•ã€‚
+   * @param color è‰²é…åˆ—( red, green, blue, alpha ).å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, float[] color )
   {
@@ -864,12 +865,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * ” ‚Ì•`‰æB
-   * @param x •`‰æXÀ•WB
-   * @param y •`‰æYÀ•WB
-   * @param w ‰¡•B
-   * @param h ‚‚³B
-   * @param color GameColorƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ç®±ã®æç”»ã€‚
+   * @param x æç”»Xåº§æ¨™ã€‚
+   * @param y æç”»Yåº§æ¨™ã€‚
+   * @param w æ¨ªå¹…ã€‚
+   * @param h é«˜ã•ã€‚
+   * @param color GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean drawBox( float x, float y, float w, float h, GameColor color )
   {
@@ -877,12 +878,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * ” ‚Ì•`‰æB
-   * @param x •`‰æXÀ•WB
-   * @param y •`‰æYÀ•WB
-   * @param w ‰¡•B
-   * @param h ‚‚³B
-   * @param color F”z—ñ(red, green, blue, alpha)BŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * ç®±ã®æç”»ã€‚
+   * @param x æç”»Xåº§æ¨™ã€‚
+   * @param y æç”»Yåº§æ¨™ã€‚
+   * @param w æ¨ªå¹…ã€‚
+   * @param h é«˜ã•ã€‚
+   * @param color è‰²é…åˆ—(red, green, blue, alpha)ã€‚å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
@@ -893,12 +894,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * ” ‚Ì•`‰æB
-   * @param x •`‰æ’†SXÀ•WB
-   * @param y •`‰æ’†SYÀ•WB
-   * @param w ‰¡•B
-   * @param h ‚‚³B
-   * @param color GameColorƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ç®±ã®æç”»ã€‚
+   * @param x æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param y æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param w æ¨ªå¹…ã€‚
+   * @param h é«˜ã•ã€‚
+   * @param color GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean drawBoxC( float x, float y, float w, float h, GameColor color )
   {
@@ -906,12 +907,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * ” ‚Ì•`‰æB
-   * @param x •`‰æ’†SXÀ•WB
-   * @param y •`‰æ’†SYÀ•WB
-   * @param w ‰¡•B
-   * @param h ‚‚³B
-   * @param color F”z—ñ(red, green, blue, alpha)BŠeF‚Ì‹­‚³‚Í0.0f-1.0fB
+   * ç®±ã®æç”»ã€‚
+   * @param x æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param y æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param w æ¨ªå¹…ã€‚
+   * @param h é«˜ã•ã€‚
+   * @param color è‰²é…åˆ—(red, green, blue, alpha)ã€‚å„è‰²ã®å¼·ã•ã¯0.0f-1.0fã€‚
    */
   public boolean drawBoxC( float x, float y, float w, float h, float[] color )
   {
@@ -924,9 +925,9 @@ public class AmanatsuDraw
   // TODO drawCircle
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æB
-   * ‚·‚×‚Ä‚ÌƒeƒNƒXƒ`ƒƒ•`‰æ‚Í‚±‚Ìƒƒ\ƒbƒh‚ğ—˜—p‚·‚éB
-   * @param texture TextureƒCƒ“ƒXƒ^ƒ“ƒXB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»ã€‚
+   * ã™ã¹ã¦ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£æç”»ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’åˆ©ç”¨ã™ã‚‹ã€‚
+   * @param tex Textureã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
    */
   public boolean drawTexture( Texture tex )
   {
@@ -942,11 +943,11 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æB
-   * ƒeƒNƒXƒ`ƒƒ‚Ì‘S‘Ì‚ğ•`‰æ‚·‚éB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param dx •`‰æXÀ•WB
-   * @param dy •`‰æYÀ•WB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»ã€‚
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å…¨ä½“ã‚’æç”»ã™ã‚‹ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param dx æç”»Xåº§æ¨™ã€‚
+   * @param dy æç”»Yåº§æ¨™ã€‚
    */
   public boolean drawTexture( int tnum, float dx, float dy )
   {
@@ -968,11 +969,11 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æB
-   * ƒeƒNƒXƒ`ƒƒ‘S‘Ì‚ğ•`‰æ‚·‚éB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»ã€‚
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£å…¨ä½“ã‚’æç”»ã™ã‚‹ã€‚
    * @param tnum
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
    */
   public boolean drawTextureC( int tnum, float dx, float dy )
   {
@@ -998,14 +999,14 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æXÀ•WB
-   * @param dy •`‰æYÀ•WB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»Xåº§æ¨™ã€‚
+   * @param dy æç”»Yåº§æ¨™ã€‚
    */
   public boolean drawTexture( int tnum,
       float rx, float ry, float w, float h,
@@ -1032,14 +1033,14 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
    */
   public boolean drawTextureC( int tnum,
     float rx, float ry, float w, float h,
@@ -1070,16 +1071,16 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æXÀ•WB
-   * @param dy •`‰æYÀ•WB
-   * @param dw •`‰æ‰¡•B
-   * @param dh •`‰æ‚‚³B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»Xåº§æ¨™ã€‚
+   * @param dy æç”»Yåº§æ¨™ã€‚
+   * @param dw æç”»æ¨ªå¹…ã€‚
+   * @param dh æç”»é«˜ã•ã€‚
    */
   public boolean drawTextureScaring( int tnum,
     float rx, float ry, float w, float h,
@@ -1106,16 +1107,16 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param dw •`‰æ‰¡•B
-   * @param dh •`‰æ‚‚³B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param dw æç”»æ¨ªå¹…ã€‚
+   * @param dh æç”»é«˜ã•ã€‚
    */
   public boolean drawTextureScaringC( int tnum,
     float rx, float ry, float w, float h,
@@ -1145,15 +1146,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æXÀ•WB
-   * @param dy •`‰æYÀ•WB
-   * @param scale Šg‘å—¦B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»Xåº§æ¨™ã€‚
+   * @param dy æç”»Yåº§æ¨™ã€‚
+   * @param scale æ‹¡å¤§ç‡ã€‚
    */
   public boolean drawTextureScaring( int tnum,
     float rx, float ry, float w, float h,
@@ -1180,26 +1181,26 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param scale Šg‘å—¦B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param scale æ‹¡å¤§ç‡ã€‚
    */
-  public boolean drawTextureScaringC( int rnum,
+  public boolean drawTextureScaringC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     scale /= 2.0f;
     setFloatArray8(
@@ -1220,15 +1221,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì‰ñ“]•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param rad ƒ‰ƒWƒAƒ“ŠpB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å›è»¢æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param rad ãƒ©ã‚¸ã‚¢ãƒ³è§’ã€‚
    */
   public boolean drawTextureRotationC( int tnum,
     float rx, float ry, float w, float h,
@@ -1274,15 +1275,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì‰ñ“]•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param angle Šp“xB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å›è»¢æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param angle è§’åº¦ã€‚
    */
   public boolean drawTextureRotationAngleC( int tnum,
     float rx, float ry, float w, float h,
@@ -1330,16 +1331,16 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬‰ñ“]•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param scale Šg‘å—¦B
-   * @param rad ƒ‰ƒWƒAƒ“ŠpB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°å›è»¢æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param scale æ‹¡å¤§ç‡ã€‚
+   * @param rad ãƒ©ã‚¸ã‚¢ãƒ³è§’ã€‚
    */
   public boolean drawTextureScaleRotateC( int tnum,
     float rx, float ry, float w, float h,
@@ -1388,16 +1389,16 @@ public class AmanatsuDraw
   }  
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚ÌŠg‘åk¬‰ñ“]•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx •`‰æ’†SXÀ•WB
-   * @param dy •`‰æ’†SYÀ•WB
-   * @param scale Šg‘å—¦B
-   * @param angle Šp“xB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ‹¡å¤§ç¸®å°å›è»¢æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx æç”»ä¸­å¿ƒXåº§æ¨™ã€‚
+   * @param dy æç”»ä¸­å¿ƒYåº§æ¨™ã€‚
+   * @param scale æ‹¡å¤§ç‡ã€‚
+   * @param angle è§’åº¦ã€‚
    */
   public boolean drawTextureScaleRotateAngleC( int tnum,
     float rx, float ry, float w, float h,
@@ -1448,13 +1449,13 @@ public class AmanatsuDraw
   //TODO scale rotate draw size.
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ìs—ñ•ÏŒ`•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param matrix44 4*4‚Ì•ÏŒ`s—ñB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¡Œåˆ—å¤‰å½¢æç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param matrix44 4*4ã®å¤‰å½¢è¡Œåˆ—ã€‚
    */
   public boolean drawTextureMatrix( int tnum,
     float rx, float ry, float w, float h,
@@ -1498,24 +1499,24 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ìs—ñ•ÏŒ`’†S•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param matrix44 4*4‚Ì•ÏŒ`s—ñB
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¡Œåˆ—å¤‰å½¢ä¸­å¿ƒæç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param matrix44 4*4ã®å¤‰å½¢è¡Œåˆ—ã€‚
    */
-  public boolean drawTextureMatrixC( int rnum,
+  public boolean drawTextureMatrixC( int tnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
@@ -1548,34 +1549,34 @@ public class AmanatsuDraw
   }
 
   /**
-   * ƒeƒNƒXƒ`ƒƒ‚Ì4“_w’è•`‰æB
-   * @param tnum ƒeƒNƒXƒ`ƒƒ”Ô†B
-   * @param rx ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnXÀ•WB
-   * @param ry ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İŠJnYÀ•WB
-   * @param w ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‰¡•B
-   * @param h ƒeƒNƒXƒ`ƒƒ‚ÌØ‚èæ‚è‚‚³B
-   * @param dx0 •`‰æXÀ•W(¶ã)B
-   * @param dy0 •`‰æYÀ•WÀ•W(¶ã)B
-   * @param dx1 •`‰æXÀ•W(‰Eã)B
-   * @param dy1 •`‰æYÀ•W(‰Eã)B
-   * @param dx2 •`‰æXÀ•W(¶‰º)B
-   * @param dy2 •`‰æYÀ•W(¶‰º)B
-   * @param dx3 •`‰æXÀ•W(‰E‰º)B
-   * @param dy3 •`‰æYÀ•W(‰E‰º)B
+   * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®4ç‚¹æŒ‡å®šæç”»ã€‚
+   * @param tnum ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·ã€‚
+   * @param rx ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Xåº§æ¨™ã€‚
+   * @param ry ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿é–‹å§‹Yåº§æ¨™ã€‚
+   * @param w ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šæ¨ªå¹…ã€‚
+   * @param h ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®åˆ‡ã‚Šå–ã‚Šé«˜ã•ã€‚
+   * @param dx0 æç”»Xåº§æ¨™(å·¦ä¸Š)ã€‚
+   * @param dy0 æç”»Yåº§æ¨™åº§æ¨™(å·¦ä¸Š)ã€‚
+   * @param dx1 æç”»Xåº§æ¨™(å³ä¸Š)ã€‚
+   * @param dy1 æç”»Yåº§æ¨™(å³ä¸Š)ã€‚
+   * @param dx2 æç”»Xåº§æ¨™(å·¦ä¸‹)ã€‚
+   * @param dy2 æç”»Yåº§æ¨™(å·¦ä¸‹)ã€‚
+   * @param dx3 æç”»Xåº§æ¨™(å³ä¸‹)ã€‚
+   * @param dy3 æç”»Yåº§æ¨™(å³ä¸‹)ã€‚
    */
-  public boolean drawTextureVertex( int rnum,
+  public boolean drawTextureVertex( int tnum,
     float rx, float ry, float w, float h,
     float dx0, float dy0,
     float dx1, float dy1,
     float dx2, float dy2,
     float dx3, float dy3 )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
     setVertex( ttex, farr8 );

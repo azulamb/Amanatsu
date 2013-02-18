@@ -1,32 +1,32 @@
 package net.azulite.Amanatsu;
 
 /**
- * Amanatsu‚É“o˜^‚·‚éƒQ[ƒ€ƒNƒ‰ƒXB
+ * Amanatsuã«ç™»éŒ²ã™ã‚‹ã‚²ãƒ¼ãƒ ã‚¯ãƒ©ã‚¹ã€‚
  */
 public interface GameView
 {
 
   /**
-   * ‰‚ß‚Éˆê“x‚¾‚¯ÀsB
-   * @param draw •`‰æƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param input “ü—ÍƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param sound ‰¹ƒTƒ|[ƒgƒNƒ‰ƒXB
+   * åˆã‚ã«ä¸€åº¦ã ã‘å®Ÿè¡Œã€‚
+   * @param draw æç”»ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param input å…¥åŠ›ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param sound éŸ³ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
    */
   public void UserInit( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
 
   /**
-   * –ˆƒtƒŒ[ƒ€ÀsB
-   * @param draw •`‰æƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param input “ü—ÍƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param sound ‰¹ƒTƒ|[ƒgƒNƒ‰ƒXB
+   * æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å®Ÿè¡Œã€‚
+   * @param draw æç”»ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param input å…¥åŠ›ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param sound éŸ³ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
    */
   public boolean MainLoop( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
 
   /**
-   * I—¹‚ÉÀsB
-   * @param draw •`‰æƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param input “ü—ÍƒTƒ|[ƒgƒNƒ‰ƒXB
-   * @param sound ‰¹ƒTƒ|[ƒgƒNƒ‰ƒXB
+   * çµ‚äº†æ™‚ã«å®Ÿè¡Œã€‚
+   * @param draw æç”»ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param input å…¥åŠ›ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
+   * @param sound éŸ³ã‚µãƒãƒ¼ãƒˆã‚¯ãƒ©ã‚¹ã€‚
    */
   public void CleanUp( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
 }

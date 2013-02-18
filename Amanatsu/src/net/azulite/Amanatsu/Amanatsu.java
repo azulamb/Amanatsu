@@ -24,7 +24,7 @@ import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.1.2
+ * @version 0.1.3
  */
 
 // Library
@@ -36,20 +36,23 @@ import net.azulite.Amanatsu.GameView;
 // * fps
 
 /**
- * Amanatsu
- * <pre>
- * Amanatsu main class.
- * </pre>
+ * Amanatsuã®ç·åˆç®¡ç†ã‚¯ãƒ©ã‚¹ã€‚
+ * Amanatsuã¨ã¯Githubã§å…¬é–‹ã•ã‚Œã¦ã„ã‚‹Androidç”¨ã®ã‚²ãƒ¼ãƒ ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã™ã€‚
+ * 
+ * https://github.com/HirokiMiyaoka/Amanatsu
+ * 
  */
 public class Amanatsu
 {
-  private static String VERSION = "0.1.2";
+  private static String VERSION = "0.1.";
 
+  /** é€éè‰²æœ‰åŠ¹ãªé€šå¸¸åˆæˆã€‚ */
   public static final int DRAW_TRC = 0;
+  /** åŠ ç®—åˆæˆã€‚ */
   public static final int DRAW_ADD = 1;
 //  public static final int DRAW_SUB = 2;
+  /** ä¹—ç®—åˆæˆã€‚ */
   public static final int DRAW_MUL = 3;
-
 
   private Context context;
   protected AmanatsuGLView view;
@@ -61,19 +64,19 @@ public class Amanatsu
   protected AmanatsuSound sound;
 
   /**
-   * Amanatsu‚Ì¶¬B
-   * @param oontent Amanatsu‚ğg—p‚·‚éActivityB
-   * @param gview GameViewƒCƒ“ƒ^[ƒtƒF[ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒXB
+   * Amanatsuã®ç”Ÿæˆã€‚
+   * @param context Amanatsuã‚’ä½¿ç”¨ã™ã‚‹Activityã€‚
+   * @param gview GameViewã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã€‚
    */
   public Amanatsu( Context context, GameView gview )
   {
     this( context, gview, true, true );
   }
   /**
-   * Amanatsu‚Ì¶¬B
-   * @param oontent Amanatsu‚ğg—p‚·‚éActivityB
-   * @param gview GameViewƒCƒ“ƒ^[ƒtƒF[ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒXB
-   * @param multitouch ƒ}ƒ‹ƒ`ƒ^ƒbƒ`‚Ì—L–³(true=ƒ}ƒ‹ƒ`ƒ^ƒbƒ`, false=ƒVƒ“ƒOƒ‹ƒ^ƒbƒ`)B
+   * Amanatsuã®ç”Ÿæˆã€‚
+   * @param context Amanatsuã‚’ä½¿ç”¨ã™ã‚‹Activityã€‚
+   * @param gview GameViewã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã€‚
+   * @param multitouch ãƒãƒ«ãƒã‚¿ãƒƒãƒã®æœ‰ç„¡(true=ãƒãƒ«ãƒã‚¿ãƒƒãƒ, false=ã‚·ãƒ³ã‚°ãƒ«ã‚¿ãƒƒãƒ)ã€‚
    */
   public Amanatsu( Context context, GameView gview, boolean multitouch )
   {
@@ -81,11 +84,11 @@ public class Amanatsu
   }
 
   /**
-   * Amanatsu‚Ì¶¬B
-   * @param oontent Amanatsu‚ğg—p‚·‚éActivityB
-   * @param gview GameViewƒCƒ“ƒ^[ƒtƒF[ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒXB
-   * @param multitouch ƒ}ƒ‹ƒ`ƒ^ƒbƒ`‚Ì—L–³(true=ƒ}ƒ‹ƒ`ƒ^ƒbƒ`, false=ƒVƒ“ƒOƒ‹ƒ^ƒbƒ`)B
-   * @param logo Amanatsu‚ÌƒƒS‚Ì•\¦(true=•\¦‚·‚é, false=•\¦‚µ‚È‚¢)B
+   * Amanatsuã®ç”Ÿæˆã€‚
+   * @param context Amanatsuã‚’ä½¿ç”¨ã™ã‚‹Activityã€‚
+   * @param gview GameViewã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç¶™æ‰¿ã—ãŸã‚¯ãƒ©ã‚¹ã€‚
+   * @param multitouch ãƒãƒ«ãƒã‚¿ãƒƒãƒã®æœ‰ç„¡(true=ãƒãƒ«ãƒã‚¿ãƒƒãƒ, false=ã‚·ãƒ³ã‚°ãƒ«ã‚¿ãƒƒãƒ)ã€‚
+   * @param logo Amanatsuã®ãƒ­ã‚´ã®è¡¨ç¤º(true=è¡¨ç¤ºã™ã‚‹, false=è¡¨ç¤ºã—ãªã„)ã€‚
    */
   public Amanatsu( Context context, GameView gview, boolean multitouch, boolean logo )
   {
@@ -113,7 +116,7 @@ public class Amanatsu
   }
 
   /**
-   * ƒQ[ƒ€‚Ìˆ—‚ğŠJn‚·‚éB
+   * ã‚²ãƒ¼ãƒ ã®å‡¦ç†ã‚’é–‹å§‹ã™ã‚‹ã€‚
    */
   public boolean start()
   {
@@ -122,7 +125,7 @@ public class Amanatsu
   }
 
   /**
-   * ƒQ[ƒ€‚Ìˆ—‚ğ~‚ß‚éB
+   * ã‚²ãƒ¼ãƒ ã®å‡¦ç†ã‚’æ­¢ã‚ã‚‹ã€‚
    */
   public void stop()
   {

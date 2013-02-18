@@ -1,9 +1,9 @@
 package net.azulite.Amanatsu;
 
 /**
- * Amanatsu‚Åg‚¤FƒNƒ‰ƒXB
- * F‚Ì–¼‘O‚É‚æ‚Á‚Ä‚ÍŠù‚É’è‹`‚µ‚Ä‚ ‚éB
- * F–¼‚Æ’l‚ÉŠÖ‚µ‚Ä‚Í http://www.colordic.org/ ‚ğQl‚É‚µ‚Ä‚¢‚éB
+ * Amanatsuã§ä½¿ã†è‰²ã‚¯ãƒ©ã‚¹ã€‚
+ * è‰²ã®åå‰ã«ã‚ˆã£ã¦ã¯æ—¢ã«å®šç¾©ã—ã¦ã‚ã‚‹ã€‚
+ * è‰²åã¨å€¤ã«é–¢ã—ã¦ã¯ http://www.colordic.org/ ã‚’å‚è€ƒã«ã—ã¦ã„ã‚‹ã€‚
  */
 public class GameColor
 {
@@ -151,11 +151,11 @@ public class GameColor
   public static final float[] MEDIUMSLATEBLUE      = new float[]{ 123.0f/255.0f, 104.0f/255.0f, 238.0f/255.0f, 1.0f };
 
   /**
-   * GameColorƒCƒ“ƒXƒ^ƒ“ƒX‚Ìì¬B
-   * @param red Ô(0-255)B
-   * @param green —Î(0-255)B
-   * @param blue Â(0-255)B
-   * @param alpha •s“§–¾“x(0-255)B
+   * GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ä½œæˆã€‚
+   * @param red èµ¤(0-255)ã€‚
+   * @param green ç·‘(0-255)ã€‚
+   * @param blue é’(0-255)ã€‚
+   * @param alpha ä¸é€æ˜åº¦(0-255)ã€‚
    */
   public GameColor( byte red, byte green, byte blue, byte alpha )
   {
@@ -167,11 +167,11 @@ public class GameColor
   }
 
   /**
-   * GameColorƒCƒ“ƒXƒ^ƒ“ƒX‚Ìì¬B
-   * @param red Ô‚ÌF‚Ì‹­‚³(0.0f-1.0f)B
-   * @param green —Î‚Ì‹­‚³(0.0f-1.0f)B
-   * @param blue Â‚Ì‹­‚³(0.0f-1.0f)B
-   * @param alpha •s“§–¾“x(0.0f-1.0f)B
+   * GameColorã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ä½œæˆã€‚
+   * @param red èµ¤ã®è‰²ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param green ç·‘ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param blue é’ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param alpha ä¸é€æ˜åº¦(0.0f-1.0f)ã€‚
    */
   public GameColor( float red, float green, float blue, float alpha )
   {
@@ -183,13 +183,13 @@ public class GameColor
   }
 
   /**
-   * F”z—ñ‚Ìì¬B
-   * @param red Ô(0-255)B
-   * @param green —Î(0-255)B
-   * @param blue Â(0-255)B
-   * @param alpha •s“§–¾“x(0-255)B
+   * è‰²é…åˆ—ã®ä½œæˆã€‚
+   * @param red èµ¤(0-255)ã€‚
+   * @param green ç·‘(0-255)ã€‚
+   * @param blue é’(0-255)ã€‚
+   * @param alpha ä¸é€æ˜åº¦(0-255)ã€‚
    */
-  static final float[] CreateColor( byte red, byte green, byte blue, byte alpha )
+  static final float[] createColor( byte red, byte green, byte blue, byte alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = (float)( red & 0xff ) / 255.0f;
@@ -200,13 +200,13 @@ public class GameColor
   }
 
   /**
-   * F”z—ñ‚Ìì¬B
-   * @param red Ô‚ÌF‚Ì‹­‚³(0.0f-1.0f)B
-   * @param green —Î‚Ì‹­‚³(0.0f-1.0f)B
-   * @param blue Â‚Ì‹­‚³(0.0f-1.0f)B
-   * @param alpha •s“§–¾“x(0.0f-1.0f)B
+   * è‰²é…åˆ—ã®ä½œæˆã€‚
+   * @param red èµ¤ã®è‰²ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param green ç·‘ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param blue é’ã®å¼·ã•(0.0f-1.0f)ã€‚
+   * @param alpha ä¸é€æ˜åº¦(0.0f-1.0f)ã€‚
    */
-  static final float[] CreateColor( float red, float green, float blue, float alpha )
+  static final float[] createColor( float red, float green, float blue, float alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = red;

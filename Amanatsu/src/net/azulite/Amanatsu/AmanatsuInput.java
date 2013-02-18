@@ -2,17 +2,19 @@ package net.azulite.Amanatsu;
 
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-
+/**
+ * Amanatsuã®å…¥åŠ›ã€‚
+ */
 public interface AmanatsuInput
 {
   public boolean setWindowSize( float width, float height );
   /**
-   * “ü—Í‚Ì’lˆæ‚ğŒˆ‚ß‚éB
-   * ‰æ–ÊƒTƒCƒY‚©‚çŠ„‡‚ğŒvZ‚µA“ü—ÍƒGƒŠƒA“à‚Éû‚Ü‚éÀ•WŒn‚É•ÏŠ·‚·‚éB
-   * @param x “ü—ÍŠJnXÀ•WB
-   * @param y “ü—ÍŠJnYÀ•WB
-   * @param width ‰¡•B
-   * @param height ‚‚³B
+   * å…¥åŠ›ã®å€¤åŸŸã‚’æ±ºã‚ã‚‹ã€‚
+   * ç”»é¢ã‚µã‚¤ã‚ºã‹ã‚‰å‰²åˆã‚’è¨ˆç®—ã—ã€å…¥åŠ›ã‚¨ãƒªã‚¢å†…ã«åã¾ã‚‹åº§æ¨™ç³»ã«å¤‰æ›ã™ã‚‹ã€‚
+   * @param x å…¥åŠ›é–‹å§‹Xåº§æ¨™ã€‚
+   * @param y å…¥åŠ›é–‹å§‹Yåº§æ¨™ã€‚
+   * @param width æ¨ªå¹…ã€‚
+   * @param height é«˜ã•ã€‚
    */
   public boolean setInputArea( float x, float y, float width, float height );
 
@@ -21,64 +23,64 @@ public interface AmanatsuInput
   public boolean touch( MotionEvent event );
 
   /**
-   * ƒ^ƒbƒ`XÀ•W‚Ìæ“¾B
+   * ã‚¿ãƒƒãƒXåº§æ¨™ã®å–å¾—ã€‚
    */
   public float getX();
 
   /**
-   * ƒ^ƒbƒ`YÀ•W‚Ìæ“¾B
+   * ã‚¿ãƒƒãƒYåº§æ¨™ã®å–å¾—ã€‚
    */
   public float getY();
 
   /**
-   * ƒ^ƒbƒ`ƒtƒŒ[ƒ€‚Ìæ“¾B
+   * ã‚¿ãƒƒãƒãƒ•ãƒ¬ãƒ¼ãƒ ã®å–å¾—ã€‚
    */
   public int getTouchFrame();
 
   /**
-   * w‚Ì”B
+   * æŒ‡ã®æ•°ã€‚
    */
   public int fingernum();
 
   /**
-   * ƒ^ƒbƒ`XÀ•W‚Ìæ“¾B
-   * @param num w”Ô†B
+   * ã‚¿ãƒƒãƒXåº§æ¨™ã®å–å¾—ã€‚
+   * @param num æŒ‡ç•ªå·ã€‚
    */
   public float getX( int num );
 
   /**
-   * ƒ^ƒbƒ`YÀ•W‚Ìæ“¾B
-   * @param num w”Ô†B
+   * ã‚¿ãƒƒãƒYåº§æ¨™ã®å–å¾—ã€‚
+   * @param num æŒ‡ç•ªå·ã€‚
    */
   public float getY( int num );
 
   /**
-   * ƒ^ƒbƒ`ƒtƒŒ[ƒ€‚Ìæ“¾B
-   * @param num w”Ô†B
+   * ã‚¿ãƒƒãƒãƒ•ãƒ¬ãƒ¼ãƒ ã®å–å¾—ã€‚
+   * @param num æŒ‡ç•ªå·ã€‚
    */
   public int getTouchFrame( int num );
 
   /**
-   * wID‚Ìæ“¾B
-   * @param num w”Ô†B
+   * æŒ‡IDã®å–å¾—ã€‚
+   * @param num æŒ‡ç•ªå·ã€‚
    */
   public int getFingerId( int num );
 
   /**
-   * ƒ^ƒbƒ`XÀ•W‚Ìæ“¾B
-   * @param fingerid wIDB
+   * ã‚¿ãƒƒãƒXåº§æ¨™ã®å–å¾—ã€‚
+   * @param fingerid æŒ‡IDã€‚
    */
   public float getFingerX( int fingerid );
 
   /**
-   * ƒ^ƒbƒ`YÀ•W‚Ìæ“¾B
-   * @param fingerid wIDB
+   * ã‚¿ãƒƒãƒYåº§æ¨™ã®å–å¾—ã€‚
+   * @param fingerid æŒ‡IDã€‚
    */
   public float getFingerY( int fingerid );
 
   /**
-   * ƒ^ƒbƒ`ƒtƒŒ[ƒ€‚Ìæ“¾B
-   * @param fingerid wIDB
+   * ã‚¿ãƒƒãƒãƒ•ãƒ¬ãƒ¼ãƒ ã®å–å¾—ã€‚
+   * @param fingerid æŒ‡IDã€‚
    */
   public int getFingerTouchFrame( int fingerid );
 
@@ -86,16 +88,16 @@ public interface AmanatsuInput
   public boolean keyUp( int keycode, KeyEvent event );
 
   /**
-   * ƒL[‚Ì‰Ÿ‚³‚ê‚Ä‚¢‚éƒtƒŒ[ƒ€”‚ğ•Ô‚·B
-   * @param keycode ƒL[”Ô†B
-   * @return ³‚Ì’l ‰Ÿ‚³‚ê‚Ä‚¢‚éƒtƒŒ[ƒ€”B
-   * @return 0 ‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢B
-   * @return -1 —£‚ê‚½Ÿ‚ÌƒtƒŒ[ƒ€B
+   * ã‚­ãƒ¼ã®æŠ¼ã•ã‚Œã¦ã„ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’è¿”ã™ã€‚
+   * @param keycode ã‚­ãƒ¼ç•ªå·ã€‚
+   * @return æ­£ã®å€¤ æŠ¼ã•ã‚Œã¦ã„ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã€‚
+   * @return 0 æŠ¼ã•ã‚Œã¦ã„ãªã„ã€‚
+   * @return -1 é›¢ã‚ŒãŸæ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã€‚
    */
   public int getKey( int keycode );
 
   /**
-   * ÅŒã‚É‰Ÿ‚³‚ê‚½ƒL[”Ô†‚ğ•Ô‚·B
+   * æœ€å¾Œã«æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ç•ªå·ã‚’è¿”ã™ã€‚
    */
   public int getLastKey();
 }

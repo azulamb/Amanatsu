@@ -11,6 +11,9 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
 
+/**
+ * Amanatsuã®éŸ³ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+ */
 // memo:AudioTrack
 // TODO:
 // * ogg loop flag
@@ -48,8 +51,7 @@ public class AmanatsuSound
   }
 
   /**
-   * ‰¹ºŠÂ‹«‚ğƒQ[ƒ€‹N“®‘O‚É–ß‚·B
-   * @param 
+   * éŸ³å£°ç’°å¢ƒã‚’ã‚²ãƒ¼ãƒ èµ·å‹•å‰ã«æˆ»ã™ã€‚
    */
   public void restore()
   {
@@ -59,8 +61,8 @@ public class AmanatsuSound
   // System
 
   /**
-   * ‰¹—Ê‚Ìİ’èB
-   * @param volume ‰¹—ÊBÅ‘å’l‚ÍgetMaxVolume()‚Åæ“¾‰Â”\B
+   * éŸ³é‡ã®è¨­å®šã€‚
+   * @param volume éŸ³é‡ã€‚æœ€å¤§å€¤ã¯getMaxVolume()ã§å–å¾—å¯èƒ½ã€‚
    */
   public boolean setVolume( int volume )
   {
@@ -72,19 +74,19 @@ public class AmanatsuSound
   }
 
   /**
-   * ‰¹ŠyÄ¶ƒfƒoƒCƒX‚ÌÅ‘å‰¹—Ê‚ğæ“¾‚·‚éB
+   * éŸ³æ¥½å†ç”Ÿãƒ‡ãƒã‚¤ã‚¹ã®æœ€å¤§éŸ³é‡ã‚’å–å¾—ã™ã‚‹ã€‚
    */
   public int getMaxVolume(){ return om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
 
   /**
-   * Œ»İ‚ÌÄ¶‰¹—Ê‚ğæ“¾‚·‚éB
+   * ç¾åœ¨ã®å†ç”ŸéŸ³é‡ã‚’å–å¾—ã™ã‚‹ã€‚
    */
   public int getVolume(){ return bvolume; }
 
   /**
-   * ƒ}ƒi[ƒ‚[ƒh‚©‚Ç‚¤‚©æ“¾‚·‚éB
-   * @return true ƒ}ƒi[ƒ‚[ƒhB
-   * @return false ƒ}ƒi[ƒ‚[ƒh‚Å‚Í‚È‚¢B
+   * ãƒãƒŠãƒ¼ãƒ¢ãƒ¼ãƒ‰ã‹ã©ã†ã‹å–å¾—ã™ã‚‹ã€‚
+   * @return true ãƒãƒŠãƒ¼ãƒ¢ãƒ¼ãƒ‰ã€‚
+   * @return false ãƒãƒŠãƒ¼ãƒ¢ãƒ¼ãƒ‰ã§ã¯ãªã„ã€‚
    */
   public boolean isMannerMode()
   {
@@ -94,10 +96,10 @@ public class AmanatsuSound
   // BGM
 
   /**
-   * BGM‚ğ“Ç‚İ‚Ş(ƒŠƒ\[ƒX)B
-   * ‰¹”Ô†‚ÍƒŠƒ\[ƒX”Ô†‚É‚È‚éB
-   * @param rnum ƒŠƒ\[ƒX”Ô†B
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
+   * BGMã‚’èª­ã¿è¾¼ã‚€(ãƒªã‚½ãƒ¼ã‚¹)ã€‚
+   * éŸ³ç•ªå·ã¯ãƒªã‚½ãƒ¼ã‚¹ç•ªå·ã«ãªã‚‹ã€‚
+   * @param rnum ãƒªã‚½ãƒ¼ã‚¹ç•ªå·ã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
    */
   public boolean loadBgm( int rnum, boolean loop )
   {
@@ -105,11 +107,11 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğ“Ç‚İ‚Ş(assets)B
-   * assets‚É’u‚©‚ê‚½ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ŞB
-   * @param snum ‰¹”Ô†B
-   * @param file assets‚ğroot‚Æ‚µ‚½‚Ìƒtƒ@ƒCƒ‹ƒpƒXB
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
+   * BGMã‚’èª­ã¿è¾¼ã‚€(assets)ã€‚
+   * assetsã«ç½®ã‹ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
+   * @param file assetsã‚’rootã¨ã—ãŸæ™‚ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
    */
   public boolean loadBgm( int snum, String file, boolean loop )
   {
@@ -117,10 +119,10 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğ“Ç‚İ‚ŞB
-   * @param snum ‰¹”Ô†B
-   * @param uri ƒtƒ@ƒCƒ‹‚ÌUriB
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
+   * BGMã‚’èª­ã¿è¾¼ã‚€ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
+   * @param uri ãƒ•ã‚¡ã‚¤ãƒ«ã®Uriã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
    */
   public boolean loadBgm( int snum, Uri uri, boolean loop )
   {
@@ -146,8 +148,8 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğŠJ•ú‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã‚’é–‹æ”¾ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean unloadBgm( int snum )
   {
@@ -160,8 +162,7 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğ‘S‚ÄŠJ•ú‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã‚’å…¨ã¦é–‹æ”¾ã™ã‚‹ã€‚
    */
   public boolean unloadBgm()
   {
@@ -178,8 +179,8 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğÄ¶‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã‚’å†ç”Ÿã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean playBgm( int snum )
   {
@@ -195,8 +196,8 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ÌÄ¶‚ğ~‚ß‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã®å†ç”Ÿã‚’æ­¢ã‚ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean stopBgm( int snum )
   {
@@ -209,7 +210,7 @@ public class AmanatsuSound
   }
 
   /**
-   * ‚·‚×‚Ä‚ÌBGM‚ÌÄ¶‚ğ~‚ß‚éB
+   * ã™ã¹ã¦ã®BGMã®å†ç”Ÿã‚’æ­¢ã‚ã‚‹ã€‚
    */
   public boolean stopBgm()
   {
@@ -226,14 +227,14 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğ“r’†‚©‚çÄ¶ŠJn‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã‚’é€”ä¸­ã‹ã‚‰å†ç”Ÿé–‹å§‹ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
-  public boolean resumeBgm( int rnum )
+  public boolean resumeBgm( int snum )
   {
-    if ( bgm.containsKey( rnum ) == false ){ return false; }
+    if ( bgm.containsKey( snum ) == false ){ return false; }
 
-    MediaPlayer mp = bgm.get( rnum );
+    MediaPlayer mp = bgm.get( snum );
 
     mp.start();
 
@@ -241,21 +242,21 @@ public class AmanatsuSound
   }
 
   /**
-   * BGM‚ğˆê’â~‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * BGMã‚’ä¸€æ™‚åœæ­¢ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
-  public boolean pauseBgm( int rnum )
+  public boolean pauseBgm( int snum )
   {
-    if ( bgm.containsKey( rnum ) == false ){ return false; }
+    if ( bgm.containsKey( snum ) == false ){ return false; }
 
-    MediaPlayer mp = bgm.get( rnum );
+    MediaPlayer mp = bgm.get( snum );
     mp.pause();
 
     return true;
   }
 
   /**
-   * ‚·‚×‚Ä‚ÌBGM‚ğˆê’â~‚·‚éB
+   * ã™ã¹ã¦ã®BGMã‚’ä¸€æ™‚åœæ­¢ã™ã‚‹ã€‚
    */
   public boolean pauseBgm()
   {
@@ -273,8 +274,8 @@ public class AmanatsuSound
   // SE
 
   /**
-   * SE‚ğ“Ç‚İ‚ŞB
-   * @param snum ‰¹”Ô†B
+   * SEã‚’èª­ã¿è¾¼ã‚€ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean loadSe( int snum )
   {
@@ -288,8 +289,8 @@ public class AmanatsuSound
   }
 
   /**
-   * SE‚ğŠJ•ú‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * SEã‚’é–‹æ”¾ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean unloadSe( int snum )
   {
@@ -302,8 +303,7 @@ public class AmanatsuSound
   }
 
   /**
-   * ‚·‚×‚Ä‚ÌSE‚ğŠJ•ú‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * ã™ã¹ã¦ã®SEã‚’é–‹æ”¾ã™ã‚‹ã€‚
    */
   public boolean unloadSe()
   {
@@ -320,32 +320,32 @@ public class AmanatsuSound
   }
 
   /**
-   * SE‚ğÄ¶‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * SEã‚’å†ç”Ÿã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean playSe( int snum ){ return playSe( snum, false, 1.0f, 1.0f, 1.0f ); }
 
   /**
-   * SE‚ğÄ¶‚·‚éB
-   * @param snum ‰¹”Ô†B
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
+   * SEã‚’å†ç”Ÿã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
    */
   public boolean playSe( int snum, boolean loop ){ return playSe( snum, loop, 1.0f, svolume, svolume ); }
 
   /**
-   * SE‚ğÄ¶‚·‚éB
-   * @param snum ‰¹”Ô†B
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
-   * @param volume ‰¹—Ê(0.0f-1.0f)B
+   * SEã‚’å†ç”Ÿã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
+   * @param volume éŸ³é‡(0.0f-1.0f)ã€‚
    */
   public boolean playSe( int snum, boolean loop, float volume ){ return playSe( snum, loop, 1.0f, volume, volume ); }
 
   /**
-   * SE‚ğÄ¶‚·‚éB
-   * @param snum ‰¹”Ô†B
-   * @param loop ƒ‹[ƒvÄ¶ƒtƒ‰ƒO(true=ƒ‹[ƒvÄ¶, false=ƒ‹[ƒvÄ¶‚µ‚È‚¢)B
-   * @param pan_l ¶‚Ì‰¹—Ê(0.0f-1.0f)B
-   * @param pan_r ‰E‚Ì‰¹—Ê(0.0f-1.0f)B
+   * SEã‚’å†ç”Ÿã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
+   * @param loop ãƒ«ãƒ¼ãƒ—å†ç”Ÿãƒ•ãƒ©ã‚°(true=ãƒ«ãƒ¼ãƒ—å†ç”Ÿ, false=ãƒ«ãƒ¼ãƒ—å†ç”Ÿã—ãªã„)ã€‚
+   * @param pan_l å·¦ã®éŸ³é‡(0.0f-1.0f)ã€‚
+   * @param pan_r å³ã®éŸ³é‡(0.0f-1.0f)ã€‚
    */
   public boolean playSe( int snum, boolean loop, float late, float pan_l, float pan_r )
   {
@@ -357,8 +357,8 @@ public class AmanatsuSound
   }
 
   /**
-   * SE‚ğ’â~‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * SEã‚’åœæ­¢ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean stopSe( int snum )
   {
@@ -368,7 +368,7 @@ public class AmanatsuSound
   }
 
   /**
-   * ‚·‚×‚Ä‚ÌSE‚ğ’â~‚·‚éB
+   * ã™ã¹ã¦ã®SEã‚’åœæ­¢ã™ã‚‹ã€‚
    */
   public boolean stopSe()
   {
@@ -376,8 +376,8 @@ public class AmanatsuSound
   }
 
   /**
-   * SE‚ÌÄ¶‚ğÄŠJ‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * SEã®å†ç”Ÿã‚’å†é–‹ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean resumeSe( int snum )
   {
@@ -387,8 +387,8 @@ public class AmanatsuSound
   }
 
   /**
-   * SE‚ÌÄ¶‚ğˆê’â~‚·‚éB
-   * @param snum ‰¹”Ô†B
+   * SEã®å†ç”Ÿã‚’ä¸€æ™‚åœæ­¢ã™ã‚‹ã€‚
+   * @param snum éŸ³ç•ªå·ã€‚
    */
   public boolean pauseSe( int snum )
   {
@@ -398,7 +398,7 @@ public class AmanatsuSound
   }
 
   /**
-   * ‚·‚×‚Ä‚ÌSE‚ÌÄ¶‚ğˆê’â~‚·‚éB
+   * ã™ã¹ã¦ã®SEã®å†ç”Ÿã‚’ä¸€æ™‚åœæ­¢ã™ã‚‹ã€‚
    */
   public boolean pauseSe()
   {

@@ -72,14 +72,19 @@ class Game implements GameView
 
 GameViewインターフェースは次のようになっている。
 
-### UserInit
+#### UserInit
 実行開始の初めの一度だけ実行されるメソッド。
 
-### MainLoop
+#### MainLoop
 毎フレーム呼ばれるメソッド。
 
-### CleanUp
+#### CleanUp
 終了時に呼ばれるメソッド。
+
+### Javadoc
+Javadocはこちら(日本語)。
+
+* [http://hiroki.azulite.net/wiki/Amanatsu/doc/](http://hiroki.azulite.net/wiki/Amanatsu/doc/)
 
 ## コンパイル方法
 EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエクスポートしてJARファイルとして出力する。
