@@ -435,7 +435,7 @@ public class AmanatsuDraw
   /**
    * テクスチャを全て解放。
    */
-  public void releaseTextureAll()
+  public void releaseTexture()
   {
     List<Integer> keys = new ArrayList<Integer>( textures.keySet() );
     for ( Integer key : keys )
@@ -509,8 +509,8 @@ public class AmanatsuDraw
   }
 
   /**
-   * Set texture color default(white).
-   * @param tnum Texture number.
+   * テクスチャの色設定(白)。
+   * @param tnum テクスチャ番号。
    */
   public final void setColor( int tnum )
   {
@@ -525,9 +525,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Set texture color(red, green, blue same power).
-   * @param tnum Texture number.
-   * @param col Color power(0.0f-1.0f).
+   * テクスチャ色の設定。
+   * @param tnum テクスチャ番号。
+   * @param col 色の強さ。アルファ値以外の値が全て同じ。0.0f-1.0f。
    */
   public final void setColor( int tnum, float col )
   {
@@ -542,9 +542,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Set texture color.
-   * @param tnum Texture number.
-   * @param color GameColor.
+   * テクスチャ色の設定。
+   * @param tnum テクスチャ番号。
+   * @param color GameColorのインスタンス。
    */
   public final void setColor( int tnum, GameColor color )
   {
@@ -552,9 +552,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Set texture color.
-   * @param tnum Texture number.
-   * @param color Color float array(red, green blue, alpha).
+   * テクスチャ色の設定。
+   * @param tnum テクスチャ番号。
+   * @param color 色の配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
    */
   public final void setColor( int tnum, float[] color )
   {
@@ -572,9 +572,9 @@ public class AmanatsuDraw
   // TODO setAlpha
 
   /**
-   * Set texture UV.
-   * @param tex Texture/
-   * @param uv UV float array( x0, y0, x1, y1, x2, y2, x3, y3 ).
+   * テクスチャのUV設定。
+   * @param tex テクスチャ番号。
+   * @param uv UV展開の各座標( x0, y0, x1, y1, x2, y2, x3, y3 )。
    */
   public final boolean setUV( Texture tex, float[] uv )
   {
@@ -583,9 +583,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Set texture draw vertex.
-   * @param tex Texture.
-   * @param vert Draw vertex float array( x0, y0, x1, y1, x2 y2, x3, y3 ).
+   * テクスチャの描画座標設定。
+   * @param tex テクスチャ番号。
+   * @param vert 描画する各座標( x0, y0, x1, y1, x2 y2, x3, y3 )。
    */
   public final boolean setVertex( Texture tex, float[] vert )
   {
@@ -594,15 +594,20 @@ public class AmanatsuDraw
   }
 
   /**
-   * Get window width.
+   * 画面の横幅取得。
    */
   public final int getWidth(){ return width; }
 
   /**
-   * Get window height.
+   * 画面の高さ取得。
    */
   public final int getHeight(){ return height; }
 
+  /**
+   * 画面の大きさ設定。
+   * 基本的に画面方向が変わると呼び出される。
+   * またこの値は描画領域として扱われるので、setScreenSizeと合わせて使うことで、スクロールなどが可能になる。
+   */
   public boolean setWindowSize( int width, int height )
   {
     this.width = width;
@@ -611,8 +616,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Get texture data.
-   * @param tnum Texture number.
+   * テクスチャデータの取得。
+   * テクスチャの色、描画座標、drawTextureで使うUV展開のデータが入っている。
+   * @param tnum テクスチャ番号。
    */
   public final Texture getTexture( int tnum ){ return textures.get( tnum ); }
 
@@ -650,37 +656,89 @@ public class AmanatsuDraw
   }
 
   /**
-   * Create font.
-   * @param fnum Font number.
-   * @param size Font size.
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * デフォルトで0番には大きさ30.0f、色は白のフォントが作成されている。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
    */
   public boolean createFont( int fnum, int size ){ return createFont( fnum, size, false, GameColor.WHITE ); }
 
   /**
-   * Create font.
-   * @param fnum Font number.
-   * @param size Font size.
-   * @param antialias Antialias.
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
    */
   public boolean createFont( int fnum, int size, boolean antialias ){ return createFont( fnum, size, antialias, GameColor.WHITE ); }
 
   /**
-   * Create font.
-   * @param fnum Font number.
-   * @param size Font size.
-   * @param antialias Antialias.
-   * @param color GameColor.
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param color GameColorのインスタンス。
    */
   public boolean createFont( int fnum, int size, boolean antialias, GameColor color ){ return createFont( fnum, size, antialias, color.color ); }
 
+  // TODO load font file? set font name?
+
   /**
-   * Create font.
-   * @param fnum Font number.
-   * @param size Font size.
-   * @param antialias Antialias.
-   * @param color Color float array( red, green, blue, alpha ).
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param color 色配列( red, green, blue, alpha )。各色の強さは0-255。
+   */
+  public boolean createFont( int fnum, int size, boolean antialias, byte[] color )
+  {
+    return createFont( fnum, size, antialias, color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+  }
+
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param color 色配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
    */
   public boolean createFont( int fnum, int size, boolean antialias, float[] color )
+  {
+    return createFont( fnum, size, antialias, (byte)(0xff * color[ 0 ]), (byte)(0xff * color[ 1 ]), (byte)(0xff * color[ 2 ]), (byte)(0xff * color[ 3 ]) );
+  }
+
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param red 赤の強さ(0.0f-1.0f)。
+   * @param green 緑の強さ(0.0f-1.0f)。
+   * @param blue 青の強さ(0.0f-1.0f)。
+   * @param alpha 不透明の強さ(0.0f-1.0f)。
+   */
+  public boolean createFont( int fnum, int size, boolean antialias, float red, float green, float blue, float alpha )
+  {
+    return createFont( fnum, size, antialias, (byte)(0xff * red), (byte)(0xff * green), (byte)(0xff * blue), (byte)(0xff * alpha) );
+  }
+
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param red 赤の強さ(0-255)。
+   * @param green 緑の強さ(0-255)。
+   * @param blue 青の強さ(0-255)。
+   * @param alpha 不透明の強さ(0255)。
+   */
+  public boolean createFont( int fnum, int size, boolean antialias, byte red, byte green, byte blue, byte alpha )
   {
     if ( paints.containsKey( fnum ) == false )
     {
@@ -692,18 +750,19 @@ public class AmanatsuDraw
     }
 
     tpaint.setTextSize( size );
-    tpaint.setARGB( (int)(0xff * color[ 3 ]), (int)(0xff * color[ 0 ]), (int)(0xff * color[ 1 ]), (int)(0xff * color[ 2 ]) );
+    tpaint.setARGB( alpha, red, green, blue );
     tpaint.setAntiAlias( antialias );
 
     return true;
   }
 
   /**
-   * Print string.
-   * @param fnum Font number.
-   * @param dx Draw x.
-   * @param dy Draw y.
-   * @param str Print string.
+   * 文字列の描画。
+   * 不正なフォント番号を使うと0番のフォントが使用される。
+   * @param fnum フォント番号。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
+   * @param str 描画する文字列。
    */
   public boolean printf( int fnum, float dx, float dy, String str )
   {
@@ -737,12 +796,12 @@ public class AmanatsuDraw
   // Base draw.
 
   /**
-   * Draw line.
-   * @param sx Draw start x.
-   * @param sy Draw start y.
-   * @param ex Draw end x.
-   * @param ey Draw end y.
-   * @param color GameColor.
+   * 先の描画。
+   * @param sx 描画開始X座標。
+   * @param sy 描画開始Y座標。
+   * @param ex 描画終了X座標。
+   * @param ey 描画終了Y座標。
+   * @param color GameColorインスタンス。
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color )
   {
@@ -750,12 +809,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * Draw line.
-   * @param sx Draw start x.
-   * @param sy Draw start y.
-   * @param ex Draw end x.
-   * @param ey Draw end y.
-   * @param color Color float array( red, green, blue, alpha ).
+   * 先の描画。
+   * @param sx 描画開始X座標。
+   * @param sy 描画開始Y座標。
+   * @param ex 描画終了X座標。
+   * @param ey 描画終了Y座標。
+   * @param color 色配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float[] color )
   {
@@ -763,13 +822,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * Draw line.
-   * @param sx Draw start x.
-   * @param sy Draw start y.
-   * @param ex Draw end x.
-   * @param ey Draw end y.
-   * @param width Line width.
-   * @param color GameColor.
+   * 先の描画。
+   * @param sx 描画開始X座標。
+   * @param sy 描画開始Y座標。
+   * @param ex 描画終了X座標。
+   * @param ey 描画終了Y座標。
+   * @param width 線の太さ。
+   * @param color GameColorインスタンス。
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, GameColor color )
   {
@@ -777,13 +836,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * Draw line.
-   * @param sx Draw start x.
-   * @param sy Draw start y.
-   * @param ex Draw end x.
-   * @param ey Draw end y.
-   * @param width Line width.
-   * @param color Color float array( red, green, blue, alpha ).
+   * 先の描画。
+   * @param sx 描画開始X座標。
+   * @param sy 描画開始Y座標。
+   * @param ex 描画終了X座標。
+   * @param ey 描画終了Y座標。
+   * @param width 線の太さ。
+   * @param color 色配列( red, green, blue, alpha ).各色の強さは0.0f-1.0f。
    */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, float[] color )
   {
@@ -805,11 +864,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param x Draw x.
-   * @param y Draw y.
-   * @param w Width.
-   * @param h Height.
-   * @param color GameColor.
+   * 箱の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
    */
   public boolean drawBox( float x, float y, float w, float h, GameColor color )
   {
@@ -817,11 +877,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param x Draw x.
-   * @param y Draw y.
-   * @param w Width.
-   * @param h Height.
-   * @param color Color float array(red, green, blue, alpha).
+   * 箱の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
    */
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
@@ -832,11 +893,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param x Draw x(center).
-   * @param y Draw y(center).
-   * @param w Width.
-   * @param h Height.
-   * @param color GameColor.
+   * 箱の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
    */
   public boolean drawBoxC( float x, float y, float w, float h, GameColor color )
   {
@@ -844,11 +906,12 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param x Draw x(center).
-   * @param y Draw y(center).
-   * @param w Width.
-   * @param h Height.
-   * @param color Color float array(red, green, blue, alpha).
+   * 箱の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
    */
   public boolean drawBoxC( float x, float y, float w, float h, float[] color )
   {
@@ -860,8 +923,12 @@ public class AmanatsuDraw
   
   // TODO drawCircle
 
-  // Draw texture.
-  private boolean drawTexture( Texture tex )//TODO
+  /**
+   * テクスチャの描画。
+   * すべてのテクスチャ描画はこのメソッドを利用する。
+   * @param texture Textureインスタンス。
+   */
+  public boolean drawTexture( Texture tex )
   {
     gl.glBindTexture( GL10.GL_TEXTURE_2D, tex.texid[ 0 ] );
 
@@ -875,19 +942,21 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param dx Draw x coordinate.
-   * @param dy Draw y coordinate.
+   * テクスチャの描画。
+   * テクスチャの全体を描画する。
+   * @param tnum テクスチャ番号。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
    */
-  public boolean drawTexture( int rnum, float dx, float dy )
+  public boolean drawTexture( int tnum, float dx, float dy )
   {
 
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
     ttex.ver = createFloatBuffer( farr8 );
@@ -899,19 +968,21 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
+   * テクスチャの描画。
+   * テクスチャ全体を描画する。
+   * @param tnum
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
    */
-  public boolean drawTextureC( int rnum, float dx, float dy )
+  public boolean drawTextureC( int tnum, float dx, float dy )
   {
 
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8(
       dx - ttex.width / 2.0f, dy - ttex.height / 2.0f,
@@ -927,24 +998,25 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate.
-   * @param dy Draw y coordinate.
+   * テクスチャの描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
    */
-  public boolean drawTexture( int rnum,
+  public boolean drawTexture( int tnum,
       float rx, float ry, float w, float h,
       float dx, float dy )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8( dx, dy, dx + w, dy, dx, dy + h, dx + w, dy + h );
     setVertex( ttex, farr8 );
@@ -960,24 +1032,25 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
+   * テクスチャの描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
    */
-  public boolean drawTextureC( int rnum,
+  public boolean drawTextureC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8(
       dx - w / 2.0f, dy - h / 2.0f,
@@ -997,26 +1070,27 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate.
-   * @param dy Draw y coordinate.
-   * @param dw Draw width.
-   * @param dh Draw height.
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
+   * @param dw 描画横幅。
+   * @param dh 描画高さ。
    */
-  public boolean drawTextureScaring( int rnum,
+  public boolean drawTextureScaring( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8( dx, dy, dx + dw, dy, dx, dy + dh, dx + dw, dy + dh );
     setVertex( ttex, farr8 );
@@ -1032,26 +1106,26 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param dw Draw width.
-   * @param dh Draw height.
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param dw 描画横幅。
+   * @param dh 描画高さ。
    */
-  public boolean drawTextureScaringC( int rnum,
+  public boolean drawTextureScaringC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
-
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8(
       dx - dw / 2.0f, dy - dh / 2.0f,
@@ -1071,25 +1145,26 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate.
-   * @param dy Draw y coordinate.
-   * @param scale Draw scale.
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
+   * @param scale 拡大率。
    */
-  public boolean drawTextureScaring( int rnum,
+  public boolean drawTextureScaring( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray8( dx, dy, dx + w * scale, dy, dx, dy + h * scale, dx + w * scale, dy + h * scale );
     setVertex( ttex, farr8 );
@@ -1105,14 +1180,15 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param scale Draw scale.
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param scale 拡大率。
    */
   public boolean drawTextureScaringC( int rnum,
     float rx, float ry, float w, float h,
@@ -1144,25 +1220,26 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param rad Rotation radian.
+   * テクスチャの回転描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param rad ラジアン角。
    */
-  public boolean drawTextureRotationC( int rnum,
+  public boolean drawTextureRotationC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float rad )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     AMatrix.identityMatrix( mat );
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
@@ -1197,25 +1274,26 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param angle Rotation angle.
+   * テクスチャの回転描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param angle 角度。
    */
-  public boolean drawTextureRotationAngleC( int rnum,
+  public boolean drawTextureRotationAngleC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float angle )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     AMatrix.identityMatrix( mat );
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
@@ -1252,26 +1330,27 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param scale Draw scale.
-   * @param rad Rotation radian.
+   * テクスチャの拡大縮小回転描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param scale 拡大率。
+   * @param rad ラジアン角。
    */
-  public boolean drawTextureScaleRotateC( int rnum,
+  public boolean drawTextureScaleRotateC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float rad )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     AMatrix.identityMatrix( mat );
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
@@ -1306,29 +1385,30 @@ public class AmanatsuDraw
     boolean ret = drawTexture( ttex );
 
     return ret;
-  }
+  }  
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param scale Draw scale.
-   * @param angle Rotation angle.
+   * テクスチャの拡大縮小回転描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param scale 拡大率。
+   * @param angle 角度。
    */
-  public boolean drawTextureScaleRotateAngleC( int rnum,
+  public boolean drawTextureScaleRotateAngleC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float angle )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     AMatrix.identityMatrix( mat );
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
@@ -1365,24 +1445,27 @@ public class AmanatsuDraw
     return ret;
   }
 
+  //TODO scale rotate draw size.
+
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param matrix44 4 * 4 draw matrix.
+   * テクスチャの行列変形描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param matrix44 4*4の変形行列。
    */
-  public boolean drawTextureMatrix( int rnum,
+  public boolean drawTextureMatrix( int tnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
   {
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return false;
     }
 
-    ttex = getTexture( rnum );
+    ttex = getTexture( tnum );
 
     setFloatArray4( 0.0f, 0.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
@@ -1415,14 +1498,13 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx Draw x coordinate(center).
-   * @param dy Draw y coordinate(center).
-   * @param matrix44 4 * 4 draw matrix.
+   * テクスチャの行列変形中心描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param matrix44 4*4の変形行列。
    */
   public boolean drawTextureMatrixC( int rnum,
     float rx, float ry, float w, float h,
@@ -1466,19 +1548,20 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param rnum Resource or Texture number.
-   * @param rx Read x coordinate.
-   * @param ry Read y coordinate.
-   * @param w Width.
-   * @param h Height.
-   * @param dx0 Draw x coordinate(left up).
-   * @param dy0 Draw y coordinate(left up).
-   * @param dx1 Draw x coordinate(right up).
-   * @param dy1 Draw y coordinate(right up).
-   * @param dx2 Draw x coordinate(left down).
-   * @param dy2 Draw y coordinate(left down).
-   * @param dx3 Draw x coordinate.
-   * @param dy3 Draw y coordinate.
+   * テクスチャの4点指定描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx0 描画X座標(左上)。
+   * @param dy0 描画Y座標座標(左上)。
+   * @param dx1 描画X座標(右上)。
+   * @param dy1 描画Y座標(右上)。
+   * @param dx2 描画X座標(左下)。
+   * @param dy2 描画Y座標(左下)。
+   * @param dx3 描画X座標(右下)。
+   * @param dy3 描画Y座標(右下)。
    */
   public boolean drawTextureVertex( int rnum,
     float rx, float ry, float w, float h,

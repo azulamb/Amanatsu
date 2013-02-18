@@ -47,6 +47,10 @@ public class AmanatsuSound
     restore();
   }
 
+  /**
+   * 音声環境をゲーム起動前に戻す。
+   * @param 
+   */
   public void restore()
   {
     om.setStreamVolume( AudioManager.STREAM_MUSIC, srcvolume, 0 );
@@ -54,41 +58,78 @@ public class AmanatsuSound
 
   // System
 
+  /**
+   * 音量の設定。
+   * @param volume 音量。最大値はgetMaxVolume()で取得可能。
+   */
   public boolean setVolume( int volume )
   {
-    if ( volume > om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ) ){ volume = om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
+    if ( volume > getMaxVolume() ){ volume = om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
     bvolume = volume;
     svolume = (float)bvolume / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
     om.setVibrateSetting( AudioManager.STREAM_MUSIC, bvolume );
     return true;
   }
 
-  public int GetVolume(){ return bvolume; }
+  /**
+   * 音楽再生デバイスの最大音量を取得する。
+   */
+  public int getMaxVolume(){ return om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
 
+  /**
+   * 現在の再生音量を取得する。
+   */
+  public int getVolume(){ return bvolume; }
+
+  /**
+   * マナーモードかどうか取得する。
+   * @return true マナーモード。
+   * @return false マナーモードではない。
+   */
   public boolean isMannerMode()
   {
     return ( om.getRingerMode() != AudioManager.RINGER_MODE_NORMAL );
   }
+
   // BGM
 
+  /**
+   * BGMを読み込む(リソース)。
+   * 音番号はリソース番号になる。
+   * @param rnum リソース番号。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   */
   public boolean loadBgm( int rnum, boolean loop )
   {
-    return loadBgm( rnum, Uri.parse("android.resource://" + ama.getContext().getPackageName() +"/" + rnum ), loop );
+    return loadBgm( rnum, Uri.parse( "android.resource://" + ama.getContext().getPackageName() +"/" + rnum ), loop );
   }
 
+  /**
+   * BGMを読み込む(assets)。
+   * assetsに置かれたファイルを読み込む。
+   * @param snum 音番号。
+   * @param file assetsをrootとした時のファイルパス。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   */
   public boolean loadBgm( int snum, String file, boolean loop )
   {
     return loadBgm( snum, Uri.parse( "file:///android_asset/" + file ), loop );
   }
 
-  public boolean loadBgm( int rnum, Uri uri, boolean loop )
+  /**
+   * BGMを読み込む。
+   * @param snum 音番号。
+   * @param uri ファイルのUri。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   */
+  public boolean loadBgm( int snum, Uri uri, boolean loop )
   {
     MediaPlayer mp = new MediaPlayer();
-    bgm.put( rnum, mp );
+    bgm.put( snum, mp );
     try
     {
-      mp.setDataSource( ama.getContext(), Uri.parse("android.resource://" + ama.getContext().getPackageName() +"/" + rnum ) );
-      mp.setAudioStreamType( AudioManager.STREAM_MUSIC );//STREAM_NOTIFICATION
+      mp.setDataSource( ama.getContext(), uri );
+      mp.setAudioStreamType( AudioManager.STREAM_MUSIC );
       mp.setLooping( loop );
       mp.prepare();
 
@@ -99,21 +140,29 @@ public class AmanatsuSound
     {
     }
 
-    bgm.remove( rnum );
+    bgm.remove( snum );
 
     return false;
   }
 
-  public boolean unloadBgm( int rnum )
+  /**
+   * BGMを開放する。
+   * @param snum 音番号。
+   */
+  public boolean unloadBgm( int snum )
   {
-    if ( bgm.containsKey( rnum ) )
+    if ( bgm.containsKey( snum ) )
     {
-      bgm.remove( rnum );
+      bgm.remove( snum );
       return true;
     }
     return false;
   }
 
+  /**
+   * BGMを全て開放する。
+   * @param snum 音番号。
+   */
   public boolean unloadBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
@@ -128,11 +177,15 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean playBgm( int rnum )
+  /**
+   * BGMを再生する。
+   * @param snum 音番号。
+   */
+  public boolean playBgm( int snum )
   {
-    if ( bgm.containsKey( rnum ) == false ){ return false; }
+    if ( bgm.containsKey( snum ) == false ){ return false; }
 
-    MediaPlayer mp = bgm.get( rnum );
+    MediaPlayer mp = bgm.get( snum );
 
     mp.seekTo( 0 );
     mp.setVolume( svolume, svolume );
@@ -141,16 +194,23 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean stopBgm( int rnum )
+  /**
+   * BGMの再生を止める。
+   * @param snum 音番号。
+   */
+  public boolean stopBgm( int snum )
   {
-    boolean ret = pauseBgm( rnum );
+    boolean ret = pauseBgm( snum );
     if ( ret )
     {
-      bgm.get( rnum ).seekTo( 0 );
+      bgm.get( snum ).seekTo( 0 );
     }
     return ret;
   }
 
+  /**
+   * すべてのBGMの再生を止める。
+   */
   public boolean stopBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
@@ -165,6 +225,10 @@ public class AmanatsuSound
     return true;
   }
 
+  /**
+   * BGMを途中から再生開始する。
+   * @param snum 音番号。
+   */
   public boolean resumeBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) == false ){ return false; }
@@ -176,6 +240,10 @@ public class AmanatsuSound
     return true;
   }
 
+  /**
+   * BGMを一時停止する。
+   * @param snum 音番号。
+   */
   public boolean pauseBgm( int rnum )
   {
     if ( bgm.containsKey( rnum ) == false ){ return false; }
@@ -186,6 +254,9 @@ public class AmanatsuSound
     return true;
   }
 
+  /**
+   * すべてのBGMを一時停止する。
+   */
   public boolean pauseBgm()
   {
     Iterator< Map.Entry<Integer, MediaPlayer> > it;
@@ -201,27 +272,39 @@ public class AmanatsuSound
 
   // SE
 
-  public boolean loadSe( int rnum )
+  /**
+   * SEを読み込む。
+   * @param snum 音番号。
+   */
+  public boolean loadSe( int snum )
   {
     int id;
 
-    id = sp.load( ama.getContext(), rnum, 1 );
+    id = sp.load( ama.getContext(), snum, 1 );
 
-    se.put( rnum, id );
+    se.put( snum, id );
 
     return true;
   }
 
-  public boolean unloadSe( int rnum )
+  /**
+   * SEを開放する。
+   * @param snum 音番号。
+   */
+  public boolean unloadSe( int snum )
   {
-    if ( se.containsKey( rnum ) == false ){ return false; }
+    if ( se.containsKey( snum ) == false ){ return false; }
 
-    sp.unload( se.get( rnum ) );
-    se.remove( rnum );
+    sp.unload( se.get( snum ) );
+    se.remove( snum );
 
     return true;
   }
 
+  /**
+   * すべてのSEを開放する。
+   * @param snum 音番号。
+   */
   public boolean unloadSe()
   {
     Iterator< Map.Entry<Integer, Integer> > it;
@@ -236,46 +319,87 @@ public class AmanatsuSound
     return true;
   }
 
-  public boolean playSe( int rnum ){ return playSe( rnum, false, 1.0f, 1.0f, 1.0f ); }
+  /**
+   * SEを再生する。
+   * @param snum 音番号。
+   */
+  public boolean playSe( int snum ){ return playSe( snum, false, 1.0f, 1.0f, 1.0f ); }
 
-  public boolean playSe( int rnum, boolean loop ){ return playSe( rnum, loop, 1.0f, svolume, svolume ); }
+  /**
+   * SEを再生する。
+   * @param snum 音番号。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   */
+  public boolean playSe( int snum, boolean loop ){ return playSe( snum, loop, 1.0f, svolume, svolume ); }
 
-  public boolean playSe( int rnum, boolean loop, float volume ){ return playSe( rnum, loop, 1.0f, volume, volume ); }
+  /**
+   * SEを再生する。
+   * @param snum 音番号。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   * @param volume 音量(0.0f-1.0f)。
+   */
+  public boolean playSe( int snum, boolean loop, float volume ){ return playSe( snum, loop, 1.0f, volume, volume ); }
 
-  public boolean playSe( int rnum, boolean loop, float late, float pan_l, float pan_r )
+  /**
+   * SEを再生する。
+   * @param snum 音番号。
+   * @param loop ループ再生フラグ(true=ループ再生, false=ループ再生しない)。
+   * @param pan_l 左の音量(0.0f-1.0f)。
+   * @param pan_r 右の音量(0.0f-1.0f)。
+   */
+  public boolean playSe( int snum, boolean loop, float late, float pan_l, float pan_r )
   {
-    if ( se.containsKey( rnum ) == false ){ return false; }
+    if ( se.containsKey( snum ) == false ){ return false; }
 
-    sp.play( se.get( rnum ), pan_l, pan_r, 0, loop ? -1 : 0, late );
+    sp.play( se.get( snum ), pan_l, pan_r, 0, loop ? -1 : 0, late );
 
     return true;
   }
 
-  public boolean stopSe( int rnum )
+  /**
+   * SEを停止する。
+   * @param snum 音番号。
+   */
+  public boolean stopSe( int snum )
   {
-    if ( se.containsKey( rnum ) == false ){ return false;}
-    sp.stop( se.get( rnum ) );
+    if ( se.containsKey( snum ) == false ){ return false;}
+    sp.stop( se.get( snum ) );
     return true;
   }
 
+  /**
+   * すべてのSEを停止する。
+   */
   public boolean stopSe()
   {
     return true;
   }
 
-  public boolean resumeSe( int rnum )
+  /**
+   * SEの再生を再開する。
+   * @param snum 音番号。
+   */
+  public boolean resumeSe( int snum )
   {
-    if ( se.containsKey( rnum ) == false ){ return false;}
-    sp.resume( se.get( rnum ) );
+    if ( se.containsKey( snum ) == false ){ return false;}
+    sp.resume( se.get( snum ) );
     return true;
   }
 
-  public boolean pauseSe( int rnum )
+  /**
+   * SEの再生を一時停止する。
+   * @param snum 音番号。
+   */
+  public boolean pauseSe( int snum )
   {
-    if ( se.containsKey( rnum ) == false ){ return false;}
-    sp.pause( se.get( rnum ) );
+    if ( se.containsKey( snum ) == false ){ return false;}
+    sp.pause( se.get( snum ) );
     return true;
   }
+
+  /**
+   * すべてのSEの再生を一時停止する。
+   */
   public boolean pauseSe()
   {
     Iterator< Map.Entry<Integer, Integer> > it;

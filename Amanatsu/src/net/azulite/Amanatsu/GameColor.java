@@ -1,10 +1,14 @@
 package net.azulite.Amanatsu;
 
+/**
+ * Amanatsuで使う色クラス。
+ * 色の名前によっては既に定義してある。
+ * 色名と値に関しては http://www.colordic.org/ を参考にしている。
+ */
 public class GameColor
 {
   float[] color;
 
-  // http://www.colordic.org/
   public static final float[] BLACK                = new float[]{          0.0f,          0.0f,          0.0f, 1.0f };
   public static final float[] ALICEBLUE            = new float[]{ 240.0f/255.0f, 248.0f/255.0f,          1.0f, 1.0f };
   public static final float[] DARKCYAN             = new float[]{          0.0f, 139.0f/255.0f, 139.0f/255.0f, 1.0f };
@@ -146,15 +150,13 @@ public class GameColor
   public static final float[] LIGHTSALMON          = new float[]{          1.0f, 160.0f/255.0f, 122.0f/255.0f, 1.0f };
   public static final float[] MEDIUMSLATEBLUE      = new float[]{ 123.0f/255.0f, 104.0f/255.0f, 238.0f/255.0f, 1.0f };
 
-  public GameColor( float red, float green, float blue, float alpha )
-  {
-    color = new float[ 4 ];
-    color[ 0 ] = red;
-    color[ 1 ] = green;
-    color[ 2 ] = blue;
-    color[ 3 ] = alpha;
-  }
-
+  /**
+   * GameColorインスタンスの作成。
+   * @param red 赤(0-255)。
+   * @param green 緑(0-255)。
+   * @param blue 青(0-255)。
+   * @param alpha 不透明度(0-255)。
+   */
   public GameColor( byte red, byte green, byte blue, byte alpha )
   {
     color = new float[ 4 ];
@@ -164,6 +166,29 @@ public class GameColor
     color[ 3 ] = (float)( alpha & 0xff ) / 255.0f;
   }
 
+  /**
+   * GameColorインスタンスの作成。
+   * @param red 赤の色の強さ(0.0f-1.0f)。
+   * @param green 緑の強さ(0.0f-1.0f)。
+   * @param blue 青の強さ(0.0f-1.0f)。
+   * @param alpha 不透明度(0.0f-1.0f)。
+   */
+  public GameColor( float red, float green, float blue, float alpha )
+  {
+    color = new float[ 4 ];
+    color[ 0 ] = red;
+    color[ 1 ] = green;
+    color[ 2 ] = blue;
+    color[ 3 ] = alpha;
+  }
+
+  /**
+   * 色配列の作成。
+   * @param red 赤(0-255)。
+   * @param green 緑(0-255)。
+   * @param blue 青(0-255)。
+   * @param alpha 不透明度(0-255)。
+   */
   static final float[] CreateColor( byte red, byte green, byte blue, byte alpha )
   {
     float[] color = new float[ 4 ];
@@ -174,6 +199,13 @@ public class GameColor
     return color;
   }
 
+  /**
+   * 色配列の作成。
+   * @param red 赤の色の強さ(0.0f-1.0f)。
+   * @param green 緑の強さ(0.0f-1.0f)。
+   * @param blue 青の強さ(0.0f-1.0f)。
+   * @param alpha 不透明度(0.0f-1.0f)。
+   */
   static final float[] CreateColor( float red, float green, float blue, float alpha )
   {
     float[] color = new float[ 4 ];

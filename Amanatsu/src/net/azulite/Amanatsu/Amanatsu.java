@@ -24,7 +24,7 @@ import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.0.3
+ * @version 0.1.2
  */
 
 // Library
@@ -465,6 +465,7 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
     H = height;
     return true;
   }
+
   @Override
   public boolean setInputArea(float x, float y, float width, float height)
   {
@@ -514,64 +515,37 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   }
 
   @Override
-  public float getX()
-  {
-    return basex + x / W * width;
-  }
+  public float getX() { return basex + x / W * width; }
 
   @Override
-  public float getY()
-  {
-    return basey + y / H * height;
-  }
+  public float getY() { return basey + y / H * height; }
 
   @Override
-  public int getTouchFrame()
-  {
-    return frame;
-  }
+  public int getTouchFrame() { return frame; }
 
   @Override
-  public int size()
-  {
-    return (frame > 0) ? 1 : 0;
-  }
+  public int fingernum() { return (frame > 0) ? 1 : 0; }
 
   @Override
-  public float getX( int num )
-  {
-    return basex + x / W * width;
-  }
+  public float getX( int num ) { return basex + x / W * width; }
 
   @Override
-  public float getY( int num )
-  {
-    return basey + y / H * height;
-  }
+  public float getY( int num ) { return basey + y / H * height; }
 
   @Override
-  public int getTouchFrame( int num )
-  {
-    return frame;
-  }
+  public int getTouchFrame( int num ) { return frame; }
 
   @Override
-  public float getFingerX( int fingerid )
-  {
-    return basex + x / W * width;
-  }
+  public int getFingerId(int num) { return 0; }
 
   @Override
-  public float getFingerY( int fingerid )
-  {
-    return basey + y / H * height;
-  }
+  public float getFingerX( int fingerid ) { return basex + x / W * width; }
 
   @Override
-  public int getFingerTouchFrame( int fingerid )
-  {
-    return frame;
-  }
+  public float getFingerY( int fingerid ) { return basey + y / H * height; }
+
+  @Override
+  public int getFingerTouchFrame( int fingerid ) { return frame; }
 
 }
 
@@ -697,10 +671,7 @@ class MultiTouchEvent extends TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public int size()
-  {
-    return len;
-  }
+  public int fingernum() { return len; }
 
   @Override
   public float getX( int num )
@@ -719,6 +690,13 @@ class MultiTouchEvent extends TouchEvent implements AmanatsuInput
   {
     if ( num >= fid.length || finger.containsKey( fid[ num ] ) == false ){ return -1; }
     return finger.get( fid[ num ] ).frame;
+  }
+
+  @Override
+  public int getFingerId( int num )
+  {
+    if ( num >= fid.length || finger.containsKey( fid[ num ] ) == false ){ return -1; }
+    return fid[ num ];
   }
 
   @Override
