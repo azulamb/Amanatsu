@@ -61,20 +61,32 @@ public class Amanatsu
   protected AmanatsuSound sound;
 
   /**
-   * Amanatsu
-   * @param Content Activity instance.
-   * @param GameView Class instance(implements GameView).
+   * Amanatsuの生成。
+   * @param oontent Amanatsuを使用するActivity。
+   * @param gview GameViewインターフェースを継承したクラス。
    */
   public Amanatsu( Context context, GameView gview )
   {
     this( context, gview, true, true );
   }
-
+  /**
+   * Amanatsuの生成。
+   * @param oontent Amanatsuを使用するActivity。
+   * @param gview GameViewインターフェースを継承したクラス。
+   * @param multitouch マルチタッチの有無(true=マルチタッチ, false=シングルタッチ)。
+   */
   public Amanatsu( Context context, GameView gview, boolean multitouch )
   {
     this( context, gview, multitouch, true );
   }
 
+  /**
+   * Amanatsuの生成。
+   * @param oontent Amanatsuを使用するActivity。
+   * @param gview GameViewインターフェースを継承したクラス。
+   * @param multitouch マルチタッチの有無(true=マルチタッチ, false=シングルタッチ)。
+   * @param logo Amanatsuのロゴの表示(true=表示する, false=表示しない)。
+   */
   public Amanatsu( Context context, GameView gview, boolean multitouch, boolean logo )
   {
     this.context = context;
@@ -101,7 +113,7 @@ public class Amanatsu
   }
 
   /**
-   * Start game.
+   * ゲームの処理を開始する。
    */
   public boolean start()
   {
@@ -110,7 +122,7 @@ public class Amanatsu
   }
 
   /**
-   * End game.
+   * ゲームの処理を止める。
    */
   public void stop()
   {
@@ -435,10 +447,10 @@ class GLLoopCleanUp implements GLLoop
 
 class TouchEvent extends AmanatsuKey implements AmanatsuInput
 {
-  private float basex, basey, width, height, W, H;
-  private float x, y;
-  private boolean touched;
-  private int frame;
+  protected float basex, basey, width, height, W, H;
+  protected float x, y;
+  protected boolean touched;
+  protected int frame;
 
 
   public TouchEvent()
@@ -563,16 +575,12 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
 
 }
 
-class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
+class MultiTouchEvent extends TouchEvent implements AmanatsuInput
 {
-  private float basex, basey, width, height, W, H;
-  private float x, y;
-  private boolean touched;
-  private int frame;
   private float[] mx, my;
   private int[] fid;
   private int len = 0, max = 0;
-  private static Map<Integer, Finger> finger = new Hashtable<Integer, Finger>( 15 );
+  private static Map<Integer, Finger> finger = new Hashtable<Integer, Finger>( 16 );
 
   // tmp;
   private Iterator< Map.Entry<Integer, Finger> > itf;
@@ -584,23 +592,6 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   public MultiTouchEvent()
   {
     touched = false;
-  }
-
-  @Override
-  public boolean setWindowSize( float width, float height )
-  {
-    W = width;
-    H = height;
-    return true;
-  }
-  @Override
-  public boolean setInputArea(float x, float y, float width, float height)
-  {
-    basex = x;
-    basey = y;
-    this.width = width;
-    this.height = height;
-    return true;
   }
 
   @Override
@@ -655,15 +646,7 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
   {
     int n, id;
 
-    this.x = event.getX();
-    this.y = event.getY();
-    if ( event.getAction() == MotionEvent.ACTION_UP )
-    {
-      touched = false;
-    }else
-    {
-      touched = true;
-    }
+    super.touch( event );
 
     int len = event.getPointerCount();
     if ( len > max )
@@ -711,24 +694,6 @@ class MultiTouchEvent extends AmanatsuKey implements AmanatsuInput
     }
 
     return true;
-  }
-
-  @Override
-  public float getX()
-  {
-    return  basex + x / W * width; // TODO index over length
-  }
-
-  @Override
-  public float getY()
-  {
-    return basey + y / H * height;
-  }
-
-  @Override
-  public int getTouchFrame()
-  {
-    return frame;
   }
 
   @Override

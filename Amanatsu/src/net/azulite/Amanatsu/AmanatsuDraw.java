@@ -127,6 +127,16 @@ public class AmanatsuDraw
     gl.glCullFace( GL10.GL_BACK );
 
   }
+
+  /**
+   * スクリーンサイズの設定。
+   * スクリーンサイズとは画面全体をウィンドウとした時、その一部分を切り取ったものを指します。
+   * 開始座標と領域で指定することが可能です。
+   * @param x 開始X座標。
+   * @param y 開始Y座標。
+   * @param width 横幅。
+   * @param height 高さ。
+   */
   public boolean setScreenSize( float x, float y, float width, float height )
   {
     if ( ama.input != null )
@@ -145,6 +155,11 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * スクリーンの移動。
+   * @param x 移動先X座標。
+   * @param y 移動先Y座標。
+   */
   public boolean moveScreen( float x, float y )
   {
     basex = x;
@@ -163,16 +178,31 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * Return FPS.
+   */
   public float getFps()
   {
     return ama.render.getFps();
   }
 
+  /**
+   * FPSの設定、
+   * @param fps FPSの設定(Amanatsuのデフォルトは30.0f)。
+   */
   public float setFps( float fps )
   {
     return ama.render.setFps( fps );
   }
 
+  /**
+   * 描画モードの設定。
+   * 描画モードを切り替えます。
+   * Amanatsu.DRAW_ADD=加算合成。
+   * Amanatsu.DRAW_MUL=乗算合成。
+   * Amanatsu.DRAW_TRC=透過色有効通常合成。
+   * @param type Amanatsu.DRAW_* で設定されている描画モード。
+   */
   public boolean setRender( int type )
   {
     switch ( type )
@@ -198,7 +228,10 @@ public class AmanatsuDraw
   }
 
   /**
-   * Clear Screen(black).
+   * 画面のクリア。
+   * 画面を黒で塗りつぶします。
+   * MainLoop開始時に一度実行してください。
+   * また、画面クリア前に描画していた命令は全て消されてしまうので気をつけて下さい。
    */
   public boolean clearScreen()
   {
@@ -206,10 +239,9 @@ public class AmanatsuDraw
   }
 
   /**
-   * Clear Screen.
-   * @param red Red color(0.0f-1.0f).
-   * @param red Green color(0.0f-1.0f).
-   * @param red Blue color(0.0f-1.0f).
+   * 画面のクリア。
+   * 任意の色で画面を塗りつぶします(アルファ値は無視)。
+   * @param color GameColorのインスタンス。
    */
   public boolean clearScreen( GameColor color )
   {
@@ -217,16 +249,42 @@ public class AmanatsuDraw
   }
 
   /**
-   * Clear Screen.
-   * @param red Red color(0.0f-1.0f).
-   * @param red Green color(0.0f-1.0f).
-   * @param red Blue color(0.0f-1.0f).
+   * 画面のクリア。
+   * 任意の色で画面を塗りつぶします(アルファ値は無視)。
+   * @param color 色配列( 赤, 緑, 青 ).各色の強さは0-255。
+   */
+  public boolean clearScreen( byte[] color )
+  {
+    return clearScreen( (float)color[ 0 ] / 255.0f, (float)color[ 1 ] / 255.0f, (float)color[ 2 ] / 255.0f );
+  }
+
+  /**
+   * 画面のクリア。
+   * 任意の色で画面を塗りつぶします(アルファ値は無視)。
+   * @param color 色配列( 赤, 緑, 青 ).各色の強さは0.0f-1.0f。
    */
   public boolean clearScreen( float[] color )
   {
     return clearScreen( color[ 0 ], color[ 1 ], color[ 2 ] );
   }
 
+  /**
+   * 画面のクリア。
+   * @param red 赤(0-255).
+   * @param green 緑(0-255).
+   * @param blue 青(0-255).
+   */
+  public boolean clearScreen( byte red, byte green, byte blue )
+  {
+    return clearScreen( (float)red / 255.0f, (float)green / 255.0f, (float)blue / 255.0f );
+  }
+
+  /**
+   * 画面のクリア。
+   * @param red 赤(0.0f-1.0f).
+   * @param green 緑(0.0f-1.0f).
+   * @param blue 青(0.0f-1.0f).
+   */
   public boolean clearScreen( float red, float green, float blue )
   {
     gl.glClearColor( red, green, blue, 1.0f );
@@ -234,16 +292,35 @@ public class AmanatsuDraw
 
     return true;
   }
+
+  /**
+   * テクスチャの生成(リソースから)。
+   * テクスチャをリソースから生成する。テクスチャ番号はリソース番号となる。
+   * @param rnum リソース番号。
+   */
   public int createTexture( int rnum )
   {
     return createTextureFromBitmap( rnum, BitmapFactory.decodeResource( resource, rnum ), true );
   }
 
+  /**
+   * テクスチャの生成(リソースから)。
+   * テクスチャ番号は自分で設定する。
+   * @param tnum テクスチャ番号。
+   * @param rnum リソース番号。
+   */
   public int createTexture( int tnum, int rnum )
   {
     return createTextureFromBitmap( tnum, BitmapFactory.decodeResource( resource, rnum ), true );
   }
 
+  /**
+   * テクスチャの設定(assets)。
+   * assets内に格納したファイルからテクスチャを生成する。
+   * ファイルパスはassetsをrootにした場合。
+   * @param tnum テクスチャ番号。
+   * @param path ファイルパス。
+   */
   public int createTexture( int tnum, String path )
   {
     try
@@ -256,12 +333,18 @@ public class AmanatsuDraw
     return -1;
   }
 
-  public int createTexture( int rnum, Bitmap bmp )
+  /**
+   * テクスチャの生成(Bitmap)。
+   * Bitmapからテクスチャを生成する。
+   * @param tnum テクスチャ番号。
+   * @param bmp Bitmapのインスタンス。
+   */
+  public int createTexture( int tnum, Bitmap bmp )
   {
-    return createTextureFromBitmap( rnum, bmp, true );
+    return createTextureFromBitmap( tnum, bmp, true );
   }
 
-  private int createTextureFromBitmap( int rnum, Bitmap bmp, boolean regist )
+  private int createTextureFromBitmap( int tnum, Bitmap bmp, boolean regist )
   {
     if ( bmp == null )
     {
@@ -270,15 +353,15 @@ public class AmanatsuDraw
 
     if ( regist )
     {
-      if ( textures.containsKey( rnum ) )
+      if ( textures.containsKey( tnum ) )
       {
-        releaseTexture( rnum );
-        ttex = textures.get( rnum );
+        releaseTexture( tnum );
+        ttex = textures.get( tnum );
       } else
       {
         ttex = new Texture();
         ttex.texid = new int [ 1 ];
-        textures.put( rnum, ttex );
+        textures.put( tnum, ttex );
       }
     } else
     {
@@ -308,33 +391,50 @@ public class AmanatsuDraw
 
     if ( regist )
     {
-      setColor( rnum );
+      setColor( tnum );
       bmp.recycle();
     }
 
     return ttex.texid[ 0 ];
   }
 
-  public boolean existTexture( int rnum ){ return (textures.containsKey( rnum ) && textures.get( rnum ).texid != null );}
+  /**
+   * テクスチャの存在チェック。
+   * @param tnum テクスチャ番号。
+   */
+  public boolean existTexture( int tnum ){ return (textures.containsKey( tnum ) && textures.get( tnum ).texid != null );}
 
-  public void destroyTexture( int rnum )
+  /**
+   * テクスチャの破棄。
+   * @param tnum テクスチャ番号。
+   */
+  public void destroyTexture( int tnum )
   {
-    if ( releaseTexture( rnum ) )
+    if ( releaseTexture( tnum ) )
     {
-      textures.remove( rnum );
+      textures.remove( tnum );
     }
   }
 
-  public boolean releaseTexture( int rnum )
+  // TODO
+  /**
+   * テクスチャの解放。
+   * @param tnum テクスチャ番号。
+   */
+  public boolean releaseTexture( int tnum )
   {
-    if ( existTexture( rnum ) )
+    if ( existTexture( tnum ) )
     {
-      gl.glDeleteTextures( 1, textures.get( rnum ).texid, 0 );
+      gl.glDeleteTextures( 1, textures.get( tnum ).texid, 0 );
       return true;
     }
     return false;
   }
 
+  // TODO
+  /**
+   * テクスチャを全て解放。
+   */
   public void releaseTextureAll()
   {
     List<Integer> keys = new ArrayList<Integer>( textures.keySet() );
@@ -408,19 +508,11 @@ public class AmanatsuDraw
     return createFloatBuffer( col );
   }
 
-  public final void setColor( int rnum, float col )
-  {
-    float[] color =
-    {
-      col, col, col, col,
-      col, col, col, col,
-      col, col, col, col,
-      col, col, col, col,
-    };
-    setColor( rnum, color );
-  }
-
-  public final void setColor( int rnum )
+  /**
+   * Set texture color default(white).
+   * @param tnum Texture number.
+   */
+  public final void setColor( int tnum )
   {
     float[] color =
     {
@@ -429,40 +521,86 @@ public class AmanatsuDraw
       1.0f, 1.0f, 1.0f, 1.0f,
       1.0f, 1.0f, 1.0f, 1.0f,
     };
-    setColor( rnum, color );
+    setColor( tnum, color );
   }
 
-  public final void setColor( int rnum, GameColor color )
+  /**
+   * Set texture color(red, green, blue same power).
+   * @param tnum Texture number.
+   * @param col Color power(0.0f-1.0f).
+   */
+  public final void setColor( int tnum, float col )
   {
-    setColor( rnum, color.color );
+    float[] color =
+    {
+      col, col, col, 1.0f,
+      col, col, col, 1.0f,
+      col, col, col, 1.0f,
+      col, col, col, 1.0f,
+    };
+    setColor( tnum, color );
   }
 
-  public final void setColor( int rnum, float[] color )
+  /**
+   * Set texture color.
+   * @param tnum Texture number.
+   * @param color GameColor.
+   */
+  public final void setColor( int tnum, GameColor color )
+  {
+    setColor( tnum, color.color );
+  }
+
+  /**
+   * Set texture color.
+   * @param tnum Texture number.
+   * @param color Color float array(red, green blue, alpha).
+   */
+  public final void setColor( int tnum, float[] color )
   {
     Texture tex;
 
-    if ( existTexture( rnum ) == false )
+    if ( existTexture( tnum ) == false )
     {
       return;
     }
 
-    tex = textures.get( rnum );
+    tex = textures.get( tnum );
     tex.col  = createFloatBuffer( color );
   }
 
+  // TODO setAlpha
+
+  /**
+   * Set texture UV.
+   * @param tex Texture/
+   * @param uv UV float array( x0, y0, x1, y1, x2, y2, x3, y3 ).
+   */
   public final boolean setUV( Texture tex, float[] uv )
   {
     tex.uv  = createFloatBuffer( uv );
     return true;
   }
 
+  /**
+   * Set texture draw vertex.
+   * @param tex Texture.
+   * @param vert Draw vertex float array( x0, y0, x1, y1, x2 y2, x3, y3 ).
+   */
   public final boolean setVertex( Texture tex, float[] vert )
   {
     tex.ver = createFloatBuffer( vert );
     return true;
   }
 
+  /**
+   * Get window width.
+   */
   public final int getWidth(){ return width; }
+
+  /**
+   * Get window height.
+   */
   public final int getHeight(){ return height; }
 
   public boolean setWindowSize( int width, int height )
@@ -472,9 +610,14 @@ public class AmanatsuDraw
     return true;
   }
 
-  public final Texture getTexture( int rnum ){ return textures.get( rnum ); }
+  /**
+   * Get texture data.
+   * @param tnum Texture number.
+   */
+  public final Texture getTexture( int tnum ){ return textures.get( tnum ); }
 
   // Support OpenGL.
+
   public static final Bitmap resizeBitmap( Bitmap bmp, int length )
   {
     Bitmap nbmp = Bitmap.createBitmap( length, length, Bitmap.Config.ARGB_8888);
@@ -506,12 +649,37 @@ public class AmanatsuDraw
     return ret;
   }
 
+  /**
+   * Create font.
+   * @param fnum Font number.
+   * @param size Font size.
+   */
   public boolean createFont( int fnum, int size ){ return createFont( fnum, size, false, GameColor.WHITE ); }
 
+  /**
+   * Create font.
+   * @param fnum Font number.
+   * @param size Font size.
+   * @param antialias Antialias.
+   */
   public boolean createFont( int fnum, int size, boolean antialias ){ return createFont( fnum, size, antialias, GameColor.WHITE ); }
 
+  /**
+   * Create font.
+   * @param fnum Font number.
+   * @param size Font size.
+   * @param antialias Antialias.
+   * @param color GameColor.
+   */
   public boolean createFont( int fnum, int size, boolean antialias, GameColor color ){ return createFont( fnum, size, antialias, color.color ); }
 
+  /**
+   * Create font.
+   * @param fnum Font number.
+   * @param size Font size.
+   * @param antialias Antialias.
+   * @param color Color float array( red, green, blue, alpha ).
+   */
   public boolean createFont( int fnum, int size, boolean antialias, float[] color )
   {
     if ( paints.containsKey( fnum ) == false )
@@ -530,6 +698,13 @@ public class AmanatsuDraw
     return true;
   }
 
+  /**
+   * Print string.
+   * @param fnum Font number.
+   * @param dx Draw x.
+   * @param dy Draw y.
+   * @param str Print string.
+   */
   public boolean printf( int fnum, float dx, float dy, String str )
   {
     Canvas canvas = new Canvas( stringbmp );
@@ -560,46 +735,94 @@ public class AmanatsuDraw
   }
 
   // Base draw.
+
+  /**
+   * Draw line.
+   * @param sx Draw start x.
+   * @param sy Draw start y.
+   * @param ex Draw end x.
+   * @param ey Draw end y.
+   * @param color GameColor.
+   */
   public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color )
   {
     return drawLine( sx, sy, ex, ey, 1.0f, color.color );
   }
 
+  /**
+   * Draw line.
+   * @param sx Draw start x.
+   * @param sy Draw start y.
+   * @param ex Draw end x.
+   * @param ey Draw end y.
+   * @param color Color float array( red, green, blue, alpha ).
+   */
   public boolean drawLine( float sx, float sy, float ex, float ey, float[] color )
   {
     return drawLine( sx, sy, ex, ey, 1.0f, color );
   }
 
+  /**
+   * Draw line.
+   * @param sx Draw start x.
+   * @param sy Draw start y.
+   * @param ex Draw end x.
+   * @param ey Draw end y.
+   * @param width Line width.
+   * @param color GameColor.
+   */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, GameColor color )
   {
     return drawLine( sx, sy, ex, ey, width, color.color );
   }
 
+  /**
+   * Draw line.
+   * @param sx Draw start x.
+   * @param sy Draw start y.
+   * @param ex Draw end x.
+   * @param ey Draw end y.
+   * @param width Line width.
+   * @param color Color float array( red, green, blue, alpha ).
+   */
   public boolean drawLine( float sx, float sy, float ex, float ey, float width, float[] color )
   {
     gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
 
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+    //setFloatArray8( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ], color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+    gl.glColorPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr8 ) );
     gl.glLineWidth( width );
     setFloatArray6( sx, sy, 1.0f, ex, ey, 1.0f );
     gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, createFloatBuffer( farr6 ) );
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 2 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
 
     return true;
   }
 
   /**
-   * @param x Draw x oordinate.
-   * @param y Draw y cordinate.
+   * @param x Draw x.
+   * @param y Draw y.
    * @param w Width.
    * @param h Height.
-   * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
-   * */
+   * @param color GameColor.
+   */
   public boolean drawBox( float x, float y, float w, float h, GameColor color )
   {
     return drawBox( x, y, w, h, color.color );
   }
+
+  /**
+   * @param x Draw x.
+   * @param y Draw y.
+   * @param w Width.
+   * @param h Height.
+   * @param color Color float array(red, green, blue, alpha).
+   */
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
     setFloatArray8( x, y, x + w, y, x, y + h, x + w, y + h );
@@ -609,17 +832,24 @@ public class AmanatsuDraw
   }
 
   /**
-   * @param x Draw x oordinate(center).
-   * @param y Draw y cordinate(center).
+   * @param x Draw x(center).
+   * @param y Draw y(center).
    * @param w Width.
    * @param h Height.
-   * @param color [ red, green, blue, alpha ] array(value 0.0f-1.0f).
-   * */
+   * @param color GameColor.
+   */
   public boolean drawBoxC( float x, float y, float w, float h, GameColor color )
   {
     return drawBoxC( x, y, w, h, color.color );
   }
 
+  /**
+   * @param x Draw x(center).
+   * @param y Draw y(center).
+   * @param w Width.
+   * @param h Height.
+   * @param color Color float array(red, green, blue, alpha).
+   */
   public boolean drawBoxC( float x, float y, float w, float h, float[] color )
   {
     setFloatArray8( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
@@ -648,7 +878,7 @@ public class AmanatsuDraw
    * @param rnum Resource or Texture number.
    * @param dx Draw x coordinate.
    * @param dy Draw y coordinate.
-   * */
+   */
   public boolean drawTexture( int rnum, float dx, float dy )
   {
 
@@ -672,7 +902,7 @@ public class AmanatsuDraw
    * @param rnum Resource or Texture number.
    * @param dx Draw x coordinate(center).
    * @param dy Draw y coordinate(center).
-   * */
+   */
   public boolean drawTextureC( int rnum, float dx, float dy )
   {
 
@@ -704,7 +934,7 @@ public class AmanatsuDraw
    * @param h Height.
    * @param dx Draw x coordinate.
    * @param dy Draw y coordinate.
-   * */
+   */
   public boolean drawTexture( int rnum,
       float rx, float ry, float w, float h,
       float dx, float dy )
@@ -737,7 +967,7 @@ public class AmanatsuDraw
    * @param h Height.
    * @param dx Draw x coordinate(center).
    * @param dy Draw y coordinate(center).
-   * */
+   */
   public boolean drawTextureC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy )
@@ -776,7 +1006,7 @@ public class AmanatsuDraw
    * @param dy Draw y coordinate.
    * @param dw Draw width.
    * @param dh Draw height.
-   * */
+   */
   public boolean drawTextureScaring( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
@@ -811,7 +1041,7 @@ public class AmanatsuDraw
    * @param dy Draw y coordinate(center).
    * @param dw Draw width.
    * @param dh Draw height.
-   * */
+   */
   public boolean drawTextureScaringC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
@@ -849,7 +1079,7 @@ public class AmanatsuDraw
    * @param dx Draw x coordinate.
    * @param dy Draw y coordinate.
    * @param scale Draw scale.
-   * */
+   */
   public boolean drawTextureScaring( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
@@ -883,7 +1113,7 @@ public class AmanatsuDraw
    * @param dx Draw x coordinate(center).
    * @param dy Draw y coordinate(center).
    * @param scale Draw scale.
-   * */
+   */
   public boolean drawTextureScaringC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
@@ -922,7 +1152,7 @@ public class AmanatsuDraw
    * @param dx Draw x coordinate(center).
    * @param dy Draw y coordinate(center).
    * @param rad Rotation radian.
-   * */
+   */
   public boolean drawTextureRotationC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float rad )
@@ -1031,7 +1261,7 @@ public class AmanatsuDraw
    * @param dy Draw y coordinate(center).
    * @param scale Draw scale.
    * @param rad Rotation radian.
-   * */
+   */
   public boolean drawTextureScaleRotateC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float rad )
@@ -1088,7 +1318,7 @@ public class AmanatsuDraw
    * @param dy Draw y coordinate(center).
    * @param scale Draw scale.
    * @param angle Rotation angle.
-   * */
+   */
   public boolean drawTextureScaleRotateAngleC( int rnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale, float angle )
@@ -1142,7 +1372,7 @@ public class AmanatsuDraw
    * @param w Width.
    * @param h Height.
    * @param matrix44 4 * 4 draw matrix.
-   * */
+   */
   public boolean drawTextureMatrix( int rnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
@@ -1193,7 +1423,7 @@ public class AmanatsuDraw
    * @param dx Draw x coordinate(center).
    * @param dy Draw y coordinate(center).
    * @param matrix44 4 * 4 draw matrix.
-   * */
+   */
   public boolean drawTextureMatrixC( int rnum,
     float rx, float ry, float w, float h,
     float[] matrix44 )
@@ -1249,7 +1479,7 @@ public class AmanatsuDraw
    * @param dy2 Draw y coordinate(left down).
    * @param dx3 Draw x coordinate.
    * @param dy3 Draw y coordinate.
-   * */
+   */
   public boolean drawTextureVertex( int rnum,
     float rx, float ry, float w, float h,
     float dx0, float dy0,

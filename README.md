@@ -43,18 +43,18 @@ public class XXXXX extends Activity
 class Game implements GameView
 {
   @Override
-  public void UserInit(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+  public void UserInit( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
     // Prepare game.
   }
 
   @Override
-  public boolean MainLoop(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+  public boolean MainLoop( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
     // Game main routine.
     return true; // false is Game end.
   }
 
   @Override
-  public void CleanUp(  AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
+  public void CleanUp( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound ) {
     // Cleanup game.
   }
 
