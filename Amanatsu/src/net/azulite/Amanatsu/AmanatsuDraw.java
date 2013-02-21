@@ -45,6 +45,8 @@ public class AmanatsuDraw
   private AssetManager assets;
   private static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >( 50 );
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
+  private static float[] circlepoint;
+  private static int circlepointnum = 32;
 
   // Box
   private Texture boxtex;
@@ -55,7 +57,7 @@ public class AmanatsuDraw
   private int stringnum;
 
   // tmp.
-  private float[] farr4, farr6, farr8, mat;
+  private float[] farr, farr4, mat;
   private Texture ttex;
   private Paint tpaint;
 
@@ -64,10 +66,10 @@ public class AmanatsuDraw
     this.ama = ama;
     resource = ama.getContext().getResources();
     assets = ama.getContext().getResources().getAssets();
+    farr = new float[ 10 ];
     farr4 = new float[ 4 ];
-    farr6 = new float[ 6 ];
-    farr8 = new float[ 8 ];
     mat = new float[ 16 ];
+    circlepoint = new float[ ( circlepointnum + 2 ) * 2 ];
   }
 
   public String getGLVersion(){ return gl.glGetString( GL10.GL_VERSION ); }
@@ -83,8 +85,8 @@ public class AmanatsuDraw
     boxtex = ttex;
 
     boxtex.col  = createFloatBuffer( new float[]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f } );
-    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    boxtex.uv   = createFloatBuffer( farr8 );
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    boxtex.uv   = createFloatBuffer( farr );
 
     stringbmp = Bitmap.createBitmap( 1024, 1024, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
     createTextureFromBitmap( 0, stringbmp, false );
@@ -180,7 +182,7 @@ public class AmanatsuDraw
   }
 
   /**
-   * Return FPS.
+   * @return FPS。
    */
   public float getFps()
   {
@@ -432,7 +434,6 @@ public class AmanatsuDraw
     return false;
   }
 
-  // TODO
   /**
    * テクスチャを全て解放。
    */
@@ -445,25 +446,27 @@ public class AmanatsuDraw
     }
   }
 
-  private final void setFloatArray4( float f0, float f1, float f2, float f3 )
+  private final void setFloatArray( float f0, float f1, float f2, float f3 )
   {
-    farr4[ 0 ] = f0; farr4[ 1 ] = f1;
-    farr4[ 2 ] = f2; farr4[ 3 ] = f3;
+    farr[ 0 ] = f0; farr[ 1 ] = f1;
+    farr[ 2 ] = f2; farr[ 3 ] = f3;
   }
 
-  private final void setFloatArray6( float f0, float f1, float f2, float f3, float f4, float f5 )
+  private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7 )
   {
-    farr6[ 0 ] = f0; farr6[ 1 ] = f1;
-    farr6[ 2 ] = f2; farr6[ 3 ] = f3;
-    farr6[ 4 ] = f4; farr6[ 5 ] = f5;
+    farr[ 0 ] = f0; farr[ 1 ] = f1;
+    farr[ 2 ] = f2; farr[ 3 ] = f3;
+    farr[ 4 ] = f4; farr[ 5 ] = f5;
+    farr[ 6 ] = f6; farr[ 7 ] = f7;
   }
 
-  private final void setFloatArray8( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7 )
+  private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9 )
   {
-    farr8[ 0 ] = f0; farr8[ 1 ] = f1;
-    farr8[ 2 ] = f2; farr8[ 3 ] = f3;
-    farr8[ 4 ] = f4; farr8[ 5 ] = f5;
-    farr8[ 6 ] = f6; farr8[ 7 ] = f7;
+    farr[ 0 ] = f0; farr[ 1 ] = f1;
+    farr[ 2 ] = f2; farr[ 3 ] = f3;
+    farr[ 4 ] = f4; farr[ 5 ] = f5;
+    farr[ 6 ] = f6; farr[ 7 ] = f7;
+    farr[ 8 ] = f8; farr[ 9 ] = f9;
   }
 
   private static final FloatBuffer createColor( float[] color )
@@ -785,11 +788,11 @@ public class AmanatsuDraw
 
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
 
-    setFloatArray8( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
-    stringtex.ver = createFloatBuffer( farr8 );
+    setFloatArray( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
+    stringtex.ver = createFloatBuffer( farr );
 
-    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    stringtex.uv   = createFloatBuffer( farr8 );
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    stringtex.uv   = createFloatBuffer( farr );
 
     return drawTexture( stringtex );
   }
@@ -797,65 +800,58 @@ public class AmanatsuDraw
   // Base draw.
 
   /**
-   * 先の描画。
+   * 線の描画。
    * @param sx 描画開始X座標。
    * @param sy 描画開始Y座標。
    * @param ex 描画終了X座標。
    * @param ey 描画終了Y座標。
    * @param color GameColorインスタンス。
    */
-  public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color )
-  {
-    return drawLine( sx, sy, ex, ey, 1.0f, color.color );
-  }
+  public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color ){ return drawLine( sx, sy, ex, ey, color.color, 1.0f, false ); }
 
   /**
-   * 先の描画。
+   * 線の描画。
    * @param sx 描画開始X座標。
    * @param sy 描画開始Y座標。
    * @param ex 描画終了X座標。
    * @param ey 描画終了Y座標。
    * @param color 色配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
    */
-  public boolean drawLine( float sx, float sy, float ex, float ey, float[] color )
-  {
-    return drawLine( sx, sy, ex, ey, 1.0f, color );
-  }
+  public boolean drawLine( float sx, float sy, float ex, float ey, float[] color ){ return drawLine( sx, sy, ex, ey, color, 1.0f, false ); }
 
   /**
-   * 先の描画。
+   * 線の描画。
    * @param sx 描画開始X座標。
    * @param sy 描画開始Y座標。
    * @param ex 描画終了X座標。
    * @param ey 描画終了Y座標。
-   * @param width 線の太さ。
    * @param color GameColorインスタンス。
+   * @param width 線の太さ。
    */
-  public boolean drawLine( float sx, float sy, float ex, float ey, float width, GameColor color )
-  {
-    return drawLine( sx, sy, ex, ey, width, color.color );
-  }
+  public boolean drawLine( float sx, float sy, float ex, float ey, GameColor color, float width ){ return drawLine( sx, sy, ex, ey, color.color, width, false ); }
 
   /**
-   * 先の描画。
+   * 線の描画。
    * @param sx 描画開始X座標。
    * @param sy 描画開始Y座標。
    * @param ex 描画終了X座標。
    * @param ey 描画終了Y座標。
-   * @param width 線の太さ。
    * @param color 色配列( red, green, blue, alpha ).各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
    */
-  public boolean drawLine( float sx, float sy, float ex, float ey, float width, float[] color )
+  public boolean drawLine( float sx, float sy, float ex, float ey, float[] color, float width, boolean antialias )
   {
     gl.glDisable( GL10.GL_TEXTURE_2D );
     gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
 
+    // TODO antialias
+
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
-    //setFloatArray8( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ], color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
-    gl.glColorPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr8 ) );
     gl.glLineWidth( width );
-    setFloatArray6( sx, sy, 1.0f, ex, ey, 1.0f );
-    gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, createFloatBuffer( farr6 ) );
+
+    setFloatArray( sx, sy, ex, ey );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr ) );
+
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 2 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -865,6 +861,106 @@ public class AmanatsuDraw
   }
 
   /**
+   * 箱の線の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
+   */
+  public boolean drawBoxLine( float x, float y, float w, float h, GameColor color ){ return drawBoxLine( x, y, w, h, color.color, 1.0f ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列( red, green, blue, alpha ).各色の強さは0.0f-1.0f。
+   */
+  public boolean drawBoxLine( float x, float y, float w, float h, float[] color ){ return drawBoxLine( x, y, w, h, color, 1.0f ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
+   * @param width 線の太さ。
+   */
+  public boolean drawBoxLine( float x, float y, float w, float h, GameColor color, float width ){ return drawBoxLine( x, y, w, h, color.color, width ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画X座標。
+   * @param y 描画Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列( red, green, blue, alpha ).各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   */
+  public boolean drawBoxLine( float x, float y, float w, float h, float[] color, float width )
+  {
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glLineWidth( width );
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    setFloatArray( x, y, x + w, y, x + w, y + h, x, y + h, x, y );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr ) );
+
+    gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 4 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
+   */
+  public boolean drawBoxLineC( float x, float y, float w, float h, GameColor color ){ return drawBoxLine( x - w / 2.0f, y - h / 2.0f, w, h, color.color, 1.0f ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawBoxLineC( float x, float y, float w, float h, float[] color ){ return drawBoxLine( x - w / 2.0f, y - h / 2.0f, w, h, color, 1.0f ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color GameColorインスタンス。
+   */
+  public boolean drawBoxLineC( float x, float y, float w, float h, GameColor color, float width ){ return drawBoxLine( x - w / 2.0f, y - h / 2.0f, w, h, color.color, width ); }
+
+  /**
+   * 箱の線の描画。
+   * @param x 描画中心X座標。
+   * @param y 描画中心Y座標。
+   * @param w 横幅。
+   * @param h 高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawBoxLineC( float x, float y, float w, float h, float[] color, float width ){ return drawBoxLine( x - w / 2.0f, y - h / 2.0f, w, h, color, width ); }
+
+  /**
    * 箱の描画。
    * @param x 描画X座標。
    * @param y 描画Y座標。
@@ -872,10 +968,7 @@ public class AmanatsuDraw
    * @param h 高さ。
    * @param color GameColorインスタンス。
    */
-  public boolean drawBox( float x, float y, float w, float h, GameColor color )
-  {
-    return drawBox( x, y, w, h, color.color );
-  }
+  public boolean drawBox( float x, float y, float w, float h, GameColor color ){ return drawBox( x, y, w, h, color.color ); }
 
   /**
    * 箱の描画。
@@ -887,8 +980,8 @@ public class AmanatsuDraw
    */
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
-    setFloatArray8( x, y, x + w, y, x, y + h, x + w, y + h );
-    boxtex.ver = createFloatBuffer( farr8 );
+    setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
+    boxtex.ver = createFloatBuffer( farr );
     boxtex.col = createColor( color );
     return drawTexture( boxtex );
   }
@@ -901,10 +994,7 @@ public class AmanatsuDraw
    * @param h 高さ。
    * @param color GameColorインスタンス。
    */
-  public boolean drawBoxC( float x, float y, float w, float h, GameColor color )
-  {
-    return drawBoxC( x, y, w, h, color.color );
-  }
+  public boolean drawBoxC( float x, float y, float w, float h, GameColor color ){ return drawBoxC( x, y, w, h, color.color ); }
 
   /**
    * 箱の描画。
@@ -916,13 +1006,377 @@ public class AmanatsuDraw
    */
   public boolean drawBoxC( float x, float y, float w, float h, float[] color )
   {
-    setFloatArray8( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
-    boxtex.ver = createFloatBuffer( farr8 );
+    setFloatArray( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
+    boxtex.ver = createFloatBuffer( farr );
     boxtex.col = createColor( color );
     return drawTexture( boxtex );
   }
   
-  // TODO drawCircle
+  private void prepareCircle( float x, float y, float w, float h, boolean fan )
+  {
+    int i, count = 0;
+    float rad;
+
+    if ( fan )
+    {
+      circlepoint[ 0 ] = x;
+      circlepoint[ 1 ] = y;
+      count = 2;
+    }
+    circlepoint[ count++ ] = w + x;
+    circlepoint[ count ] = y;
+
+    for ( i = 1 ; i <= circlepointnum ; ++i )
+    {
+      rad = 2.0f * (float)i / (float) circlepointnum * (float)Math.PI;
+      circlepoint[ ++count ] = (float)Math.cos( rad ) * w + x;
+      circlepoint[ ++count ] = (float)Math.sin( rad ) * h + y;
+    }
+  }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, GameColor color ){ return drawCircleLine( x, y, w, h, color.color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, float[] color ){ return drawCircleLine( x, y, w, h, color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, GameColor color, float width ){ return drawCircleLine( x, y, w, h, color.color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, float[] color, float width ){ return drawCircleLine( x, y, w, h, color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, GameColor color, float width, boolean antialias ){ return drawCircleLine( x, y, w, h, color.color, width, antialias ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の開始X座標。
+   * @param y 円を収める箱の開始Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLine( float x, float y, float w, float h, float[] color, float width, boolean antialias )
+  {
+    // TODO antialias
+    w /= 2.0f;
+    h /= 2.0f;
+    prepareCircle( x + w, y + h, w, h, false );
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glLineWidth( width );
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color GameColorのインスタンス。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, GameColor color ){ return drawCircleLineC( x, y, r, color.color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, float[] color ){ return drawCircleLineC( x, y, r, color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, GameColor color, float width ){ return drawCircleLineC( x, y, r, color.color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, float[] color, float width ){ return drawCircleLineC( x, y, r, color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, GameColor color, float width, boolean antialias ){ return drawCircleLineC( x, y, r, color.color, width, antialias ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLineC( float x, float y, float r, float[] color, float width, boolean antialias )
+  {
+    // TODO antialias
+    prepareCircle( x, y, r, r, false );
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glLineWidth( width );
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, GameColor color ){ return drawCircleLineC( x, y, w, h, color.color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, float[] color ){ return drawCircleLineC( x, y, w, h, color, 1.0f, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, GameColor color, float width ){ return drawCircleLineC( x, y, w, h, color.color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, float[] color, float width ){ return drawCircleLineC( x, y, w, h, color, width, false ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, GameColor color, float width, boolean antialias ){ return drawCircleLineC( x, y, w, h, color.color, width, antialias ); }
+
+  /**
+   * 円の線の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   * @param width 線の太さ。
+   * @param antialias アンチエイリアス(まだ無効)。
+   */
+  public boolean drawCircleLineC( float x, float y, float w, float h, float[] color, float width, boolean antialias )
+  {
+    // TODO antialias
+    prepareCircle( x, y, w / 2.0f, h / 2.0f, false );
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glLineWidth( width );
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
+
+  /**
+   * 円の描画。
+   * @param x 円を収める箱のX座標。
+   * @param y 円を収める箱のY座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   */
+  public boolean drawCircle( float x, float y, float w, float h, GameColor color ){ return drawCircleC( x + w / 2.0f, y + h / 2.0f, w, h, color.color ); }
+
+  /**
+   * 円の描画。
+   * @param x 円を収める箱のX座標。
+   * @param y 円を収める箱のY座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircle( float x, float y, float w, float h, float[] color ){ return drawCircleC( x + w / 2.0f, y + h / 2.0f, w, h, color ); }
+
+  /**
+   * 円の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color GameColorのインスタンス。
+   */
+  public boolean drawCircleC( float x, float y, float w, float h, GameColor color )
+  {
+    return drawCircleC( x, y, w, h, color.color );
+  }
+
+  /**
+   * 円の描画。
+   * @param x 円を収める箱の中心X座標。
+   * @param y 円を収める箱の中心Y座標。
+   * @param w 円を収める箱の横幅。
+   * @param h 円を収める箱の高さ。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleC( float x, float y, float w, float h, float[] color )
+  {
+    prepareCircle( x, y, w / 2.0f, h / 2.0f, true );
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    gl.glDrawArrays( GL10.GL_TRIANGLE_FAN, 0, circlepointnum + 2 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
+
+  /**
+   * 円の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleC( float x, float y, float r, GameColor color )
+  {
+    return drawCircleC( x, y, r, color.color );
+  }
+
+  /**
+   * 円の描画。
+   * @param x 円の中心X座標。
+   * @param y 円の中心Y座標。
+   * @param r 円の半径。
+   * @param color 色配列(red, green, blue, alpha)。各色の強さは0.0f-1.0f。
+   */
+  public boolean drawCircleC( float x, float y, float r, float[] color )
+  {
+    prepareCircle( x, y, r, r, true );
+
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    gl.glDrawArrays( GL10.GL_TRIANGLE_FAN, 0, circlepointnum + 2 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+
+    return true;
+  }
 
   /**
    * テクスチャの描画。
@@ -959,11 +1413,11 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
-    ttex.ver = createFloatBuffer( farr8 );
+    setFloatArray( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
+    ttex.ver = createFloatBuffer( farr );
 
-    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr8 );
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    ttex.uv   = createFloatBuffer( farr );
 
     return drawTexture( ttex );
   }
@@ -985,15 +1439,15 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8(
+    setFloatArray(
       dx - ttex.width / 2.0f, dy - ttex.height / 2.0f,
       dx + ttex.width / 2.0f, dy - ttex.height / 2.0f,
       dx - ttex.width / 2.0f, dy + ttex.height / 2.0f,
       dx + ttex.width / 2.0f, dy + ttex.height );
-    ttex.ver = createFloatBuffer( farr8 );
+    ttex.ver = createFloatBuffer( farr );
 
-    setFloatArray8( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr8 );
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    ttex.uv   = createFloatBuffer( farr );
 
     return drawTexture( ttex );
   }
@@ -1019,15 +1473,15 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8( dx, dy, dx + w, dy, dx, dy + h, dx + w, dy + h );
-    setVertex( ttex, farr8 );
+    setFloatArray( dx, dy, dx + w, dy, dx, dy + h, dx + w, dy + h );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1053,19 +1507,19 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8(
+    setFloatArray(
       dx - w / 2.0f, dy - h / 2.0f,
       dx + w / 2.0f, dy - h / 2.0f,
       dx - w / 2.0f, dy + h / 2.0f,
       dx + w / 2.0f, dy + h / 2.0f );
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1093,15 +1547,15 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8( dx, dy, dx + dw, dy, dx, dy + dh, dx + dw, dy + dh );
-    setVertex( ttex, farr8 );
+    setFloatArray( dx, dy, dx + dw, dy, dx, dy + dh, dx + dw, dy + dh );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1128,19 +1582,19 @@ public class AmanatsuDraw
     }
     ttex = getTexture( tnum );
 
-    setFloatArray8(
+    setFloatArray(
       dx - dw / 2.0f, dy - dh / 2.0f,
       dx + dw / 2.0f, dy - dh / 2.0f,
       dx - dw / 2.0f, dy + dh / 2.0f,
       dx + dw / 2.0f, dy + dh / 2.0f );
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1167,15 +1621,15 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8( dx, dy, dx + w * scale, dy, dx, dy + h * scale, dx + w * scale, dy + h * scale );
-    setVertex( ttex, farr8 );
+    setFloatArray( dx, dy, dx + w * scale, dy, dx, dy + h * scale, dx + w * scale, dy + h * scale );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1203,19 +1657,19 @@ public class AmanatsuDraw
     ttex = getTexture( tnum );
 
     scale /= 2.0f;
-    setFloatArray8(
+    setFloatArray(
       dx - w * scale, dy - h * scale,
       dx + w * scale, dy - h * scale,
       dx - w * scale, dy + h * scale,
       dx + w * scale, dy + h * scale );
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1246,30 +1700,30 @@ public class AmanatsuDraw
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     return drawTexture( ttex );
   }
@@ -1300,30 +1754,30 @@ public class AmanatsuDraw
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
     AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx    / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
@@ -1358,30 +1812,30 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
@@ -1416,30 +1870,30 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
@@ -1468,30 +1922,30 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray4( 0.0f, 0.0f, 0.0f, 1.0f );
+    setFloatArray( 0.0f, 0.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w, 0.0f, 0.0f, 1.0f );
+    setFloatArray( w, 0.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( 0.0f, h, 0.0f, 1.0f );
+    setFloatArray( 0.0f, h, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w, h, 0.0f, 1.0f );
+    setFloatArray( w, h, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
@@ -1518,30 +1972,30 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 0 ] = farr4[ 0 ]; farr8[ 1 ] = farr4[ 1 ];
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 2 ] = farr4[ 0 ]; farr8[ 3 ] = farr4[ 1 ];
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 4 ] = farr4[ 0 ]; farr8[ 5 ] = farr4[ 1 ];
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
-    farr8[ 6 ] = farr4[ 0 ]; farr8[ 7 ] = farr4[ 1 ];
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
-    setVertex( ttex, farr8 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
@@ -1578,15 +2032,15 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray8( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
-    setVertex( ttex, farr8 );
+    setFloatArray( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
+    setVertex( ttex, farr );
 
-    setFloatArray8(
+    setFloatArray(
       rx     / ttex.width, ry     / ttex.height,
       rx + w / ttex.width, ry     / ttex.height,
       rx     / ttex.width, ry + h / ttex.height,
       rx + w / ttex.width, ry + h / ttex.height );
-    setUV( ttex, farr8 );
+    setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
 
