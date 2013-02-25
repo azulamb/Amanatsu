@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -24,7 +26,7 @@ import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.1.5
+ * @version 0.2.0
  */
 
 // Library
@@ -44,7 +46,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = "0.1.5";
+  private static String VERSION = new String( "0.2.0" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -60,8 +62,8 @@ public class Amanatsu
   protected GameView gview;
 
   protected GameGLSurfaceViewRender render;
-  protected AmanatsuInput input;
-  protected AmanatsuSound sound;
+  protected static AmanatsuInput input;
+  protected static AmanatsuSound sound;
 
   /**
    * Amanatsuの生成。
@@ -109,10 +111,26 @@ public class Amanatsu
     this.gview = gview;
 
     render = new GameGLSurfaceViewRender( this );
+
+    setGameView( gview );
+
     render.setGLLoop( new GLLoopAmanatsuOP( this, logo ) );
 
     view.setRenderer( render );
     view.setRenderMode( GLSurfaceView.RENDERMODE_WHEN_DIRTY );
+
+  }
+
+  /**
+   * GLSurfaceViewの登録と同時にゲームの実行を開始する。
+   * @param context Activityのインスタンス。
+   * @param gview GameViewを継承したクラスのインスタンス。
+   */
+  public static GLSurfaceView autoRunAmanatsu( Context context, GameView gview )
+  {
+    Amanatsu ama = new Amanatsu( context, gview );
+    ama.start();
+    return ama.getGLSurfaceView();
   }
 
   /**
@@ -133,19 +151,23 @@ public class Amanatsu
     render.term();
   }
 
-  // Setter.
+  /**
+   * GameViewをセットする。
+   * 前に設定したGameViewがある場合、前のGameViewのCleanUp()と新たに設定するGameViewのUserInit()が実行される。
+   */
   public GameView setGameView( GameView view )
   {
     GameView ret = this.gview;
     this.gview = view;
+    GameView.system = this;
     render.setGameView( view );// TODO Lock
     return ret;
   }
 
   public AmanatsuInput setInput( AmanatsuInput input )
   {
-    AmanatsuInput ret = this.input;
-    this.input = input;
+    AmanatsuInput ret = Amanatsu.input;
+    Amanatsu.input = input;
     /*int n;
     Class<?>[] interfaces = input.getClass().getInterfaces();
     for ( n = 0 ; n < interfaces.length ; ++n )
@@ -157,8 +179,8 @@ public class Amanatsu
 
   public AmanatsuSound setSound( AmanatsuSound sound )
   {
-    AmanatsuSound ret = this.sound;
-    this.sound = sound;
+    AmanatsuSound ret = Amanatsu.sound;
+    Amanatsu.sound = sound;
     return ret;
   }
 
@@ -177,7 +199,7 @@ class AmanatsuGLView extends GLSurfaceView
   {
     super( ama.getContext() );
 
-    input = ama.input;
+    input = Amanatsu.input;
     // Enable touch.
     setFocusable( true );
   }
@@ -204,10 +226,11 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 {
   private Amanatsu ama;
   private AmanatsuGLView glview;
-  protected GameView view = null;
+  protected GameView view = null, nextview;
   private AmanatsuDraw draw;
   protected GLLoop loop;
   private boolean loopflag = false;
+  private String gltype = "", glver = "";
 
   // FPS
   private long before, now, progress;
@@ -219,7 +242,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   {
     this.ama = ama;
     glview = ama.view;
-    setGameView( ama.gview );
+    //setGameView( ama.gview );
   }
 
   public void setGLLoop( GLLoop loop )
@@ -230,13 +253,25 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   protected GameView setGameView( GameView view )
   {
     GameView ret = this.view;
-    this.view = view;
+    if ( ret != null )
+    {
+      ret.CleanUp();
+      nextview = view;
+    } else
+    {
+      this.view = view;
+      nextview = view;
+    }
+    if ( ret != null )
+    {
+      view.UserInit();
+    }
     return ret;
   }
 
   public void term()
   {
-    view.CleanUp( draw, ama.input, ama.sound );
+    view.CleanUp();
   }
 
   public void start()
@@ -274,10 +309,16 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   {
     draw.setGL( gl );
 
-    ama.input.update();
+    Amanatsu.input.update();
 
     loop.run( draw );
     gl.glFlush();
+
+    if ( view != nextview )
+    {
+      view = nextview;
+      loop.setGameView( view );
+    }
 
     now = System.currentTimeMillis();
     progress = now - before;
@@ -304,15 +345,38 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   public void onSurfaceCreated( GL10 gl, EGLConfig config )
   {
     // TODO:select version
-    draw = new AmanatsuDraw( ama );
+    Pattern pattern = Pattern.compile( "OpenGL ES(-*[CML]*) ([0-9.]+)" );
+    Matcher matcher = pattern.matcher( gl.glGetString( GL10.GL_VERSION ) );
+    if ( matcher.find() )
+    {
+      gltype = matcher.group( 1 );
+      glver = matcher.group( 2 );
+    }
+    draw = new AmanatsuDraw( ama, gltype, glver );
     draw.init( gl );
+    if ( view != null )
+    {
+      GameView.draw = draw;
+      GameView.sound = Amanatsu.sound;
+      GameView.input = Amanatsu.input;
+    }
   }
 
 }
 
-interface GLLoop{ public void run( AmanatsuDraw draw ); }
+class GLLoop
+{
+  protected GameView view;
+  public GameView setGameView( GameView view )
+  {
+    GameView ret = this.view;
+    this.view = view;
+    return ret;
+  }
+  public void run( AmanatsuDraw draw ){}
+}
 
-class GLLoopAmanatsuOP implements GLLoop
+class GLLoopAmanatsuOP extends GLLoop
 {
   private Amanatsu ama;
   private int counter;
@@ -349,7 +413,7 @@ class GLLoopAmanatsuOP implements GLLoop
       {
         draw.printf( 0, draw.getWidth() / 2.0f - 50, draw.getHeight() / 2.0f + max / 2.0f, Amanatsu.getVersion() );
       }
-      draw.drawTextureScaring( 0, 0, 0, 256, 256, draw.getWidth() / 2 - max / 2, draw.getHeight() / 2 - max / 2, max, max );
+      draw.drawTextureScaling( 0, 0, 0, 256, 256, draw.getWidth() / 2 - max / 2, draw.getHeight() / 2 - max / 2, max, max );
       ++counter;
     } else if ( counter < 0 )
     {
@@ -369,16 +433,15 @@ class GLLoopAmanatsuOP implements GLLoop
   }
 }
 
-class GLLoopUserInit implements GLLoop
+class GLLoopUserInit extends GLLoop
 {
-  private GameView view;
   private Amanatsu ama;
   private int run = 0;
 
   public GLLoopUserInit( Amanatsu ama )
   {
     this.ama = ama;
-    this.view = ama.render.view;
+    setGameView( ama.render.view );
     this.run = 0;
   }
 
@@ -388,46 +451,40 @@ class GLLoopUserInit implements GLLoop
     if ( run == 0 )
     {
       run = 1;
-      view.UserInit( draw, ama.input, ama.sound );
+      view.UserInit();
       ama.render.loop = new GLLoopMainLoop( ama );
     }
   }
 }
 
-class GLLoopMainLoop implements GLLoop
+class GLLoopMainLoop extends GLLoop
 {
   private Amanatsu ama;
-  private GameView view;
-  private AmanatsuInput input;
-  private AmanatsuSound sound;
 
   public GLLoopMainLoop( Amanatsu ama )
   {
     this.ama = ama;
-    this.view = ama.render.view;
-    this.input = ama.input;
-    this.sound = ama.sound;
+    setGameView( ama.render.view );
   }
 
   @Override
   public void run( AmanatsuDraw draw )
   {
-    if ( view.MainLoop( draw, input, sound ) == false )
+    if ( view.MainLoop() == false )
     {
       ama.render.loop = new GLLoopCleanUp( ama );
     }
   }
 }
 
-class GLLoopCleanUp implements GLLoop
+class GLLoopCleanUp extends GLLoop
 {
-  private GameView view;
   private Amanatsu ama;
   private int run;
 
   public GLLoopCleanUp( Amanatsu ama )
   {
-    this.view = ama.render.view;
+    setGameView( ama.render.view );
     this.ama = ama;
     this.run = 0;
   }
@@ -438,10 +495,10 @@ class GLLoopCleanUp implements GLLoop
     if ( run == 0 )
     {
       run = 1;
-      view.CleanUp( draw, ama.input, ama.sound );
+      view.CleanUp();
       ama.stop();
       draw.release();
-      ama.sound.release();
+      Amanatsu.sound.release();
       ( (Activity) ama.getContext() ).finish();
     }
   }
@@ -527,7 +584,7 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   public int getTouchFrame() { return frame; }
 
   @Override
-  public int fingernum() { return (frame > 0) ? 1 : 0; }
+  public int fingerNum() { return (frame > 0) ? 1 : 0; }
 
   @Override
   public float getX( int num ) { return basex + x / W * width; }
@@ -674,7 +731,7 @@ class MultiTouchEvent extends TouchEvent implements AmanatsuInput
   }
 
   @Override
-  public int fingernum() { return len; }
+  public int fingerNum() { return len; }
 
   @Override
   public float getX( int num )

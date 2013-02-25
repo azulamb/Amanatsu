@@ -189,7 +189,7 @@ public class GameColor
    * @param blue 青(0-255)。
    * @param alpha 不透明度(0-255)。
    */
-  static final float[] createColor( byte red, byte green, byte blue, byte alpha )
+  public static final float[] createColor( byte red, byte green, byte blue, byte alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = (float)( red & 0xff ) / 255.0f;
@@ -206,7 +206,7 @@ public class GameColor
    * @param blue 青の強さ(0.0f-1.0f)。
    * @param alpha 不透明度(0.0f-1.0f)。
    */
-  static final float[] createColor( float red, float green, float blue, float alpha )
+  public static final float[] createColor( float red, float green, float blue, float alpha )
   {
     float[] color = new float[ 4 ];
     color[ 0 ] = red;

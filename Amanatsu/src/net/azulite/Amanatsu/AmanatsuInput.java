@@ -40,7 +40,7 @@ public interface AmanatsuInput
   /**
    * 指の数。
    */
-  public int fingernum();
+  public int fingerNum();
 
   /**
    * タッチX座標の取得。

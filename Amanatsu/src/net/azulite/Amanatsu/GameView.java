@@ -3,16 +3,19 @@ package net.azulite.Amanatsu;
 /**
  * Amanatsuに登録するゲームクラス。
  */
-public interface GameView
+public class GameView
 {
-
+  public static Amanatsu system;
+  public static AmanatsuDraw draw;
+  public static AmanatsuInput input;
+  public static AmanatsuSound sound;
   /**
    * 初めに一度だけ実行。
    * @param draw 描画サポートクラス。
    * @param input 入力サポートクラス。
    * @param sound 音サポートクラス。
    */
-  public void UserInit( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
+  public void UserInit(){}
 
   /**
    * 毎フレーム実行。
@@ -20,7 +23,11 @@ public interface GameView
    * @param input 入力サポートクラス。
    * @param sound 音サポートクラス。
    */
-  public boolean MainLoop( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
+  public boolean MainLoop()
+  {
+    draw.clearScreen();
+    return true;
+  }
 
   /**
    * 終了時に実行。
@@ -28,5 +35,5 @@ public interface GameView
    * @param input 入力サポートクラス。
    * @param sound 音サポートクラス。
    */
-  public void CleanUp( AmanatsuDraw draw, AmanatsuInput input, AmanatsuSound sound );
+  public void CleanUp(){}
 }

@@ -47,6 +47,7 @@ public class AmanatsuDraw
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
   private static float[] circlepoint;
   private static int circlepointnum = 32;
+  private String gltype, glver;
 
   // Box
   private Texture boxtex;
@@ -61,7 +62,7 @@ public class AmanatsuDraw
   private Texture ttex;
   private Paint tpaint;
 
-  public AmanatsuDraw( Amanatsu ama )
+  public AmanatsuDraw( Amanatsu ama, String gltype, String glver )
   {
     this.ama = ama;
     resource = ama.getContext().getResources();
@@ -69,10 +70,14 @@ public class AmanatsuDraw
     farr = new float[ 10 ];
     farr4 = new float[ 4 ];
     mat = new float[ 16 ];
+    this.gltype = gltype;
+    this.glver = glver;
     circlepoint = new float[ ( circlepointnum + 2 ) * 2 ];
   }
 
-  public String getGLVersion(){ return gl.glGetString( GL10.GL_VERSION ); }
+  public String getGLVersion_(){ return gl.glGetString( GL10.GL_VERSION ); }
+  public String getGLVersion(){ return glver; }
+  public String getGLType(){ return gltype; }
 
   public void init( GL10 gl )
   {
@@ -111,12 +116,12 @@ public class AmanatsuDraw
     {
       setWindowSize( width, height );
       setScreenSize( 0.0f, 0.0f, width, height );
-      ama.input.setWindowSize( width, height );
-      ama.input.setInputArea( 0.0f, 0.0f, width, height );
+      Amanatsu.input.setWindowSize( width, height );
+      Amanatsu.input.setInputArea( 0.0f, 0.0f, width, height );
     } else
     {
       setWindowSize( width, height );
-      ama.input.setWindowSize( width, height );
+      Amanatsu.input.setWindowSize( width, height );
     }
 
     gl.glEnable( GL10.GL_BLEND );
@@ -129,6 +134,11 @@ public class AmanatsuDraw
     gl.glEnable( GL10.GL_CULL_FACE );
     gl.glCullFace( GL10.GL_BACK );
 
+    gl.glDisable( GL10.GL_DEPTH_TEST );
+    gl.glDisable( GL10.GL_DITHER );
+
+    gl.glShadeModel( GL10.GL_FLAT );
+    gl.glHint( GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST );
   }
 
   /**
@@ -142,9 +152,9 @@ public class AmanatsuDraw
    */
   public boolean setScreenSize( float x, float y, float width, float height )
   {
-    if ( ama.input != null )
+    if ( Amanatsu.input != null )
     {
-      ama.input.setInputArea( x, y, width, height );
+      Amanatsu.input.setInputArea( x, y, width, height );
     }
     basex = x * this.width / width;
     basey = y * this.height / height;
@@ -376,11 +386,13 @@ public class AmanatsuDraw
     gl.glGenTextures( 1, ttex.texid, 0 );
     gl.glBindTexture( GL10.GL_TEXTURE_2D, ttex.texid[ 0 ] );
 
-    if ( AmanatsuDraw.isPowerOf2( bmp.getWidth() ) == false ||
-         AmanatsuDraw.isPowerOf2( bmp.getHeight() ) == false ||
-         bmp.getWidth() != bmp.getHeight() )
+    ttex.bwidth = bmp.getWidth();
+    ttex.bheight = bmp.getHeight();
+    if ( AmanatsuDraw.isPowerOf2( ttex.bwidth ) == false ||
+         AmanatsuDraw.isPowerOf2( ttex.bheight ) == false ||
+         ttex.bwidth != ttex.bheight )
     {
-      int length = AmanatsuDraw.convertPowerOf2( bmp.getWidth() >= bmp.getHeight() ? bmp.getWidth() : bmp.getHeight() );
+      int length = AmanatsuDraw.convertPowerOf2( ttex.bwidth >= ttex.bheight ? ttex.bwidth : ttex.bheight );
       bmp = AmanatsuDraw.resizeBitmap( bmp, length );
     }
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmp, 0 );
@@ -573,7 +585,34 @@ public class AmanatsuDraw
     tex.col  = createFloatBuffer( color );
   }
 
-  // TODO setAlpha
+  /**
+   * テクスチャのアルファ値の設定。
+   * @param tnum テクスチャ番号。
+   * @param alpha テクスチャのアルファ値。アルファ値の強さは0-255。
+   */
+  public final void setAlpha( int tnum, byte alpha )
+  {
+    setAlpha( tnum, (float)alpha / 255.0f );
+  }
+  
+  /**
+   * テクスチャのアルファ値の設定。
+   * @param tnum テクスチャ番号。
+   * @param alpha テクスチャのアルファ値。アルファ値の強さは0.0f-1.0f。
+   */
+  public final void setAlpha( int tnum, float alpha )
+  {
+    Texture tex;
+
+    if ( existTexture( tnum ) == false )
+    {
+      return;
+    }
+    tex = textures.get( tnum );
+    tex.col.get( mat, 0, 16 );
+    mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = alpha;
+    tex.col  = createFloatBuffer( mat );
+  }
 
   /**
    * テクスチャのUV設定。
@@ -641,7 +680,11 @@ public class AmanatsuDraw
 
   public static final FloatBuffer createFloatBuffer( float[] arr )
   {
-    ByteBuffer bb = ByteBuffer.allocateDirect( arr.length * 4 );
+    return createFloatBuffer( arr, arr.length );
+  }
+  public static final FloatBuffer createFloatBuffer( float[] arr, int length )
+  {
+    ByteBuffer bb = ByteBuffer.allocateDirect( length * 4 );
     bb.order( ByteOrder.nativeOrder() );
     FloatBuffer fb = bb.asFloatBuffer();
     fb.put( arr );
@@ -912,6 +955,7 @@ public class AmanatsuDraw
     setFloatArray( x, y, x + w, y, x + w, y + h, x, y + h, x, y );
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr ) );
 
+    // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 4 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -1112,6 +1156,7 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    /// TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -1190,6 +1235,7 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -1274,6 +1320,7 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -1536,7 +1583,7 @@ public class AmanatsuDraw
    * @param dw 描画横幅。
    * @param dh 描画高さ。
    */
-  public boolean drawTextureScaring( int tnum,
+  public boolean drawTextureScaling( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
   {
@@ -1563,6 +1610,70 @@ public class AmanatsuDraw
   /**
    * テクスチャの拡大縮小描画。
    * @param tnum テクスチャ番号。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
+   * @param dw 描画横幅。
+   * @param dh 描画高さ。
+   */
+  public boolean drawTextureScalingC( int tnum, float dx, float dy, float dw, float dh )
+  {
+    if ( existTexture( tnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = getTexture( tnum );
+
+    farr[ 0 ] = dw / 2.0f;
+    farr[ 1 ] = dh / 2.0f;
+
+    setFloatArray(
+        dx - farr[ 0 ], dy - farr[ 1 ],
+        dx + farr[ 0 ], dy - farr[ 1 ],
+        dx - farr[ 0 ], dy + farr[ 1 ],
+        dx + farr[ 0 ], dy + farr[ 1 ] );
+    setVertex( ttex, farr );
+
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    ttex.uv   = createFloatBuffer( farr );
+
+    return drawTexture( ttex );
+  }
+  /**
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
+   * @param dx 描画X座標。
+   * @param dy 描画Y座標。
+   * @param scale 拡大率。
+   */
+  public boolean drawTextureScalingC( int tnum, float dx, float dy, float scale )
+  {
+    if ( existTexture( tnum ) == false )
+    {
+      return false;
+    }
+
+    ttex = getTexture( tnum );
+
+    farr[ 0 ] = ttex.width * scale / 2.0f;
+    farr[ 1 ] = ttex.height * scale / 2.0f;
+
+    setFloatArray(
+        dx - farr[ 0 ], dy - farr[ 1 ],
+        dx + farr[ 0 ], dy - farr[ 1 ],
+        dx - farr[ 0 ], dy + farr[ 1 ],
+        dx + farr[ 0 ], dy + farr[ 1 ] );
+    setVertex( ttex, farr );
+
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    ttex.uv   = createFloatBuffer( farr );
+
+    return drawTexture( ttex );
+  }
+
+  /**
+   * テクスチャの拡大縮小描画。
+   * @param tnum テクスチャ番号。
    * @param rx テクスチャの読み込み開始X座標。
    * @param ry テクスチャの読み込み開始Y座標。
    * @param w テクスチャの切り取り横幅。
@@ -1572,7 +1683,7 @@ public class AmanatsuDraw
    * @param dw 描画横幅。
    * @param dh 描画高さ。
    */
-  public boolean drawTextureScaringC( int tnum,
+  public boolean drawTextureScalingC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float dw, float dh )
   {
@@ -1610,7 +1721,7 @@ public class AmanatsuDraw
    * @param dy 描画Y座標。
    * @param scale 拡大率。
    */
-  public boolean drawTextureScaring( int tnum,
+  public boolean drawTextureScaling( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
   {
@@ -1645,7 +1756,7 @@ public class AmanatsuDraw
    * @param dy 描画中心Y座標。
    * @param scale 拡大率。
    */
-  public boolean drawTextureScaringC( int tnum,
+  public boolean drawTextureScalingC( int tnum,
     float rx, float ry, float w, float h,
     float dx, float dy, float scale )
   {
@@ -1899,8 +2010,6 @@ public class AmanatsuDraw
 
     return ret;
   }
-
-  //TODO scale rotate draw size.
 
   /**
    * テクスチャの行列変形描画。
