@@ -50,6 +50,7 @@ class Game extends GameView
   @Override
   public boolean MainLoop() {
     // Game main routine.
+    draw.clearScreen();
     return true; // false is Game end.
   }
 
@@ -61,8 +62,22 @@ class Game extends GameView
 }
 <code></pre>
 
+## Sample game
+
+* [Sample Shooting](https://github.com/HirokiMiyaoka/AmanatsuSampleShooting)
+
 ## Android
 バージョン2.2以上。
+
+## サンプルコード
+
+上に載ってるやつ。
+
+## サンプルゲーム
+
+Amanatsuを使った単純なシューティングのプロジェクトを公開しています。
+
+* [Sample Shooting](https://github.com/HirokiMiyaoka/AmanatsuSampleShooting)
 
 ## 利用方法
 使いたいプロジェクト内にlibsフォルダを作り、その中にAmanatsu.jarをコピーします。
@@ -70,7 +85,7 @@ class Game extends GameView
 
 で、後は上のような感じで適当にゲーム処理を記述するためのGameクラス(GameViewを継承)を作り、Amanatsuオブジェクト生成時に渡したり、View登録時にAmanatsuのViewを登録してください。
 
-また、GameViewクラスを継承すると、system、draw、sound、inputというクラス変数が利用可能で、それを使うことでゲームに必要な各種処理を行うことができます。
+また、GameViewクラスを継承すると、system、draw、sound、inputというクラス変数が利用可能で、それを使うことでゲームに必要な各種処理を行うことができます(さらに、これらはpublic static宣言されているため、任意の継承クラス名.draw や GameView.draw などの形で他のクラスからもアクセスできる)。
 
 GameViewクラスは次のようになっています。
 
