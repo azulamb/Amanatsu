@@ -46,7 +46,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.2.0" );
+  private static String VERSION = new String( "0.2.1" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -393,7 +393,7 @@ class GLLoopAmanatsuOP extends GLLoop
   public void run( AmanatsuDraw draw )
   {
     draw.clearScreen();
-    if ( counter == 120 || logo == false )
+    if ( counter == 60 || logo == false )
     {
       // End.
       draw.destroyTexture( 0 );
@@ -403,12 +403,12 @@ class GLLoopAmanatsuOP extends GLLoop
       // OP
       int max = draw.getWidth() < draw.getHeight() ? draw.getWidth() : draw.getHeight();
       max *= 0.4;
-      if ( counter < 40 )
+      if ( counter < 20 )
       {
-        draw.setColor( 0, counter / 40.0f );
-      } else if ( counter >= 80 )
+        draw.setColor( 0, counter / 20.0f );
+      } else if ( counter >= 40 )
       {
-        draw.setColor( 0, (120 - counter) / 40.0f );
+        draw.setColor( 0, (60 - counter) / 20.0f );
       } else
       {
         draw.printf( 0, draw.getWidth() / 2.0f - 50, draw.getHeight() / 2.0f + max / 2.0f, Amanatsu.getVersion() );

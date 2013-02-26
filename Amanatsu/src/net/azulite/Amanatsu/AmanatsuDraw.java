@@ -629,7 +629,7 @@ public class AmanatsuDraw
    */
   public final boolean setUV( Texture tex, float[] uv )
   {
-    tex.uv  = createFloatBuffer( uv );
+    tex.uv  = createFloatBuffer( uv, 8 );
     return true;
   }
 
@@ -640,7 +640,7 @@ public class AmanatsuDraw
    */
   public final boolean setVertex( Texture tex, float[] vert )
   {
-    tex.ver = createFloatBuffer( vert );
+    tex.ver = createFloatBuffer( vert, 8 );
     return true;
   }
 
@@ -695,7 +695,7 @@ public class AmanatsuDraw
     ByteBuffer bb = ByteBuffer.allocateDirect( length * 4 );
     bb.order( ByteOrder.nativeOrder() );
     FloatBuffer fb = bb.asFloatBuffer();
-    fb.put( arr );
+    fb.put( arr, 0, length );
     fb.position( 0 );
     return fb;
   }
@@ -1532,10 +1532,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1570,10 +1570,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1606,10 +1606,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1709,10 +1709,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1744,10 +1744,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1784,10 +1784,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1838,10 +1838,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1892,10 +1892,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx    / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -1950,10 +1950,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2008,10 +2008,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2058,10 +2058,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2108,10 +2108,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2153,10 +2153,10 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray(
-      rx     / ttex.width, ry     / ttex.height,
-      rx + w / ttex.width, ry     / ttex.height,
-      rx     / ttex.width, ry + h / ttex.height,
-      rx + w / ttex.width, ry + h / ttex.height );
+      ( rx )     / ttex.width, ( ry )     / ttex.height,
+      ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+      ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
