@@ -35,6 +35,8 @@ import android.opengl.GLUtils;
 // * auto change 1.1, 2.0
 // * box texture
 // * set funciton glEnable() GL_POINT_SMOOTH,GL_LINE_SMOOTH,GL_POLYGON_SMOOTH
+// * float buffer reuse
+// * float buffer size
 public class AmanatsuDraw
 {
   private Amanatsu ama;
@@ -456,6 +458,12 @@ public class AmanatsuDraw
     {
       releaseTexture( key );
     }
+  }
+
+  private final void setFloatArray4( float f0, float f1, float f2, float f3 )
+  {
+    farr4[ 0 ] = f0; farr4[ 1 ] = f1;
+    farr4[ 2 ] = f2; farr4[ 3 ] = f3;
   }
 
   private final void setFloatArray( float f0, float f1, float f2, float f3 )
@@ -1923,19 +1931,19 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
@@ -1981,19 +1989,19 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
