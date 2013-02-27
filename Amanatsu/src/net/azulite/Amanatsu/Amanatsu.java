@@ -46,7 +46,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.2.1" );
+  private static String VERSION = new String( "0.2.2" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;

@@ -406,9 +406,19 @@ public class AmanatsuDraw
     ttex.width = bmp.getWidth();
     ttex.height = bmp.getHeight();
 
+    //setColor( tnum );
+    mat[ 0 ] = mat[ 1 ] = mat[ 2 ] = mat[ 3 ] =
+    mat[ 4 ] = mat[ 5 ] = mat[ 6 ] = mat[ 7 ] =
+    mat[ 8 ] = mat[ 9 ] = mat[ 10 ] = mat[ 11 ] =
+    mat[ 12 ] = mat[ 13 ] = mat[ 14 ] = mat[ 15 ] = 1.0f;
+    ttex.col = createFloatBuffer( mat );
+    ttex.col.position( 0 );
+    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    ttex.uv = AmanatsuDraw.createFloatBuffer( farr, 8 );
+    ttex.ver = AmanatsuDraw.createFloatBuffer( farr, 8 );
+
     if ( regist )
     {
-      setColor( tnum );
       bmp.recycle();
     }
 
@@ -538,14 +548,11 @@ public class AmanatsuDraw
    */
   public final void setColor( int tnum )
   {
-    float[] color =
-    {
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-      1.0f, 1.0f, 1.0f, 1.0f,
-    };
-    setColor( tnum, color );
+    mat[ 0 ] = mat[ 1 ] = mat[ 2 ] = mat[ 3 ] =
+    mat[ 4 ] = mat[ 5 ] = mat[ 6 ] = mat[ 7 ] =
+    mat[ 8 ] = mat[ 9 ] = mat[ 10 ] = mat[ 11 ] =
+    mat[ 12 ] = mat[ 13 ] = mat[ 14 ] = mat[ 15 ] = 1.0f;
+    setColor( tnum, mat );
   }
 
   /**
@@ -562,6 +569,11 @@ public class AmanatsuDraw
       col, col, col, 1.0f,
       col, col, col, 1.0f,
     };
+    mat[ 0 ] = mat[ 1 ] = mat[ 2 ] =
+    mat[ 4 ] = mat[ 5 ] = mat[ 6 ] =
+    mat[ 8 ] = mat[ 9 ] = mat[ 10 ] =
+    mat[ 12 ] = mat[ 13 ] = mat[ 14 ] = col;
+    mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = 1.0f;
     setColor( tnum, color );
   }
 
@@ -590,7 +602,8 @@ public class AmanatsuDraw
     }
 
     tex = textures.get( tnum );
-    tex.col  = createFloatBuffer( color );
+    tex.col.put( color, 0, 16 );//  = createFloatBuffer( color );
+    tex.col.position( 0 );
   }
 
   /**
@@ -618,8 +631,10 @@ public class AmanatsuDraw
     }
     tex = textures.get( tnum );
     tex.col.get( mat, 0, 16 );
+    tex.col.position( 0 );
     mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = alpha;
-    tex.col  = createFloatBuffer( mat );
+    tex.col.put( mat, 0, 16 );//  = createFloatBuffer( mat );
+    tex.col.position( 0 );
   }
 
   /**
@@ -629,7 +644,8 @@ public class AmanatsuDraw
    */
   public final boolean setUV( Texture tex, float[] uv )
   {
-    tex.uv  = createFloatBuffer( uv, 8 );
+    tex.uv.put( uv, 0, 8 );//  = createFloatBuffer( uv, 8 );
+    tex.uv.position( 0 );
     return true;
   }
 
@@ -640,7 +656,8 @@ public class AmanatsuDraw
    */
   public final boolean setVertex( Texture tex, float[] vert )
   {
-    tex.ver = createFloatBuffer( vert, 8 );
+    tex.ver.put( vert, 0, 8 );// = createFloatBuffer( vert, 8 );
+    tex.ver.position( 0 );
     return true;
   }
 
@@ -1469,10 +1486,14 @@ public class AmanatsuDraw
     ttex = getTexture( tnum );
 
     setFloatArray( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
-    ttex.ver = createFloatBuffer( farr );
+    setVertex( ttex, farr );
+    //ttex.ver.put( farr, 0, 8 );// = createFloatBuffer( farr );
+    //ttex.ver.position( 0 );
 
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr );
+    setUV( ttex, farr );
+    //ttex.uv.put( farr, 0, 8 );// = createFloatBuffer( farr );
+    //ttex.uv.position( 0 );
 
     return drawTexture( ttex );
   }
@@ -1499,10 +1520,14 @@ public class AmanatsuDraw
       dx + ttex.width / 2.0f, dy - ttex.height / 2.0f,
       dx - ttex.width / 2.0f, dy + ttex.height / 2.0f,
       dx + ttex.width / 2.0f, dy + ttex.height );
-    ttex.ver = createFloatBuffer( farr );
+    setVertex( ttex, farr );
+    //ttex.ver.put( farr, 0, 8 );// = createFloatBuffer( farr );
+    //ttex.ver.position( 0 );
 
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr );
+    setUV( ttex, farr );
+    //ttex.uv.put( farr, 0, 8 );// = createFloatBuffer( farr );
+    //ttex.uv.position( 0 );
 
     return drawTexture( ttex );
   }
@@ -1643,7 +1668,8 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr );
+    setUV( ttex, farr );
+    //ttex.uv   = createFloatBuffer( farr );
 
     return drawTexture( ttex );
   }
@@ -1674,7 +1700,8 @@ public class AmanatsuDraw
     setVertex( ttex, farr );
 
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
-    ttex.uv   = createFloatBuffer( farr );
+    setUV( ttex, farr );
+    //ttex.uv   = createFloatBuffer( farr );
 
     return drawTexture( ttex );
   }
