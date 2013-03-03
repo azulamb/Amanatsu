@@ -28,14 +28,27 @@ public class XXXXX extends Activity
   public void onCreate( Bundle savedInstanceState ) {
     super.onCreate( savedInstanceState );
 
+    setContentView( Amanatsu.autoRunAmanatsu( this, new OP() ) );
+
+    /*
+    // Or under.
+    super.onCreate( savedInstanceState );
+
     // Create Amanatsu object.
     ama = new Amanatsu( this, new Game() );
+
+    // Fullscreen.
+    ama.setFullScreen( true );
+
+    // Do not sleep.
+    ama.setSleepMode( false );
 
     // Set View.
     this.setContentView( ama.getGLSurfaceView() );
 
     // Start game.
     ama.start();
+    */
   }
 
 }
@@ -78,6 +91,10 @@ class Game extends GameView
 Amanatsuを使った単純なシューティングのプロジェクトを公開しています。
 
 * [Sample Shooting](https://github.com/HirokiMiyaoka/AmanatsuSampleShooting)
+
+また、上のリポジトリにあるWikiにて、サンプルシューティングを作るまでの工程を書く予定です。
+
+* [Sample Shooting wiki](https://github.com/HirokiMiyaoka/AmanatsuSampleShooting/wiki)
 
 ## 利用方法
 使いたいプロジェクト内にlibsフォルダを作り、その中にAmanatsu.jarをコピーします。
