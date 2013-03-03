@@ -7,6 +7,7 @@ import android.view.MotionEvent;
  */
 public interface AmanatsuInput
 {
+  public void term();
   public boolean setWindowSize( float width, float height );
   /**
    * 入力の値域を決める。
@@ -100,4 +101,23 @@ public interface AmanatsuInput
    * 最後に押されたキー番号を返す。
    */
   public int getLastKey();
+
+  /**
+   * 方位角を返す。
+   * @return 北が0。東がπ/2。南がπ。西が-π/2。
+   */
+  public float getAzimuth();
+
+  /**
+   * 傾斜角を返す。
+   * @return 水平な台に端末を置いた状態を基準に、手前に立ち上げると負の値。奥に倒すと正の値。-π～π。
+   */
+  public float getPitch();
+
+  /**
+   * 回転角を返す。
+   * @return 水平な台に端末を置いた状態を基準に、右に傾けると正の値。左に傾けると負の値。-π～π。
+   */
+  public float getRoll();
 }
+

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,26 +17,33 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.Window;
+import android.view.WindowManager;
 
 import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 // Library
 // TODO
 // * enable back to exit
-// * CreateTexture
-// * disable amanatsu thema
+// * CreateTexture(truecolor)
 // * screen size
-// * fps
+// * sensor
 
 /**
  * Amanatsuの総合管理クラス。
@@ -46,7 +54,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.2.2" );
+  private static String VERSION = new String( "0.3.0" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -56,7 +64,8 @@ public class Amanatsu
   /** 乗算合成。 */
   public static final int DRAW_MUL = 3;
 
-  private Context context;
+  protected Activity context;
+  private boolean setcontentview = false;
   protected AmanatsuGLView view;
 
   protected GameView gview;
@@ -94,14 +103,14 @@ public class Amanatsu
    */
   public Amanatsu( Context context, GameView gview, boolean multitouch, boolean logo )
   {
-    this.context = context;
+    this.context = (Activity)context;
 
     if ( multitouch )
     {
-      setInput( new MultiTouchEvent() );
+      setInput( new MultiTouchEvent( context ) );
     } else
     {
-      setInput( new TouchEvent() );      
+      setInput( new TouchEvent( context ) );
     }
 
     setSound( new AmanatsuSound( this ) );
@@ -129,6 +138,8 @@ public class Amanatsu
   public static GLSurfaceView autoRunAmanatsu( Context context, GameView gview )
   {
     Amanatsu ama = new Amanatsu( context, gview );
+    ama.setFullScreen( true );
+    ama.setSleepMode( false );
     ama.start();
     return ama.getGLSurfaceView();
   }
@@ -188,17 +199,55 @@ public class Amanatsu
   public static final String getVersion(){ return VERSION; }
   public final Context getContext(){ return context; }
 
-  public final GLSurfaceView getGLSurfaceView(){ return view; }
+  public final GLSurfaceView getGLSurfaceView(){ setcontentview = true; return view; }
 
+  public static int getWindowRotation(){ return GameGLSurfaceViewRender.getWindowRotation(); }
+  /**
+   * スリープの設定(onCreate時のみ)
+   * @param dosleep trueでスリープあり(通常)、falseでスリープしないようにする。
+   */
+  public boolean setSleepMode( boolean dosleep )
+  {
+    if ( setcontentview == false )
+    {
+      if ( dosleep )
+      {
+        context.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
+        return true;
+      }
+      context.getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * フルスクリーンの設定
+   * setContentViewより前にtrueで実行することにより、タイトルバーも消す。
+   * @param full trueでフルスクリーン、falseで解除。
+   */
+  public boolean setFullScreen( boolean full )
+  {
+    if ( full )
+    {
+      context.getWindow().addFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN );
+      context.requestWindowFeature( Window.FEATURE_NO_TITLE );
+      return true;
+    }
+    context.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN );
+    return true;
+  }
 }
 
 class AmanatsuGLView extends GLSurfaceView
 {
+  Amanatsu ama;
   private AmanatsuInput input;
   public AmanatsuGLView( Amanatsu ama )
   {
     super( ama.getContext() );
 
+    this.ama = ama;
     input = Amanatsu.input;
     // Enable touch.
     setFocusable( true );
@@ -220,6 +269,13 @@ class AmanatsuGLView extends GLSurfaceView
   {
     return input.keyUp( keyCode, event );
   }
+
+  @Override
+  public void surfaceDestroyed( SurfaceHolder holder )
+  {
+    super.surfaceDestroyed( holder );
+    ama.stop();
+  }
 }
 
 class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
@@ -231,6 +287,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   protected GLLoop loop;
   private boolean loopflag = false;
   private String gltype = "", glver = "";
+  public static int rotate;
 
   // FPS
   private long before, now, progress;
@@ -272,6 +329,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   public void term()
   {
     view.CleanUp();
+    ama.setSleepMode( true );
   }
 
   public void start()
@@ -298,6 +356,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
     return ret;
   }
 
+  public static int getWindowRotation(){ return rotate; }
   @Override
   public void handleMessage( Message msg )
   {
@@ -339,6 +398,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   public void onSurfaceChanged( GL10 gl, int width, int height )
   {
     draw.change( gl, width, height );
+    rotate = ((Activity)ama.context).getWindowManager().getDefaultDisplay().getRotation();
   }
 
   @Override
@@ -505,7 +565,106 @@ class GLLoopCleanUp extends GLLoop
   
 }
 
-class TouchEvent extends AmanatsuKey implements AmanatsuInput
+class AmanatsuSensor extends AmanatsuKey
+{
+  protected Context context;
+  private SensorManager manager;
+  SensorListener listener;
+  private SensorEventListener sensorlistener;
+  protected float[] orientation;
+  protected float[] magnetic;
+  protected float[] accelerometer;
+
+  public AmanatsuSensor( Context context )
+  {
+    this.context = context;
+
+    manager = (SensorManager)context.getSystemService( Activity.SENSOR_SERVICE );
+    listener = new SensorListener( this );
+
+    List<Sensor> sensors = manager.getSensorList( Sensor.TYPE_ALL );//Sensor.TYPE_ORIENTATION,Sensor.TYPE_ACCELEROMETER
+    for ( Sensor sensor : sensors )
+    {
+      if( sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+        manager.registerListener( listener, sensor, SensorManager.SENSOR_DELAY_UI);
+      }
+
+      if ( sensor.getType() == Sensor.TYPE_ACCELEROMETER )
+      {
+        manager.registerListener( listener, sensor, SensorManager.SENSOR_DELAY_UI );
+      }
+    }
+    orientation = new float[ 3 ];
+    magnetic = new float[ 3 ];
+    accelerometer = new float[ 3 ];
+  }
+
+  public void term()
+  {
+    manager.unregisterListener( sensorlistener );
+  }
+
+  public float getAzimuth(){ return orientation[ 0 ]; }
+  public float getPitch(){ return orientation[ 1 ]; }
+  public float getRoll(){ return orientation[ 2 ]; }
+}
+
+class SensorListener implements SensorEventListener
+{
+  AmanatsuSensor sensor;
+  static final int MATRIX_SIZE = 16;
+  float[] in;
+  float[] out;
+  float[] i;
+
+  public SensorListener( AmanatsuSensor sensor )
+  {
+    this.sensor = sensor;
+    in = new float[ MATRIX_SIZE ];
+    out = new float[ MATRIX_SIZE ];
+    i = new float[ MATRIX_SIZE ];
+  }
+
+  @Override
+  public void onAccuracyChanged( Sensor sensor, int accuracy )
+  {
+  }
+
+  @Override
+  public void onSensorChanged( SensorEvent event )
+  {
+    if ( event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE ){ return; }
+
+    switch ( event.sensor.getType() )
+    {
+    case Sensor.TYPE_MAGNETIC_FIELD:
+      sensor.magnetic = event.values.clone();
+      break;
+    case Sensor.TYPE_ACCELEROMETER:
+      sensor.accelerometer = event.values.clone();
+      break;
+    }
+
+    SensorManager.getRotationMatrix( in, i, sensor.accelerometer, sensor.magnetic );
+    switch ( GameGLSurfaceViewRender.getWindowRotation() )
+    {
+    case Surface.ROTATION_90:
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, out );
+      break;
+    case Surface.ROTATION_180:
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, out );
+      break;
+    case Surface.ROTATION_270:
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, out );
+      break;
+    default:
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_X, SensorManager.AXIS_Y, out );
+    }
+    SensorManager.getOrientation( out, sensor.orientation );
+  }
+}
+
+class TouchEvent extends AmanatsuSensor implements AmanatsuInput
 {
   protected float basex, basey, width, height, W, H;
   protected float x, y;
@@ -513,8 +672,9 @@ class TouchEvent extends AmanatsuKey implements AmanatsuInput
   protected int frame;
 
 
-  public TouchEvent()
+  public TouchEvent( Context context )
   {
+    super( context );
     touched = false;
   }
 
@@ -623,8 +783,9 @@ class MultiTouchEvent extends TouchEvent implements AmanatsuInput
 
   boolean lock = false;
 
-  public MultiTouchEvent()
+  public MultiTouchEvent( Context context )
   {
+    super( context );
     touched = false;
   }
 

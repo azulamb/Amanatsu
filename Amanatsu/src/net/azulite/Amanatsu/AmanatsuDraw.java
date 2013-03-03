@@ -49,6 +49,9 @@ public class AmanatsuDraw
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
   private static float[] circlepoint;
   private static int circlepointnum = 32;
+  private static FloatBuffer circlebuffer;
+  private static FloatBuffer boxbuffer;
+  private static FloatBuffer linebuffer;
   private String gltype, glver;
 
   // Box
@@ -75,6 +78,9 @@ public class AmanatsuDraw
     this.gltype = gltype;
     this.glver = glver;
     circlepoint = new float[ ( circlepointnum + 2 ) * 2 ];
+    circlebuffer = createFloatBuffer( circlepoint );
+    boxbuffer = createFloatBuffer( farr, 8 );
+    linebuffer = createFloatBuffer( farr, 4 );
   }
 
   public String getGLVersion_(){ return gl.glGetString( GL10.GL_VERSION ); }
@@ -85,6 +91,7 @@ public class AmanatsuDraw
   {
     setGL( gl );
 
+    // prepare box
     Bitmap white = Bitmap.createBitmap( 1, 1, Config.ALPHA_8 );
     Canvas canvas = new Canvas( white );
     canvas.drawARGB( 255, 255, 255, 255 );
@@ -95,6 +102,7 @@ public class AmanatsuDraw
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
     boxtex.uv   = createFloatBuffer( farr );
 
+    // prepare string
     stringbmp = Bitmap.createBitmap( 1024, 1024, Config.ALPHA_8 );//Bitmap.Config.ARGB_8888);
     createTextureFromBitmap( 0, stringbmp, false );
     stringtex = ttex;
@@ -499,7 +507,7 @@ public class AmanatsuDraw
     farr[ 8 ] = f8; farr[ 9 ] = f9;
   }
 
-  private static final FloatBuffer createColor( float[] color )
+  /*private static final FloatBuffer createColor( float[] color )
   {
     if ( color.length >= 16 )
     {
@@ -540,7 +548,7 @@ public class AmanatsuDraw
       1.0f, 1.0f, 1.0f, 1.0f,
     };
     return createFloatBuffer( col );
-  }
+  }*/
 
   /**
    * テクスチャの色設定(白)。
@@ -562,19 +570,12 @@ public class AmanatsuDraw
    */
   public final void setColor( int tnum, float col )
   {
-    float[] color =
-    {
-      col, col, col, 1.0f,
-      col, col, col, 1.0f,
-      col, col, col, 1.0f,
-      col, col, col, 1.0f,
-    };
     mat[ 0 ] = mat[ 1 ] = mat[ 2 ] =
     mat[ 4 ] = mat[ 5 ] = mat[ 6 ] =
     mat[ 8 ] = mat[ 9 ] = mat[ 10 ] =
     mat[ 12 ] = mat[ 13 ] = mat[ 14 ] = col;
     mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = 1.0f;
-    setColor( tnum, color );
+    setColor( tnum, mat );
   }
 
   /**
@@ -602,7 +603,18 @@ public class AmanatsuDraw
     }
 
     tex = textures.get( tnum );
-    tex.col.put( color, 0, 16 );//  = createFloatBuffer( color );
+    tex.col.put( color, 0, 16 );
+    tex.col.position( 0 );
+  }
+
+  /**
+   * テクスチャ色の設定。
+   * @param tex テクスチャ。
+   * @param color 色の配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
+   */
+  public static final void setColor( Texture tex, float[] color )
+  {
+    tex.col.put( color, 0, 16 );
     tex.col.position( 0 );
   }
 
@@ -633,7 +645,7 @@ public class AmanatsuDraw
     tex.col.get( mat, 0, 16 );
     tex.col.position( 0 );
     mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = alpha;
-    tex.col.put( mat, 0, 16 );//  = createFloatBuffer( mat );
+    tex.col.put( mat, 0, 16 );
     tex.col.position( 0 );
   }
 
@@ -644,7 +656,7 @@ public class AmanatsuDraw
    */
   public final boolean setUV( Texture tex, float[] uv )
   {
-    tex.uv.put( uv, 0, 8 );//  = createFloatBuffer( uv, 8 );
+    tex.uv.put( uv, 0, 8 );
     tex.uv.position( 0 );
     return true;
   }
@@ -656,7 +668,7 @@ public class AmanatsuDraw
    */
   public final boolean setVertex( Texture tex, float[] vert )
   {
-    tex.ver.put( vert, 0, 8 );// = createFloatBuffer( vert, 8 );
+    tex.ver.put( vert, 0, 8 );
     tex.ver.position( 0 );
     return true;
   }
@@ -918,7 +930,9 @@ public class AmanatsuDraw
     gl.glLineWidth( width );
 
     setFloatArray( sx, sy, ex, ey );
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr ) );
+    linebuffer.put( farr, 0, 4 );
+    linebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, linebuffer );//createFloatBuffer( farr )
 
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 2 );
 
@@ -978,7 +992,9 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
     setFloatArray( x, y, x + w, y, x + w, y + h, x, y + h, x, y );
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( farr ) );
+    boxbuffer.put( farr, 0, 8 );
+    boxbuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, boxbuffer );//createFloatBuffer( farr )
 
     // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, 4 );
@@ -1050,8 +1066,11 @@ public class AmanatsuDraw
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
     setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
+    //boxbuffer.put( farr, 0, 8 );
+    //boxbuffer.position( 0 );
     boxtex.ver = createFloatBuffer( farr );
-    boxtex.col = createColor( color );
+    setColor( boxtex, color );
+
     return drawTexture( boxtex );
   }
 
@@ -1077,7 +1096,7 @@ public class AmanatsuDraw
   {
     setFloatArray( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
     boxtex.ver = createFloatBuffer( farr );
-    boxtex.col = createColor( color );
+    setColor( boxtex, color );
     return drawTexture( boxtex );
   }
   
@@ -1180,7 +1199,9 @@ public class AmanatsuDraw
     gl.glLineWidth( width );
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    circlebuffer.put( circlepoint );
+    circlebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, circlebuffer );//createFloatBuffer( circlepoint )
     /// TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
@@ -1259,7 +1280,9 @@ public class AmanatsuDraw
     gl.glLineWidth( width );
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    circlebuffer.put( circlepoint );
+    circlebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, circlebuffer );//createFloatBuffer( circlepoint )
     // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
@@ -1344,7 +1367,9 @@ public class AmanatsuDraw
     gl.glLineWidth( width );
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    circlebuffer.put( circlepoint );
+    circlebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, circlebuffer );//createFloatBuffer( circlepoint )
     // TODO: GL_LINE_LOOP
     gl.glDrawArrays( GL10.GL_LINE_STRIP, 0, circlepointnum + 1 );
 
@@ -1404,7 +1429,9 @@ public class AmanatsuDraw
 
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    circlebuffer.put( circlepoint );
+    circlebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, circlebuffer );//createFloatBuffer( circlepoint )
     gl.glDrawArrays( GL10.GL_TRIANGLE_FAN, 0, circlepointnum + 2 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
@@ -1441,7 +1468,9 @@ public class AmanatsuDraw
 
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, createFloatBuffer( circlepoint ) );
+    circlebuffer.put( circlepoint );
+    circlebuffer.position( 0 );
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, circlebuffer );//createFloatBuffer( circlepoint )
     gl.glDrawArrays( GL10.GL_TRIANGLE_FAN, 0, circlepointnum + 2 );
 
     gl.glEnable( GL10.GL_TEXTURE_2D );
