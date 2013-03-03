@@ -604,6 +604,9 @@ class AmanatsuSensor extends AmanatsuKey
     manager.unregisterListener( sensorlistener );
   }
 
+  public float getAcceleX(){ return accelerometer[ 0 ]; }
+  public float getAcceleY(){ return accelerometer[ 1 ]; }
+  public float getAcceleZ(){ return accelerometer[ 2 ]; }
   public float getAzimuth(){ return orientation[ 0 ]; }
   public float getPitch(){ return orientation[ 1 ]; }
   public float getRoll(){ return orientation[ 2 ]; }

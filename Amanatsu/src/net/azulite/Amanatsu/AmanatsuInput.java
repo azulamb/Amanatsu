@@ -103,6 +103,18 @@ public interface AmanatsuInput
   public int getLastKey();
 
   /**
+   * X軸方向の加速度を返す。
+   */
+  public float getAcceleX();
+  /**
+   * Y軸方向の加速度を返す。
+   */
+  public float getAcceleY();
+  /**
+   * Z軸方向の加速度を返す。
+   */
+  public float getAcceleZ();
+  /**
    * 方位角を返す。
    * @return 北が0。東がπ/2。南がπ。西が-π/2。
    */
