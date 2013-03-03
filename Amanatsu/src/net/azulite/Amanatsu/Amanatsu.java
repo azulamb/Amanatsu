@@ -160,6 +160,7 @@ public class Amanatsu
   {
     //timer.stop();
     render.term();
+    input.term();
   }
 
   /**
@@ -201,10 +202,18 @@ public class Amanatsu
 
   public final GLSurfaceView getGLSurfaceView(){ setcontentview = true; return view; }
 
-  public static int getWindowRotation(){ return GameGLSurfaceViewRender.getWindowRotation(); }
   /**
-   * スリープの設定(onCreate時のみ)
-   * @param dosleep trueでスリープあり(通常)、falseでスリープしないようにする。
+   * 画面の向きの取得(4方向)
+   * いわゆる描画の向き。90度ごとに1つの値が与えられている。
+   * @return 0=通常、1=通常から左に90度回転、2=180度回転、3=右に90度回転。
+   */
+  public static int getWindowRotation(){ return GameGLSurfaceViewRender.getWindowRotation(); }
+
+  // setter.
+
+  /**
+   * スリープの設定(getGLSurfaceView()使用前かつonCreate内で実行した時のみ有効)
+   * @param dosleep trueでスリープあり(デフォルト)、falseでスリープしないようにする。
    */
   public boolean setSleepMode( boolean dosleep )
   {
