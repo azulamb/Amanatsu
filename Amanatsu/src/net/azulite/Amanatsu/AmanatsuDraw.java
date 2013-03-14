@@ -612,9 +612,19 @@ public class AmanatsuDraw
    * @param tex テクスチャ。
    * @param color 色の配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
    */
-  public static final void setColor( Texture tex, float[] color )
+  public void setColor( Texture tex, float[] color )
   {
-    tex.col.put( color, 0, 16 );
+    if ( color.length >= 16 )
+    {
+      tex.col.put( color, 0, 16 );
+    } else if( color.length >= 4 )
+    {
+      mat[ 0 ] = mat[ 4 ] = mat[ 8 ] = mat[ 12 ] = color[ 0 ];
+      mat[ 1 ] = mat[ 5 ] = mat[ 9 ] = mat[ 13 ] = color[ 1 ];
+      mat[ 2 ] = mat[ 6 ] = mat[ 10 ] = mat[ 14 ] = color[ 2 ];
+      mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = color[ 3 ];
+      tex.col.put( mat, 0, 16 );
+    }
     tex.col.position( 0 );
   }
 
@@ -1065,13 +1075,25 @@ public class AmanatsuDraw
    */
   public boolean drawBox( float x, float y, float w, float h, float[] color )
   {
-    setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
-    //boxbuffer.put( farr, 0, 8 );
-    //boxbuffer.position( 0 );
-    boxtex.ver = createFloatBuffer( farr );
-    setColor( boxtex, color );
 
-    return drawTexture( boxtex );
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+    gl.glLineWidth( width );
+
+    setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
+    boxbuffer.put( farr, 0, 8 );
+    boxbuffer.position( 0 );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, boxbuffer );
+
+    gl.glDrawArrays( GL10.GL_TRIANGLE_STRIP, 0, 4 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+    
+    return true;
   }
 
   /**
@@ -1094,10 +1116,24 @@ public class AmanatsuDraw
    */
   public boolean drawBoxC( float x, float y, float w, float h, float[] color )
   {
+    gl.glDisable( GL10.GL_TEXTURE_2D );
+    gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
+
+    gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
+    gl.glLineWidth( width );
+
     setFloatArray( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
-    boxtex.ver = createFloatBuffer( farr );
-    setColor( boxtex, color );
-    return drawTexture( boxtex );
+    boxbuffer.put( farr, 0, 8 );
+    boxbuffer.position( 0 );
+
+    gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, boxbuffer );
+
+    gl.glDrawArrays( GL10.GL_TRIANGLE_STRIP, 0, 4 );
+
+    gl.glEnable( GL10.GL_TEXTURE_2D );
+    gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+    
+    return true;
   }
   
   private void prepareCircle( float x, float y, float w, float h, boolean fan )

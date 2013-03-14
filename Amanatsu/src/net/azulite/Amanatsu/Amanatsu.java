@@ -35,7 +35,7 @@ import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.3.0
+ * @version 0.3.2
  */
 
 // Library
@@ -54,7 +54,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.3.0" );
+  private static String VERSION = new String( "0.3.2" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -379,6 +379,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 
     Amanatsu.input.update();
 
+    draw.clearScreen();
     loop.run( draw );
     gl.glFlush();
 
@@ -583,19 +584,21 @@ class AmanatsuSensor extends AmanatsuKey
   protected float[] orientation;
   protected float[] magnetic;
   protected float[] accelerometer;
+  protected boolean mag;
 
   public AmanatsuSensor( Context context )
   {
     this.context = context;
-
+    mag = false;
     manager = (SensorManager)context.getSystemService( Activity.SENSOR_SERVICE );
     listener = new SensorListener( this );
 
     List<Sensor> sensors = manager.getSensorList( Sensor.TYPE_ALL );//Sensor.TYPE_ORIENTATION,Sensor.TYPE_ACCELEROMETER
     for ( Sensor sensor : sensors )
     {
-      if( sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
-        manager.registerListener( listener, sensor, SensorManager.SENSOR_DELAY_UI);
+      if( sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD ){
+        manager.registerListener( listener, sensor, SensorManager.SENSOR_DELAY_UI );
+        mag = true;
       }
 
       if ( sensor.getType() == Sensor.TYPE_ACCELEROMETER )
@@ -613,9 +616,13 @@ class AmanatsuSensor extends AmanatsuKey
     manager.unregisterListener( sensorlistener );
   }
 
+  public boolean canUseMagnetic(){ return mag; }
   public float getAcceleX(){ return accelerometer[ 0 ]; }
   public float getAcceleY(){ return accelerometer[ 1 ]; }
   public float getAcceleZ(){ return accelerometer[ 2 ]; }
+  public float getMagneticX(){ return magnetic[ 0 ]; }
+  public float getMagneticY(){ return magnetic[ 1 ]; }
+  public float getMagneticZ(){ return magnetic[ 2 ]; }
   public float getAzimuth(){ return orientation[ 0 ]; }
   public float getPitch(){ return orientation[ 1 ]; }
   public float getRoll(){ return orientation[ 2 ]; }
@@ -645,7 +652,7 @@ class SensorListener implements SensorEventListener
   @Override
   public void onSensorChanged( SensorEvent event )
   {
-    if ( event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE ){ return; }
+    //if ( event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE ){ return; }
 
     switch ( event.sensor.getType() )
     {

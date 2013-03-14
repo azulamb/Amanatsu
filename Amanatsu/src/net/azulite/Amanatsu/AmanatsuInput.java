@@ -103,17 +103,40 @@ public interface AmanatsuInput
   public int getLastKey();
 
   /**
+   * 磁気センサーが利用可能かどうか調べる。
+   */
+  public boolean canUseMagnetic();
+
+  /**
    * X軸方向の加速度を返す。
    */
   public float getAcceleX();
+
   /**
    * Y軸方向の加速度を返す。
    */
   public float getAcceleY();
+
   /**
    * Z軸方向の加速度を返す。
    */
   public float getAcceleZ();
+
+  /**
+   * X軸方向の磁気を返す。
+   */
+  public float getMagneticX();
+
+  /**
+   * Y軸方向の磁気を返す。
+   */
+  public float getMagneticY();
+
+  /**
+   * Z軸方向の磁気を返す。
+   */
+  public float getMagneticZ();
+
   /**
    * 方位角を返す。
    * @return 北が0。東がπ/2。南がπ。西が-π/2。
