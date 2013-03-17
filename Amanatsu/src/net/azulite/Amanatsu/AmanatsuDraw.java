@@ -19,6 +19,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.Color;
 import android.opengl.GLUtils;
@@ -47,6 +48,7 @@ public class AmanatsuDraw
   private AssetManager assets;
   private static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >( 50 );
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
+  private static Map<Integer, GameColor> fcolors = new Hashtable< Integer, GameColor >( 50 );
   private static float[] circlepoint;
   private static int circlepointnum = 32;
   private static FloatBuffer circlebuffer;
@@ -66,6 +68,7 @@ public class AmanatsuDraw
   private float[] farr, farr4, mat;
   private Texture ttex;
   private Paint tpaint;
+  private GameColor tcolor;
 
   public AmanatsuDraw( Amanatsu ama, String gltype, String glver )
   {
@@ -838,13 +841,16 @@ public class AmanatsuDraw
     {
       tpaint = new Paint();
       paints.put( fnum, tpaint );
+      fcolors.put( fnum, new GameColor( red, green, blue, alpha ) );
     } else
     {
       tpaint = paints.get( fnum );
     }
 
     tpaint.setTextSize( size );
-    tpaint.setARGB( alpha, red, green, blue );
+//    tpaint.setARGB( alpha, red, green, blue );
+    tpaint.setColor( Color.WHITE );
+    tpaint.setStyle(Style.FILL_AND_STROKE);
     tpaint.setAntiAlias( antialias );
 
     return true;
@@ -867,14 +873,15 @@ public class AmanatsuDraw
     if ( paints.containsKey( fnum ) )
     {
       tpaint = paints.get( fnum );
+      tcolor = fcolors.get( fnum );
     } else
     {
       tpaint = paints.get( 0 );
+      tcolor = fcolors.get( 0 );
     }
 
     canvas.drawText( str, 0, tpaint.getTextSize(), tpaint );
-
-    gl.glBindTexture(GL10.GL_TEXTURE_2D, stringnum );
+    gl.glBindTexture( GL10.GL_TEXTURE_2D, stringnum );
 
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
 
@@ -883,6 +890,13 @@ public class AmanatsuDraw
 
     setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
     stringtex.uv   = createFloatBuffer( farr );
+
+    mat[ 0 ] = mat[ 4 ] = mat[ 8 ] = mat[ 12 ] = tcolor.color[ 0 ];
+    mat[ 1 ] = mat[ 5 ] = mat[ 9 ] = mat[ 13 ] = tcolor.color[ 1 ];
+    mat[ 2 ] = mat[ 6 ] = mat[ 10 ] = mat[ 14 ] = tcolor.color[ 2 ];
+    mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = tcolor.color[ 3 ];
+    stringtex.col.put( mat );
+    stringtex.col.position( 0 );
 
     return drawTexture( stringtex );
   }
