@@ -69,6 +69,8 @@ public class AmanatsuDraw
   private Texture ttex;
   private Paint tpaint;
   private GameColor tcolor;
+  private int lr, ud;
+  private float[] u, v;
 
   public AmanatsuDraw( Amanatsu ama, String gltype, String glver )
   {
@@ -84,12 +86,18 @@ public class AmanatsuDraw
     circlebuffer = createFloatBuffer( circlepoint );
     boxbuffer = createFloatBuffer( farr, 8 );
     linebuffer = createFloatBuffer( farr, 4 );
+    u = new float[ 2 ];
+    v = new float[ 2 ];
   }
 
   public String getGLVersion_(){ return gl.glGetString( GL10.GL_VERSION ); }
   public String getGLVersion(){ return glver; }
   public String getGLType(){ return gltype; }
 
+  public float getBaseX(){ return basex; }
+  public float getBaseY(){ return basey; }
+  
+  public GL10 getGL10(){ return gl; }
   public void init( GL10 gl )
   {
     setGL( gl );
@@ -125,6 +133,8 @@ public class AmanatsuDraw
     gl.glLoadIdentity();
     gl.glOrthof( 0.0f, width, height, 0.0f, 50.0f, -50.0f );
 
+    //src_width = width;
+    //src_height = height;
     if ( getWidth() <= 0 )
     {
       setWindowSize( width, height );
@@ -171,12 +181,17 @@ public class AmanatsuDraw
     }
     basex = x * this.width / width;
     basey = y * this.height / height;
+    //basex = x * src_width / width;
+    //basey = y * src_height / height;
     screenwidth = width;
     screenheight = height;
     width = (this.width * this.width) / width;
     height = (this.height * this.height) / height;
+    //width = (this.width * src_width) / width;
+    //height = (this.height * src_height) / height;
 
     gl.glViewport( (int)-basex, (this.height - (int)height) + (int)basey, (int)width, (int)height );
+    //gl.glViewport( (int)-basex, (int)basey - (int)src_height/2, (int)width, (int)height );
 
     return true;
   }
@@ -410,9 +425,12 @@ public class AmanatsuDraw
     }
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmp, 0 );
 
-    gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
+    //gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
+    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);//GL10.GL_LINEAR);
     //gl.glTexParameterf( GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );
     gl.glBindTexture( GL10.GL_TEXTURE_2D, 0 );
+
 
     ttex.width = bmp.getWidth();
     ttex.height = bmp.getHeight();
@@ -588,7 +606,21 @@ public class AmanatsuDraw
    */
   public final void setColor( int tnum, GameColor color )
   {
-    setColor( tnum, color.color );
+    Texture tex;
+
+    if ( existTexture( tnum ) == false )
+    {
+      return;
+    }
+
+    tex = textures.get( tnum );
+
+    mat[ 0 ] = mat[ 4 ] = mat[ 8 ] = mat[ 12 ] = color.color[ 0 ];
+    mat[ 1 ] = mat[ 5 ] = mat[ 9 ] = mat[ 13 ] = color.color[ 1 ];
+    mat[ 2 ] = mat[ 6 ] = mat[ 10 ] = mat[ 14 ] = color.color[ 2 ];
+    mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = color.color[ 3 ];
+    tex.col.put( mat, 0, 16 );
+    tex.col.position( 0 );
   }
 
   /**
@@ -604,9 +636,22 @@ public class AmanatsuDraw
     {
       return;
     }
-
+    
     tex = textures.get( tnum );
-    tex.col.put( color, 0, 16 );
+
+    if ( color.length >= 16 )
+    {
+      tex.col.put( color, 0, 16 );
+    } else if( color.length >= 4 )
+    {
+      mat[ 0 ] = mat[ 4 ] = mat[ 8 ] = mat[ 12 ] = color[ 0 ];
+      mat[ 1 ] = mat[ 5 ] = mat[ 9 ] = mat[ 13 ] = color[ 1 ];
+      mat[ 2 ] = mat[ 6 ] = mat[ 10 ] = mat[ 14 ] = color[ 2 ];
+      mat[ 3 ] = mat[ 7 ] = mat[ 11 ] = mat[ 15 ] = color[ 3 ];
+      tex.col.put( mat, 0, 16 );
+    }
+
+    //tex.col.put( color, 0, 16 );
     tex.col.position( 0 );
   }
 
@@ -1882,6 +1927,7 @@ public class AmanatsuDraw
     ttex = getTexture( tnum );
 
     scale /= 2.0f;
+
     setFloatArray(
       dx - w * scale, dy - h * scale,
       dx + w * scale, dy - h * scale,
@@ -2124,7 +2170,79 @@ public class AmanatsuDraw
 
     return ret;
   }
+  /**
+   * テクスチャの拡大縮小回転描画。
+   * @param tnum テクスチャ番号。
+   * @param rx テクスチャの読み込み開始X座標。
+   * @param ry テクスチャの読み込み開始Y座標。
+   * @param w テクスチャの切り取り横幅。
+   * @param h テクスチャの切り取り高さ。
+   * @param dx 描画中心X座標。
+   * @param dy 描画中心Y座標。
+   * @param scale 拡大率。
+   * @param rad ラジアン角。
+   * @param flag 描画フラグ。
+   */
+  public boolean drawTextureScaleRotateC( int tnum,
+    float rx, float ry, float w, float h,
+    float dx, float dy, float scale, float rad, int flag )
+  {
+    if ( existTexture( tnum ) == false )
+    {
+      return false;
+    }
 
+    ttex = getTexture( tnum );
+
+    AMatrix.identityMatrix( mat );
+    AMatrix.translateM( mat, 0, dx, dy, 0.0f );
+    AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
+    AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
+
+    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
+
+    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
+
+    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
+
+    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
+    farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
+
+    setVertex( ttex, farr );
+
+    //lr=1の時左右反転
+    lr = (flag & Amanatsu.DRAW_LR) != 0 ? 1 : 0;
+    //ud=1の時上下反転
+    ud = (flag & Amanatsu.DRAW_UD) != 0 ? 1 : 0;
+
+    u[ 0 ] = (float)( ( rx + w * lr     ) / ttex.width );
+    u[ 1 ] = (float)( ( rx + w * (1-lr) ) / ttex.width );
+    v[ 0 ] = (float)( ( ry + h * ud     ) / ttex.height );
+    v[ 1 ] = (float)( ( ry + h * (1-ud) ) / ttex.height );
+
+/*    setFloatArray(
+        ( rx )     / ttex.width, ( ry )     / ttex.height,
+        ( rx + w ) / ttex.width, ( ry )     / ttex.height,
+        ( rx )     / ttex.width, ( ry + h ) / ttex.height,
+        ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    setFloatArray(
+      u[ 0 ], v[ 0 ],
+      u[ 1 ], v[ 0 ],
+      u[ 0 ], v[ 1 ],
+      u[ 1 ], v[ 1 ] );
+    setUV( ttex, farr );
+
+    boolean ret = drawTexture( ttex );
+
+    return ret;
+  }
   /**
    * テクスチャの行列変形描画。
    * @param tnum テクスチャ番号。

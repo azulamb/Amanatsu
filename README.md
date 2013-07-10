@@ -8,7 +8,7 @@ Iy you only want to use Amanatsu, Download "Amanatsu.jar".
 And copy "Amanatsu.jar" to "libs/" dir in your project.
 
 ## Compile
-Use Eclipse.
+Use Eclipse Export.
 Do not export "AndroidManifest.xml" and "project.properties".
 
 ## Sample code

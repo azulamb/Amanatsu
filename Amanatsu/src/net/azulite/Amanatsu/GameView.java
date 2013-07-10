@@ -9,6 +9,14 @@ public class GameView
   public static AmanatsuDraw draw;
   public static AmanatsuInput input;
   public static AmanatsuSound sound;
+  
+  /**
+   * 端末の向きが変わった時に実行。
+   * @param draw 描画サポートクラス。
+   * @param input 入力サポートクラス。
+   * @param sound 音サポートクラス。
+   */
+  public void ChangeDevice(){}
   /**
    * 初めに一度だけ実行。
    * @param draw 描画サポートクラス。

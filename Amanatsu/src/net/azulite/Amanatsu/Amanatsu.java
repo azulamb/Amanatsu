@@ -35,7 +35,7 @@ import net.azulite.Amanatsu.GameView;
 
 /**
  * @author Hiroki
- * @version 0.3.3
+ * @version 0.4.0
  */
 
 // Library
@@ -54,7 +54,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.3.3" );
+  private static String VERSION = new String( "0.4.0" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -63,6 +63,9 @@ public class Amanatsu
 //  public static final int DRAW_SUB = 2;
   /** 乗算合成。 */
   public static final int DRAW_MUL = 3;
+
+  public static final int DRAW_LR = 1;
+  public static final int DRAW_UD = 2;
 
   protected Activity context;
   private boolean setcontentview = false;
@@ -409,6 +412,7 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
   {
     draw.change( gl, width, height );
     rotate = ((Activity)ama.context).getWindowManager().getDefaultDisplay().getRotation();
+    view.ChangeDevice();
   }
 
   @Override
