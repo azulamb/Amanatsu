@@ -54,7 +54,7 @@ import net.azulite.Amanatsu.GameView;
  */
 public class Amanatsu
 {
-  private static String VERSION = new String( "0.4.0" );
+  private static String VERSION = new String( "1.1.1" );
 
   /** 透過色有効な通常合成。 */
   public static final int DRAW_TRC = 0;
@@ -638,6 +638,7 @@ class SensorListener implements SensorEventListener
   static final int MATRIX_SIZE = 16;
   float[] in;
   float[] out;
+  float[] out2;
   float[] i;
 
   public SensorListener( AmanatsuSensor sensor )
@@ -645,6 +646,7 @@ class SensorListener implements SensorEventListener
     this.sensor = sensor;
     in = new float[ MATRIX_SIZE ];
     out = new float[ MATRIX_SIZE ];
+    out2 = new float[ MATRIX_SIZE ];
     i = new float[ MATRIX_SIZE ];
   }
 
@@ -675,13 +677,18 @@ class SensorListener implements SensorEventListener
       SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, out );
       break;
     case Surface.ROTATION_180:
-      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, out );
+      //SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, out );
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, out2 );
+      SensorManager.remapCoordinateSystem( out2, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, out );
       break;
     case Surface.ROTATION_270:
-      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, out );
+      //SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, out );
+      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_MINUS_X, out );
       break;
     default:
-      SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_X, SensorManager.AXIS_Y, out );
+      //SensorManager.remapCoordinateSystem( in, SensorManager.AXIS_X, SensorManager.AXIS_Y, out );
+      SensorManager.getOrientation( in, sensor.orientation );
+      return;
     }
     SensorManager.getOrientation( out, sensor.orientation );
   }

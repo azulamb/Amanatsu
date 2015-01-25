@@ -22,6 +22,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.opengl.GLUtils;
 
 /**
@@ -48,6 +49,7 @@ public class AmanatsuDraw
   private AssetManager assets;
   private static Map<Integer, Texture> textures = new Hashtable< Integer, Texture >( 50 );
   private static Map<Integer, Paint> paints = new Hashtable< Integer, Paint >( 50 );
+
   private static Map<Integer, GameColor> fcolors = new Hashtable< Integer, GameColor >( 50 );
   private static float[] circlepoint;
   private static int circlepointnum = 32;
@@ -110,7 +112,9 @@ public class AmanatsuDraw
     boxtex = ttex;
 
     boxtex.col  = createFloatBuffer( new float[]{ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f } );
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     boxtex.uv   = createFloatBuffer( farr );
 
     // prepare string
@@ -194,6 +198,28 @@ public class AmanatsuDraw
     //gl.glViewport( (int)-basex, (int)basey - (int)src_height/2, (int)width, (int)height );
 
     return true;
+  }
+
+  /**
+   * 
+   */
+  public void setScreenScale( float scale )
+  {
+    //gl.glLoadIdentity();
+    gl.glScalef( scale, scale, 1.0f );
+  }
+
+  public void setScreenScaleC( float scale )
+  {
+    gl.glLoadIdentity();
+    gl.glScalef( scale, scale, 1.0f );
+    gl.glTranslatef( 0.1f, 0.1f, 0.0f );
+    //gl.glTranslatef( - screenwidth / scale, -screenheight / scale, 0.0f );
+  }
+
+  public void moveScreenPosition( float mx, float my )
+  {
+    gl.glTranslatef( mx, my, 1.0f );
   }
 
   /**
@@ -442,7 +468,9 @@ public class AmanatsuDraw
     mat[ 12 ] = mat[ 13 ] = mat[ 14 ] = mat[ 15 ] = 1.0f;
     ttex.col = createFloatBuffer( mat );
     ttex.col.position( 0 );
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     ttex.uv = AmanatsuDraw.createFloatBuffer( farr, 8 );
     ttex.ver = AmanatsuDraw.createFloatBuffer( farr, 8 );
 
@@ -499,34 +527,34 @@ public class AmanatsuDraw
     }
   }
 
-  private final void setFloatArray4( float f0, float f1, float f2, float f3 )
+  /*private final void setFloatArray4( float f0, float f1, float f2, float f3 )
   {
     farr4[ 0 ] = f0; farr4[ 1 ] = f1;
     farr4[ 2 ] = f2; farr4[ 3 ] = f3;
-  }
+  }*/
 
-  private final void setFloatArray( float f0, float f1, float f2, float f3 )
+  /*private final void setFloatArray( float f0, float f1, float f2, float f3 )
   {
     farr[ 0 ] = f0; farr[ 1 ] = f1;
     farr[ 2 ] = f2; farr[ 3 ] = f3;
-  }
+  }*/
 
-  private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7 )
+  /*private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7 )
   {
     farr[ 0 ] = f0; farr[ 1 ] = f1;
     farr[ 2 ] = f2; farr[ 3 ] = f3;
     farr[ 4 ] = f4; farr[ 5 ] = f5;
     farr[ 6 ] = f6; farr[ 7 ] = f7;
-  }
+  }*/
 
-  private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9 )
+  /*private final void setFloatArray( float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9 )
   {
     farr[ 0 ] = f0; farr[ 1 ] = f1;
     farr[ 2 ] = f2; farr[ 3 ] = f3;
     farr[ 4 ] = f4; farr[ 5 ] = f5;
     farr[ 6 ] = f6; farr[ 7 ] = f7;
     farr[ 8 ] = f8; farr[ 9 ] = f9;
-  }
+  }*/
 
   /*private static final FloatBuffer createColor( float[] color )
   {
@@ -902,6 +930,88 @@ public class AmanatsuDraw
   }
 
   /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param fontsile フォントファイル名(assets内)
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param color 色配列( red, green, blue, alpha )。各色の強さは0.0f-1.0f。
+   */
+  public boolean createFont( int fnum, String fontfile, int size, boolean antialias, float[] color )
+  {
+    return createFont( fnum, fontfile, size, antialias, (byte)(0xff * color[ 0 ]), (byte)(0xff * color[ 1 ]), (byte)(0xff * color[ 2 ]), (byte)(0xff * color[ 3 ]) );
+  }
+  
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param fontsile フォントファイル名(assets内)
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param red 赤の強さ(0.0f-1.0f)。
+   * @param green 緑の強さ(0.0f-1.0f)。
+   * @param blue 青の強さ(0.0f-1.0f)。
+   * @param alpha 不透明の強さ(0.0f-1.0f)。
+   */
+  public boolean createFont( int fnum, String fontfile, int size, boolean antialias, float red, float green, float blue, float alpha )
+  {
+    return createFont( fnum, fontfile, size, antialias, (byte)(0xff * red), (byte)(0xff * green), (byte)(0xff * blue), (byte)(0xff * alpha) );
+  }
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param fontsile フォントファイル名(assets内)
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param red 赤の強さ(0-255)。
+   * @param green 緑の強さ(0-255)。
+   * @param blue 青の強さ(0-255)。
+   * @param alpha 不透明の強さ(0255)。
+   */
+  public boolean createFont( int fnum, String fontfile, int size, boolean antialias, byte red, byte green, byte blue, byte alpha )
+  {
+    Typeface typeface = Typeface.createFromAsset( ama.getContext().getAssets(), fontfile );
+
+    return createFont( fnum, typeface, size, antialias, red, green, blue, alpha );
+  }
+  /**
+   * フォントの作成。
+   * printfで文字列を描画する時に使うフォントの作成。
+   * @param fnum フォント番号。
+   * @param typeface Typeface
+   * @param size フォントサイズ。　
+   * @param antialias アンチエイリアスの設定。
+   * @param red 赤の強さ(0-255)。
+   * @param green 緑の強さ(0-255)。
+   * @param blue 青の強さ(0-255)。
+   * @param alpha 不透明の強さ(0255)。
+   */
+  public boolean createFont( int fnum, Typeface typeface, int size, boolean antialias, byte red, byte green, byte blue, byte alpha )
+  {
+    if ( paints.containsKey( fnum ) == false )
+    {
+      tpaint = new Paint();
+      paints.put( fnum, tpaint );
+      fcolors.put( fnum, new GameColor( red, green, blue, alpha ) );
+      tpaint.setTypeface( typeface );
+    } else
+    {
+      tpaint = paints.get( fnum );
+      tpaint.setTypeface( typeface );
+    }
+
+    tpaint.setTextSize( size );
+//    tpaint.setARGB( alpha, red, green, blue );
+    tpaint.setColor( Color.WHITE );
+    tpaint.setStyle(Style.FILL_AND_STROKE);
+    tpaint.setAntiAlias( antialias );
+
+    return true;
+  }
+  /**
    * 文字列の描画。
    * 不正なフォント番号を使うと0番のフォントが使用される。
    * @param fnum フォント番号。
@@ -930,10 +1040,14 @@ public class AmanatsuDraw
 
     GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, stringbmp, 0 );
 
-    setFloatArray( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
+    //setFloatArray( dx, dy, dx + stringtex.width, dy, dx, dy + stringtex.height, dx + stringtex.width, dy + stringtex.height );
+    farr[ 0 ] = dx; farr[ 1 ] = dy; farr[ 2 ] = dx + stringtex.width; farr[ 3 ] = dy;
+    farr[ 4 ] = dx; farr[ 5 ] = dy + stringtex.height; farr[ 6 ] = dx + stringtex.width; farr[ 7 ] = dy + stringtex.height;
     stringtex.ver = createFloatBuffer( farr );
 
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     stringtex.uv   = createFloatBuffer( farr );
 
     mat[ 0 ] = mat[ 4 ] = mat[ 8 ] = mat[ 12 ] = tcolor.color[ 0 ];
@@ -998,7 +1112,8 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
     gl.glLineWidth( width );
 
-    setFloatArray( sx, sy, ex, ey );
+    //setFloatArray( sx, sy, ex, ey );
+    farr[ 0 ] = sx; farr[ 1 ] = sy; farr[ 2 ] = ex; farr[ 3 ] = ey;
     linebuffer.put( farr, 0, 4 );
     linebuffer.position( 0 );
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, linebuffer );//createFloatBuffer( farr )
@@ -1060,7 +1175,10 @@ public class AmanatsuDraw
     gl.glLineWidth( width );
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
 
-    setFloatArray( x, y, x + w, y, x + w, y + h, x, y + h, x, y );
+    //setFloatArray( x, y, x + w, y, x + w, y + h, x, y + h, x, y );
+    farr[ 0 ] = x; farr[ 1 ] = y; farr[ 2 ] = x + w; farr[ 3 ] = y;
+    farr[ 4 ] = x + w; farr[ 5 ] = y + h; farr[ 6 ] = x; farr[ 7 ] = y + h;
+    farr[ 8 ] = x; farr[ 9 ] = y;
     boxbuffer.put( farr, 0, 8 );
     boxbuffer.position( 0 );
     gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, boxbuffer );//createFloatBuffer( farr )
@@ -1141,7 +1259,9 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
     gl.glLineWidth( width );
 
-    setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
+    //setFloatArray( x, y, x + w, y, x, y + h, x + w, y + h );
+    farr[ 0 ] = x; farr[ 1 ] = y; farr[ 2 ] = x + w; farr[ 3 ] = y;
+    farr[ 4 ] = x; farr[ 5 ] = y + h; farr[ 6 ] = x + w; farr[ 7 ] = y + h;
     boxbuffer.put( farr, 0, 8 );
     boxbuffer.position( 0 );
 
@@ -1181,7 +1301,9 @@ public class AmanatsuDraw
     gl.glColor4f( color[ 0 ], color[ 1 ], color[ 2 ], color[ 3 ] );
     gl.glLineWidth( width );
 
-    setFloatArray( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
+    //setFloatArray( x - w / 2.0f, y - h / 2.0f, x + w / 2.0f, y - h / 2.0f, x - w / 2.0f, y + h / 2.0f, x + w / 2.0f, y + h / 2.0f );
+    farr[ 0 ] = x - w / 2.0f; farr[ 1 ] = y - h / 2.0f; farr[ 2 ] = x + w / 2.0f; farr[ 3 ] = y - h / 2.0f;
+    farr[ 4 ] = x - w / 2.0f; farr[ 5 ] = y + h / 2.0f; farr[ 6 ] = x + w / 2.0f; farr[ 7 ] = y + h / 2.0f;
     boxbuffer.put( farr, 0, 8 );
     boxbuffer.position( 0 );
 
@@ -1609,12 +1731,16 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
+    //setFloatArray( dx, dy, dx + ttex.width, dy, dx, dy + ttex.height, dx + ttex.width, dy + ttex.height );
+    farr[ 0 ] = dx; farr[ 1 ] = dy; farr[ 2 ] = dx + ttex.width; farr[ 3 ] = dy;
+    farr[ 4 ] = dx; farr[ 5 ] = dy + ttex.height; farr[ 6 ] = dx + ttex.width; farr[ 7 ] = dy + ttex.height;
     setVertex( ttex, farr );
     //ttex.ver.put( farr, 0, 8 );// = createFloatBuffer( farr );
     //ttex.ver.position( 0 );
 
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     setUV( ttex, farr );
     //ttex.uv.put( farr, 0, 8 );// = createFloatBuffer( farr );
     //ttex.uv.position( 0 );
@@ -1639,16 +1765,22 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray(
+    /*setFloatArray(
       dx - ttex.width / 2.0f, dy - ttex.height / 2.0f,
       dx + ttex.width / 2.0f, dy - ttex.height / 2.0f,
       dx - ttex.width / 2.0f, dy + ttex.height / 2.0f,
-      dx + ttex.width / 2.0f, dy + ttex.height );
+      dx + ttex.width / 2.0f, dy + ttex.height );*/
+    farr[ 0 ] = dx - ttex.width / 2.0f; farr[ 1 ] = dy - ttex.height / 2.0f;
+    farr[ 2 ] = dx + ttex.width / 2.0f; farr[ 3 ] = dy - ttex.height / 2.0f;
+    farr[ 4 ] = dx - ttex.width / 2.0f; farr[ 5 ] = dy + ttex.height / 2.0f;
+    farr[ 6 ] = dx + ttex.width / 2.0f; farr[ 7 ] = dy + ttex.height / 2.0f;
     setVertex( ttex, farr );
     //ttex.ver.put( farr, 0, 8 );// = createFloatBuffer( farr );
     //ttex.ver.position( 0 );
 
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     setUV( ttex, farr );
     //ttex.uv.put( farr, 0, 8 );// = createFloatBuffer( farr );
     //ttex.uv.position( 0 );
@@ -1677,14 +1809,20 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( dx, dy, dx + w, dy, dx, dy + h, dx + w, dy + h );
+    //setFloatArray( dx, dy, dx + w, dy, dx, dy + h, dx + w, dy + h );
+    farr[ 0 ] = dx; farr[ 1 ] = dy; farr[ 2 ] = dx + w; farr[ 3 ] = dy;
+    farr[ 4 ] = dx; farr[ 5 ] = dy + h; farr[ 6 ] = dx + w; farr[ 7 ] = dy + h;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 8 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1711,18 +1849,26 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray(
+    /*setFloatArray(
       dx - w / 2.0f, dy - h / 2.0f,
       dx + w / 2.0f, dy - h / 2.0f,
       dx - w / 2.0f, dy + h / 2.0f,
-      dx + w / 2.0f, dy + h / 2.0f );
+      dx + w / 2.0f, dy + h / 2.0f );*/
+    farr[ 0 ] = dx - w / 2.0f; farr[ 1 ] = dy - h / 2.0f;
+    farr[ 2 ] = dx + w / 2.0f; farr[ 3 ] = dy - h / 2.0f;
+    farr[ 4 ] = dx - w / 2.0f; farr[ 5 ] = dy + h / 2.0f;
+    farr[ 6 ] = dx + w / 2.0f; farr[ 7 ] = dy + h / 2.0f;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1751,14 +1897,20 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( dx, dy, dx + dw, dy, dx, dy + dh, dx + dw, dy + dh );
+    //setFloatArray( dx, dy, dx + dw, dy, dx, dy + dh, dx + dw, dy + dh );
+    farr[ 0 ] = dx; farr[ 1 ] = dy; farr[ 2 ] = dx + dw; farr[ 3 ] = dy;
+    farr[ 4 ] = dx; farr[ 5 ] = dy + dh; farr[ 6 ] = dx + dw; farr[ 7 ] = dy + dh;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1784,14 +1936,20 @@ public class AmanatsuDraw
     farr[ 0 ] = dw / 2.0f;
     farr[ 1 ] = dh / 2.0f;
 
-    setFloatArray(
+    /*setFloatArray(
         dx - farr[ 0 ], dy - farr[ 1 ],
         dx + farr[ 0 ], dy - farr[ 1 ],
         dx - farr[ 0 ], dy + farr[ 1 ],
-        dx + farr[ 0 ], dy + farr[ 1 ] );
+        dx + farr[ 0 ], dy + farr[ 1 ] );*/
+    farr[ 0 ] = dx - farr[ 0 ]; farr[ 1 ] = dy - farr[ 1 ];
+    farr[ 2 ] = dx + farr[ 0 ]; farr[ 3 ] = dy - farr[ 1 ];
+    farr[ 4 ] = dx - farr[ 0 ]; farr[ 5 ] = dy + farr[ 1 ];
+    farr[ 6 ] = dx + farr[ 0 ]; farr[ 7 ] = dy + farr[ 1 ];
     setVertex( ttex, farr );
 
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     setUV( ttex, farr );
     //ttex.uv   = createFloatBuffer( farr );
 
@@ -1816,14 +1974,20 @@ public class AmanatsuDraw
     farr[ 0 ] = ttex.width * scale / 2.0f;
     farr[ 1 ] = ttex.height * scale / 2.0f;
 
-    setFloatArray(
+    /*setFloatArray(
         dx - farr[ 0 ], dy - farr[ 1 ],
         dx + farr[ 0 ], dy - farr[ 1 ],
         dx - farr[ 0 ], dy + farr[ 1 ],
-        dx + farr[ 0 ], dy + farr[ 1 ] );
+        dx + farr[ 0 ], dy + farr[ 1 ] );*/
+    farr[ 0 ] = dx - farr[ 0 ]; farr[ 1 ] = dy - farr[ 1 ];
+    farr[ 2 ] = dx + farr[ 0 ]; farr[ 3 ] = dy - farr[ 1 ];
+    farr[ 4 ] = dx - farr[ 0 ]; farr[ 5 ] = dy + farr[ 1 ];
+    farr[ 6 ] = dx + farr[ 0 ]; farr[ 7 ] = dy + farr[ 1 ];
     setVertex( ttex, farr );
 
-    setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f );
+    farr[ 0 ] = 0.0f; farr[ 1 ] = 0.0f; farr[ 2 ] = 1.0f; farr[ 3 ] = 0.0f;
+    farr[ 4 ] = 0.0f; farr[ 5 ] = 1.0f; farr[ 6 ] = 1.0f; farr[ 7 ] = 1.0f;
     setUV( ttex, farr );
     //ttex.uv   = createFloatBuffer( farr );
 
@@ -1852,18 +2016,26 @@ public class AmanatsuDraw
     }
     ttex = getTexture( tnum );
 
-    setFloatArray(
+    /*setFloatArray(
       dx - dw / 2.0f, dy - dh / 2.0f,
       dx + dw / 2.0f, dy - dh / 2.0f,
       dx - dw / 2.0f, dy + dh / 2.0f,
-      dx + dw / 2.0f, dy + dh / 2.0f );
+      dx + dw / 2.0f, dy + dh / 2.0f );*/
+    farr[ 0 ] = dx - dw / 2.0f; farr[ 1 ] = dy - dh / 2.0f;
+    farr[ 2 ] = dx + dw / 2.0f; farr[ 3 ] = dy - dh / 2.0f;
+    farr[ 4 ] = dx - dw / 2.0f; farr[ 5 ] = dy + dh / 2.0f;
+    farr[ 6 ] = dx + dw / 2.0f; farr[ 7 ] = dy + dh / 2.0f;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1891,14 +2063,20 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( dx, dy, dx + w * scale, dy, dx, dy + h * scale, dx + w * scale, dy + h * scale );
+    //setFloatArray( dx, dy, dx + w * scale, dy, dx, dy + h * scale, dx + w * scale, dy + h * scale );
+    farr[ 0 ] = dx; farr[ 1 ] = dy; farr[ 2 ] = dx + w * scale; farr[ 3 ] = dy;
+    farr[ 4 ] = dx; farr[ 5 ] = dy + h * scale; farr[ 6 ] = dx + w * scale; farr[ 7 ] = dy + h * scale;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1928,18 +2106,26 @@ public class AmanatsuDraw
 
     scale /= 2.0f;
 
-    setFloatArray(
+    /*setFloatArray(
       dx - w * scale, dy - h * scale,
       dx + w * scale, dy - h * scale,
       dx - w * scale, dy + h * scale,
-      dx + w * scale, dy + h * scale );
+      dx + w * scale, dy + h * scale );*/
+    farr[ 0 ] = dx - w * scale; farr[ 1 ] = dy - h * scale;
+    farr[ 2 ] = dx + w * scale; farr[ 3 ] = dy - h * scale;
+    farr[ 4 ] = dx - w * scale; farr[ 5 ] = dy + h * scale;
+    farr[ 6 ] = dx + w * scale; farr[ 7 ] = dy + h * scale;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -1971,29 +2157,37 @@ public class AmanatsuDraw
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     return drawTexture( ttex );
@@ -2025,29 +2219,37 @@ public class AmanatsuDraw
     AMatrix.translateM( mat, 0, dx, dy, 0.0f );
     AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2083,29 +2285,37 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2141,29 +2351,37 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, angle, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2199,19 +2417,23 @@ public class AmanatsuDraw
     AMatrix.scaleM( mat, 0, scale, scale, 1.0f );
     AMatrix.rotateM( mat, 0, rad * 180.0f / (float)Math.PI, 0.0f, 0.0f, 1.0f );
 
-    setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray4( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, mat, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
@@ -2232,11 +2454,13 @@ public class AmanatsuDraw
         ( rx + w ) / ttex.width, ( ry )     / ttex.height,
         ( rx )     / ttex.width, ( ry + h ) / ttex.height,
         ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
-    setFloatArray(
+    /*setFloatArray(
       u[ 0 ], v[ 0 ],
       u[ 1 ], v[ 0 ],
       u[ 0 ], v[ 1 ],
-      u[ 1 ], v[ 1 ] );
+      u[ 1 ], v[ 1 ] );*/
+    farr[ 0 ] = u[ 0 ]; farr[ 1 ] = v[ 0 ]; farr[ 2 ] = u[ 1 ]; farr[ 3 ] = v[ 0 ];
+    farr[ 4 ] = u[ 0 ]; farr[ 5 ] = v[ 1 ]; farr[ 6 ] = u[ 1 ]; farr[ 7 ] = v[ 1 ];
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2263,29 +2487,37 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( 0.0f, 0.0f, 0.0f, 1.0f );
+    //setFloatArray( 0.0f, 0.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = 0.0f; farr4[ 1 ] = 0.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w, 0.0f, 0.0f, 1.0f );
+    //setFloatArray( w, 0.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w; farr4[ 1 ] = 0.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( 0.0f, h, 0.0f, 1.0f );
+    //setFloatArray( 0.0f, h, 0.0f, 1.0f );
+    farr4[ 0 ] = 0.0f; farr4[ 1 ] = h; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w, h, 0.0f, 1.0f );
+    //setFloatArray( w, h, 0.0f, 1.0f );
+    farr4[ 0 ] = w; farr4[ 1 ] = h; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2313,29 +2545,37 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 0 ] = farr4[ 0 ]; farr[ 1 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, - h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = - h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 2 ] = farr4[ 0 ]; farr[ 3 ] = farr4[ 1 ];
 
-    setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( - w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = - w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 4 ] = farr4[ 0 ]; farr[ 5 ] = farr4[ 1 ];
 
-    setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    //setFloatArray( w / 2.0f, h / 2.0f, 0.0f, 1.0f );
+    farr4[ 0 ] = w / 2.0f; farr4[ 1 ] = h / 2.0f; farr4[ 2 ] = 0.0f; farr4[ 3 ] = 1.0f;
     AMatrix.multiplyMV( farr4, 0, matrix44, 0, farr4, 0 );
     farr[ 6 ] = farr4[ 0 ]; farr[ 7 ] = farr4[ 1 ];
 
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );
@@ -2373,14 +2613,20 @@ public class AmanatsuDraw
 
     ttex = getTexture( tnum );
 
-    setFloatArray( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
+    //setFloatArray( dx0, dy0, dx1, dy1, dx2, dy2, dx3, dy3 );
+    farr[ 0 ] = dx0; farr[ 1 ] = dy0; farr[ 2 ] = dx1; farr[ 3 ] = dy1;
+    farr[ 4 ] = dx2; farr[ 5 ] = dy2; farr[ 6 ] = dx3; farr[ 7 ] = dy3;
     setVertex( ttex, farr );
 
-    setFloatArray(
+    /*setFloatArray(
       ( rx )     / ttex.width, ( ry )     / ttex.height,
       ( rx + w ) / ttex.width, ( ry )     / ttex.height,
       ( rx )     / ttex.width, ( ry + h ) / ttex.height,
-      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );
+      ( rx + w ) / ttex.width, ( ry + h ) / ttex.height );*/
+    farr[ 0 ] = ( rx )     / ttex.width; farr[ 1 ] = ( ry )     / ttex.height;
+    farr[ 2 ] = ( rx + w ) / ttex.width; farr[ 3 ] = ( ry )     / ttex.height;
+    farr[ 4 ] = ( rx )     / ttex.width; farr[ 5 ] = ( ry + h ) / ttex.height;
+    farr[ 6 ] = ( rx + w ) / ttex.width; farr[ 7 ] = ( ry + h ) / ttex.height;
     setUV( ttex, farr );
 
     boolean ret = drawTexture( ttex );

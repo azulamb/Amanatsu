@@ -79,9 +79,18 @@ public class AmanatsuSound
   public int getMaxVolume(){ return om.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); }
 
   /**
-   * 現在の再生音量を取得する。
+   * 再生音量を取得する。
    */
   public int getVolume(){ return bvolume; }
+  /**
+   * 現在の再生音量を調べて取得する。
+   */
+  public int getNowVolume()
+  {
+    bvolume = om.getStreamVolume( AudioManager.STREAM_MUSIC );
+    svolume = (float)bvolume / (float)om.getStreamMaxVolume( AudioManager.STREAM_MUSIC );
+    return bvolume;
+  }
 
   /**
    * マナーモードかどうか取得する。
@@ -270,7 +279,16 @@ public class AmanatsuSound
     }
     return true;
   }
+  /**
+   * BGMを再生しているか調べる。
+   * @param snum 音番号。
+   */
+  public boolean isPlayBgm( int snum )
+  {
+    if ( bgm.containsKey( snum ) == false ){ return false; }
 
+    return bgm.get( snum ).isPlaying();
+  }
   // SE
 
   /**
