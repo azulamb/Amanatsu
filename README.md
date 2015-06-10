@@ -53,17 +53,24 @@ public class XXXXX extends Activity
 
 }
 
+// Game prigram
 class Game extends GameView
 {
   @Override
   public void UserInit() {
     // Prepare game.
+    // draw.createTexture, sound.loadBgm, etc ...
   }
 
   @Override
   public boolean MainLoop() {
+
     // Game main routine.
+
     draw.clearScreen();
+
+    // draw texture
+
     return true; // false is Game end.
   }
 
@@ -80,11 +87,12 @@ class Game extends GameView
 * [Sample Shooting](https://github.com/HirokiMiyaoka/AmanatsuSampleShooting)
 
 ## Android
-バージョン2.2以上。
+バージョン2.2以上。ただし2.3以上を推奨。
 
 ## サンプルコード
 
 上に載ってるやつ。
+とりあえずプロジェクト生成時に自動作成されたJavaファイルの中身をそっくり入れ替えれば良いはず。
 
 ## サンプルゲーム
 
@@ -120,6 +128,7 @@ GameViewクラスは次のようになっています。
 
 #### UserInit
 実行開始の初めの一度だけ実行されるメソッド。
+画像を読み込んだり、音を読み込んだり、データの初期化のために使います。
 
 #### MainLoop
 毎フレーム呼ばれるメソッド。
@@ -144,6 +153,8 @@ EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエ�
 ##### 画像
 画像の場合、res以下のディレクトリに入れると画像がリサイズされる場合があります。
 assetsに入れることを推奨(その場合createTextureではテクスチャ番号とファイルパスを与える形になる)。
+
+また、2のn乗の正方形にして、サイズは1024以下が好ましい（2048くらいでも大丈夫だった気が）。
 
 ##### 音声
 res/rawもしくはassets内に置いてください。
