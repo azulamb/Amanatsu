@@ -100,6 +100,18 @@ Amanatsuを使った単純なシューティングのプロジェクトを公開
 使いたいプロジェクト内にlibsフォルダを作り、その中にAmanatsu.jarをコピーします。
 ソースとか興味なくてただ単に使いたい場合は、ルートディレクトリにある"Amanatsu.jar"をダウンロード(ファイル名をクリック->Raw or View Rawをクリック)して、プロジェクト内に用意した libs/ ディレクトリに入れてください。
 
+AndroidStudioの場合はappかmobileかwearにlibsフォルダを作ってAmanatsu.jarをコピーし、build.gradleにJARを追加してください。
+
+```
+...
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+...
+```
+
 で、後は上のような感じで適当にゲーム処理を記述するためのGameクラス(GameViewを継承)を作り、Amanatsuオブジェクト生成時に渡したり、View登録時にAmanatsuのViewを登録してください。
 
 また、GameViewクラスを継承すると、system、draw、sound、inputというクラス変数が利用可能で、それを使うことでゲームに必要な各種処理を行うことができます(さらに、これらはpublic static宣言されているため、任意の継承クラス名.draw や GameView.draw などの形で他のクラスからもアクセスできる)。
@@ -121,6 +133,7 @@ Javadocはこちら(日本語)。
 * [http://hiroki.azulite.net/wiki/Amanatsu/doc/](http://hiroki.azulite.net/wiki/Amanatsu/doc/)
 
 ## コンパイル方法
+
 EclipseにAmanatsuのプロジェクトを追加し、プロジェクトをエクスポートしてJARファイルとして出力します。
 ただし、"AndroidManifest.xml"と"project.properties"はエクスポートしないようにチェックボックスを外すこと。
 
