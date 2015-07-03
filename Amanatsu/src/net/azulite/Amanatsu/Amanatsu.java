@@ -399,13 +399,16 @@ class GameGLSurfaceViewRender extends Handler implements GLSurfaceView.Renderer
 
 		if ( forceclear ){ draw.clearScreen(); }
 		loop.run( draw );
+		//if ( draw.isClear() ){ 
 		gl.glFlush();
+		// }
 
 		if ( view != nextview )
 		{
 			view = nextview;
 			loop.setGameView( view );
 		}
+		draw.after();
 
 		now = System.currentTimeMillis();
 		progress = now - before;

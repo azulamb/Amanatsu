@@ -57,6 +57,7 @@ public class AmanatsuDraw
 	private static FloatBuffer boxbuffer;
 	private static FloatBuffer linebuffer;
 	private String gltype, glver;
+	private boolean update;
 
 	// Box
 	private Texture boxtex;
@@ -127,6 +128,11 @@ public class AmanatsuDraw
 		createFont( 0, 30 );
 
 		setRender( Amanatsu.DRAW_TRC );
+	}
+
+	protected void after()
+	{
+		update = false;
 	}
 
 	public void change( GL10 gl, int width, int height )
@@ -356,9 +362,11 @@ public class AmanatsuDraw
 	{
 		gl.glClearColor( red, green, blue, 1.0f );
 		gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
-
+		update = true;
 		return true;
 	}
+
+	protected boolean isClear(){ return update; }
 
 	/**
 	 * テクスチャの生成(リソースから)。
